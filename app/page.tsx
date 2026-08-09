@@ -1,14 +1,12 @@
+"use client";
+
 import BentoGrid from '@/components/BentoGrid';
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-type SearchParams = Promise<{ admin?: string }>;
-
-interface PageProps {
-  searchParams: SearchParams;
-}
-
-export default async function Home(props: PageProps) {
-  const searchParams = await props.searchParams;
-  const isAdmin = searchParams.admin === 'true';
+function HomeContent() {
+  const searchParams = useSearchParams();
+  const isAdmin = searchParams.get('admin') === 'true';
 
   return (
     <div className="space-y-8 py-6">
@@ -25,5 +23,13 @@ export default async function Home(props: PageProps) {
       {/* Bento Grid */}
       <BentoGrid isAdmin={isAdmin} />
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="py-12 text-center text-zinc-500">加载中...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
