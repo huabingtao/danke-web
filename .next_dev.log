@@ -1,0 +1,35 @@
+nohup: ignoring input
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3002
+- Network:       http://0.0.0.0:3002
+✓ Ready in 208ms
+
+⨯ Error: Page "/strategies/[slug]/page" is missing exported function "generateStaticParams()", which is required with "output: export" config.
+    at ignore-listed frames {
+  page: '/strategies/pub-20260914-1000000159'
+}
+ GET /strategies/pub-20260914-1000000159 500 in 1797ms (next.js: 1723ms, application-code: 74ms)
+⨯ Error: Page "/strategies/[slug]/page" is missing exported function "generateStaticParams()", which is required with "output: export" config.
+    at ignore-listed frames {
+  page: '/strategies/pub-20260914-1000000159'
+}
+ GET /strategies/pub-20260914-1000000159 500 in 312ms (next.js: 304ms, application-code: 8ms)
+⨯ Error: Page "/strategies/[slug]/page" is missing exported function "generateStaticParams()", which is required with "output: export" config.
+    at ignore-listed frames {
+  page: '/strategies/pub-20260824-2247485928'
+}
+ GET /strategies/pub-20260824-2247485928 500 in 278ms (next.js: 272ms, application-code: 6ms)
+⨯ Error: Page "/strategies/[slug]/page" is missing exported function "generateStaticParams()", which is required with "output: export" config.
+    at ignore-listed frames {
+  page: '/strategies/pub-20260914-1000000159'
+}
+ HEAD /strategies/pub-20260914-1000000159 500 in 261ms (next.js: 256ms, application-code: 5ms)
+⨯ Error: Page "/strategies/[slug]/page" is missing exported function "generateStaticParams()", which is required with "output: export" config.
+    at ignore-listed frames {
+  page: '/strategies/pub-20260914-1000000159'
+}
+ GET /strategies/pub-20260914-1000000159 500 in 265ms (next.js: 261ms, application-code: 4ms)
+✓ Compiled in 44ms
+ HEAD /strategies/pub-20260914-1000000159 200 in 438ms (next.js: 286ms, generate-params: 282ms, application-code: 152ms)
+ GET /strategies/pub-20260914-1000000159 200 in 71ms (next.js: 20ms, generate-params: 18ms, application-code: 51ms)
+ GET /strategies/pub-20260824-2247485928 200 in 45ms (next.js: 2ms, generate-params: 24µs, application-code: 43ms)

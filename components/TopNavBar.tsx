@@ -1,0 +1,121 @@
+"use client";
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { Flame, Menu, X, BookOpen, Wrench, Info } from 'lucide-react';
+
+interface TopNavBarProps {
+  onNavigateTo?: (targetId: string) => void;
+}
+
+export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // 工具模块开关：当存在稳定可访问的独立工具页面时才展示
+  const SHOW_TOOLS = false;
+
+  const handleNavClick = (targetId: string) => {
+    setMobileMenuOpen(false);
+    if (onNavigateTo) {
+      onNavigateTo(targetId);
+    } else {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
+  return (
+    <header className="sticky top-0 z-50 w-full bg-[#0a0f1d]/85 backdrop-blur-xl border-b border-slate-800/80 transition-all">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        {/* Left: Brand Logo & Title */}
+        <Link href="/" className="flex items-center space-x-3 group">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-600 via-amber-500 to-yellow-400 p-[2px] shadow-lg shadow-orange-500/20 group-hover:scale-105 transition-transform duration-300 shrink-0">
+            <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
+              <Flame className="w-5 h-5 text-orange-400" />
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-base sm:text-lg font-black tracking-wide text-white group-hover:text-orange-400 transition-colors">
+              弹壳特攻队攻略站
+            </span>
+            <span className="text-[11px] text-slate-400 hidden sm:block">玩家硬核攻略与战术精算</span>
+          </div>
+        </Link>
+
+        {/* Desktop Main Navigation */}
+        <nav className="hidden md:flex items-center space-x-2">
+          <button
+            onClick={() => handleNavClick('latest-strategies')}
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all cursor-pointer"
+          >
+            <BookOpen className="w-4 h-4 text-orange-400" />
+            <span>攻略</span>
+          </button>
+
+          {/* 工具导航：仅在具备稳定访问页面时展示 */}
+          {SHOW_TOOLS && (
+            <button
+              onClick={() => handleNavClick('tools-section')}
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all cursor-pointer"
+            >
+              <Wrench className="w-4 h-4 text-blue-400" />
+              <span>工具</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => handleNavClick('footer-about')}
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all cursor-pointer"
+          >
+            <Info className="w-4 h-4 text-slate-400" />
+            <span>关于</span>
+          </button>
+        </nav>
+
+        {/* Mobile Hamburger Toggle */}
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 rounded-xl bg-slate-900/90 border border-slate-700/60 text-slate-300 hover:text-white"
+            aria-label="切换菜单"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-slate-800 bg-[#0a0f1d]/95 backdrop-blur-2xl px-4 py-4 space-y-2">
+          <button
+            onClick={() => handleNavClick('latest-strategies')}
+            className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-orange-500/20 hover:text-orange-300 text-left"
+          >
+            <BookOpen className="w-4 h-4 text-orange-400" />
+            <span>攻略文章</span>
+          </button>
+
+          {SHOW_TOOLS && (
+            <button
+              onClick={() => handleNavClick('tools-section')}
+              className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-blue-500/20 hover:text-blue-300 text-left"
+            >
+              <Wrench className="w-4 h-4 text-blue-400" />
+              <span>实用工具</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => handleNavClick('footer-about')}
+            className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-slate-800 text-left"
+          >
+            <Info className="w-4 h-4 text-slate-400" />
+            <span>关于本站与公众号</span>
+          </button>
+        </div>
+      )}
+    </header>
+  );
+}
