@@ -38,7 +38,7 @@ export async function generateStaticParams() {
   );
 
   try {
-    const res = await fetch('http://localhost:3001/api/strategies?limit=1000');
+    const res = await fetch('http://localhost:3000/api/strategies?limit=1000');
     if (!res.ok) return fallbackSlugs.map((slug) => ({ slug }));
     const items = await res.json();
     if (!Array.isArray(items) || items.length === 0) {

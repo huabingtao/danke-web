@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import AtmosphericBackground from '@/components/AtmosphericBackground';
+import MobileTabBar from '@/components/MobileTabBar';
 
 export const metadata: Metadata = {
   title: '呱呱弹壳空间 | 弹壳特攻队全体系攻略与战术门户',
@@ -24,6 +25,9 @@ export default function RootLayout({
         <div className="relative z-10 min-h-screen">
           {children}
         </div>
+
+        {/* Mobile & WeChat Mini Program Bottom Dock TabBar */}
+        <MobileTabBar />
       </body>
     </html>
   );

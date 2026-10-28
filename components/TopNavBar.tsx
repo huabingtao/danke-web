@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Flame, Menu, X, BookOpen, Layers, Calculator, Info } from 'lucide-react';
+import { Flame, Menu, X, BookOpen, Layers, Calculator, Info, Sparkles } from 'lucide-react';
 
 interface TopNavBarProps {
   onNavigateTo?: (targetId: string) => void;
@@ -54,11 +54,19 @@ export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
           </Link>
 
           <Link
+            href="/wiki"
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 border border-orange-500/20 transition-all"
+          >
+            <Sparkles className="w-4 h-4 text-orange-400 animate-pulse" />
+            <span>战术图鉴</span>
+          </Link>
+
+          <Link
             href="/items"
             className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
           >
             <Layers className="w-4 h-4 text-amber-400" />
-            <span>百科图鉴</span>
+            <span>物品图鉴</span>
           </Link>
 
           <Link
@@ -103,12 +111,21 @@ export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
           </Link>
 
           <Link
+            href="/wiki"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-orange-500/15 border border-orange-500/30 text-orange-300 hover:bg-orange-500/25"
+          >
+            <Sparkles className="w-4 h-4 text-orange-400" />
+            <span>战术图鉴 (特工/全量收藏品/载具)</span>
+          </Link>
+
+          <Link
             href="/items"
             onClick={() => setMobileMenuOpen(false)}
             className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-amber-500/20 hover:text-amber-300"
           >
             <Layers className="w-4 h-4 text-amber-400" />
-            <span>百科图鉴中心 (158+词条)</span>
+            <span>物品图鉴手册 (158+词条)</span>
           </Link>
 
           <Link
