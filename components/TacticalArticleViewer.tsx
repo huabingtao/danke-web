@@ -101,25 +101,25 @@ export default function TacticalArticleViewer({
         'hover:scale-[1.01]',
       );
 
-      // 图片加载失败优雅降级与跨端口自动回退
+      // 图片加载失败优雅降级，严格杜绝死循环向控制台刷请求
       img.onerror = () => {
+        // 立即注销 onerror 事件监听，彻底阻断任何二次递归死循环
+        img.onerror = null;
+
         const currentSrc = img.src;
-        // 如果当前是 3001 端口且加载失败，自动回退到当前页面端口（3002）静态资源目录
-        if (currentSrc.includes(':3001') && typeof window !== 'undefined') {
-          const fallbackSrc = currentSrc.replace(':3001', `:${window.location.port || '3002'}`);
-          if (fallbackSrc !== currentSrc) {
-            img.src = fallbackSrc;
-            return;
+        // 最多仅尝试一次跨端口优雅回退（仅当未重试过且来自非本页面端口时）
+        if (!img.dataset.retried && typeof window !== 'undefined') {
+          img.dataset.retried = 'true';
+          const localPort = window.location.port || '3002';
+          if (currentSrc.includes(':3000') || currentSrc.includes(':3001')) {
+            const fallbackSrc = currentSrc.replace(/:(3000|3001)/, `:${localPort}`);
+            if (fallbackSrc !== currentSrc) {
+              img.src = fallbackSrc;
+              return;
+            }
           }
         }
-        // 如果当前是 3002 端口且加载失败，尝试 3001 核心后端端口
-        if (currentSrc.includes(':3002') && typeof window !== 'undefined') {
-          const fallbackSrc = currentSrc.replace(':3002', ':3001');
-          if (fallbackSrc !== currentSrc) {
-            img.src = fallbackSrc;
-            return;
-          }
-        }
+        // 最终兜底：优雅隐藏失败图片，绝不频繁重发请求
         img.style.display = 'none';
       };
     });

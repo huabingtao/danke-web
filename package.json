@@ -6,7 +6,8 @@
     "dev": "next dev -H 0.0.0.0 -p 3002",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

@@ -13,9 +13,9 @@ export const getApiBase = (): string => {
     if (window.location.hostname.endsWith('guaguahub.cn')) {
       return 'https://dankecore.guaguahub.cn';
     }
-    return `${window.location.protocol}//${window.location.hostname}:3001`;
+    return `${window.location.protocol}//${window.location.hostname}:3000`;
   }
-  return 'http://localhost:3001';
+  return 'http://localhost:3000';
 };
 
 export async function fetchAgents(): Promise<any[] | null> {

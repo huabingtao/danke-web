@@ -26,7 +26,7 @@ export default async function Home() {
       const apiBase = getApiBase();
       initialArticles = strategiesOnly.map((item: any) => {
         let coverImg = item.cover;
-        if (coverImg && coverImg.startsWith('/uploads/') && apiBase && !apiBase.includes('localhost:3001')) {
+        if (coverImg && coverImg.startsWith('/uploads/') && apiBase && !apiBase.includes('localhost:3000')) {
           coverImg = `${apiBase}${coverImg}`;
         }
         // 格式化完整年月日 (YYYY-MM-DD)

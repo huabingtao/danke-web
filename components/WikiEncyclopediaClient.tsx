@@ -507,8 +507,9 @@ export default function WikiEncyclopediaClient({
                             alt={entry.name}
                             className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-200"
                             onError={(e) => {
-                              (e.currentTarget as HTMLImageElement).src =
-                                '/wiki-assets/占位图.png';
+                              const target = e.currentTarget as HTMLImageElement;
+                              target.onerror = null;
+                              target.src = '/wiki-assets/占位图.png';
                             }}
                           />
                         </div>
@@ -592,8 +593,9 @@ export default function WikiEncyclopediaClient({
                   alt={selectedEntry.name}
                   className="w-full h-full object-contain"
                   onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src =
-                      '/wiki-assets/占位图.png';
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = '/wiki-assets/占位图.png';
                   }}
                 />
               </div>

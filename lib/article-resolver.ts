@@ -90,17 +90,19 @@ export function getAllLocalArticleSlugs(): string[] {
 
         const cleanSub = sub.trim().replace(/[\s\/\\]+/g, '-');
 
-        // 1. 标准可读纯中文 slug（如 faq-周常和日常分享）
+        // 1. 标准可读纯中文 slug（如 faq-周常攻略）
         slugs.add(`${category}-${cleanSub}`);
 
-        // 2. URL 编码版 slug（如 faq-%e5%91%a8%e5%b8%b8%e5%92%8c%e6%97%a5%e5%b8%b8%e5%88%86%e4%ba%ab）
-        slugs.add(`${category}-${encodeURIComponent(cleanSub)}`);
+        // 2. URL 编码版 slug（支持大写与小写，杜绝大小写敏感导致的 404）
+        const encodedSub = encodeURIComponent(cleanSub);
+        slugs.add(`${category}-${encodedSub}`);
+        slugs.add(`${category}-${encodedSub.toLowerCase()}`);
 
-        // 3. 历史数据库截断兼容 slug（如 faq-%e5%91%a8%e5%b8%b8%e5%92%8c%e6）
+        // 3. 历史数据库截断兼容 slug（如 faq-%e5%91%a8%e5%b8%b8%e6）
         const legacyTruncated = `${category}-${encodeURIComponent(sub).toLowerCase().slice(0, 30)}`;
         slugs.add(legacyTruncated);
 
-        // 4. 目录名直接作为别名（如 周常和日常分享）
+        // 4. 目录名直接作为别名（如 周常攻略）
         slugs.add(cleanSub);
       }
     }
@@ -262,9 +264,12 @@ export function resolveLocalArticle(inputSlug: string): ResolvedArticle | null {
       title.includes('每日提醒');
 
     const finalCategory = isReminder ? 'reminder' : mapping.category;
+    const nonGenericTags = Array.isArray(frontmatterData.tags)
+      ? frontmatterData.tags.filter((t: string) => t !== '弹壳特攻队' && t !== '游戏攻略')
+      : [];
     const rawTag =
       frontmatterData.tag ||
-      (Array.isArray(frontmatterData.tags) && frontmatterData.tags[0]) ||
+      nonGenericTags[0] ||
       mapping.label;
     const tag = cleanChineseTag(rawTag);
     const categoryLabel = isReminder ? '每日日历' : tag || mapping.label;
