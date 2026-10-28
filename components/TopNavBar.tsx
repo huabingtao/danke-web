@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Flame, Menu, X, BookOpen, Wrench, Info } from 'lucide-react';
+import { Flame, Menu, X, BookOpen, Layers, Calculator, Info } from 'lucide-react';
 
 interface TopNavBarProps {
   onNavigateTo?: (targetId: string) => void;
@@ -10,9 +10,6 @@ interface TopNavBarProps {
 
 export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // 工具模块开关：当存在稳定可访问的独立工具页面时才展示
-  const SHOW_TOOLS = false;
 
   const handleNavClick = (targetId: string) => {
     setMobileMenuOpen(false);
@@ -38,32 +35,39 @@ export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
           </div>
           <div className="flex flex-col">
             <span className="text-base sm:text-lg font-black tracking-wide text-white group-hover:text-orange-400 transition-colors">
-              弹壳特攻队攻略站
+              弹壳特攻队 Wiki & 攻略站
             </span>
-            <span className="text-[11px] text-slate-400 hidden sm:block">玩家硬核攻略与战术精算</span>
+            <span className="text-[11px] text-slate-400 hidden sm:block">
+              硬核图鉴百科 · 养成消耗精算 · 战术攻略
+            </span>
           </div>
         </Link>
 
         {/* Desktop Main Navigation */}
         <nav className="hidden md:flex items-center space-x-2">
-          <button
-            onClick={() => handleNavClick('latest-strategies')}
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all cursor-pointer"
+          <Link
+            href="/"
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
           >
             <BookOpen className="w-4 h-4 text-orange-400" />
-            <span>攻略</span>
-          </button>
+            <span>深度攻略</span>
+          </Link>
 
-          {/* 工具导航：仅在具备稳定访问页面时展示 */}
-          {SHOW_TOOLS && (
-            <button
-              onClick={() => handleNavClick('tools-section')}
-              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all cursor-pointer"
-            >
-              <Wrench className="w-4 h-4 text-blue-400" />
-              <span>工具</span>
-            </button>
-          )}
+          <Link
+            href="/items"
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
+          >
+            <Layers className="w-4 h-4 text-amber-400" />
+            <span>百科图鉴</span>
+          </Link>
+
+          <Link
+            href="/calculator"
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
+          >
+            <Calculator className="w-4 h-4 text-cyan-400" />
+            <span>养成消耗表</span>
+          </Link>
 
           <button
             onClick={() => handleNavClick('footer-about')}
@@ -89,23 +93,32 @@ export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-slate-800 bg-[#0a0f1d]/95 backdrop-blur-2xl px-4 py-4 space-y-2">
-          <button
-            onClick={() => handleNavClick('latest-strategies')}
-            className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-orange-500/20 hover:text-orange-300 text-left"
+          <Link
+            href="/"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-orange-500/20 hover:text-orange-300"
           >
             <BookOpen className="w-4 h-4 text-orange-400" />
-            <span>攻略文章</span>
-          </button>
+            <span>深度攻略门户</span>
+          </Link>
 
-          {SHOW_TOOLS && (
-            <button
-              onClick={() => handleNavClick('tools-section')}
-              className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-blue-500/20 hover:text-blue-300 text-left"
-            >
-              <Wrench className="w-4 h-4 text-blue-400" />
-              <span>实用工具</span>
-            </button>
-          )}
+          <Link
+            href="/items"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-amber-500/20 hover:text-amber-300"
+          >
+            <Layers className="w-4 h-4 text-amber-400" />
+            <span>百科图鉴中心 (158+词条)</span>
+          </Link>
+
+          <Link
+            href="/calculator"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-cyan-500/20 hover:text-cyan-300"
+          >
+            <Calculator className="w-4 h-4 text-cyan-400" />
+            <span>养成消耗与节点速查表</span>
+          </Link>
 
           <button
             onClick={() => handleNavClick('footer-about')}

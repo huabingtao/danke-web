@@ -34,9 +34,17 @@ export default function LatestStrategiesSection({
 }: LatestStrategiesSectionProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // 基础攻略集合（彻底筛除过滤掉弹壳日历与实机录像视频，保持攻略专区 100% 纯粹图文深度精算）
+  // 基础攻略集合（彻底筛除过滤掉每日提醒/日历与实机录像视频，保持攻略专区 100% 纯粹图文深度精算）
   const strategyOnlyArticles = articles.filter(
-    (item) => item.category !== 'reminder' && item.category !== 'video'
+    (item) =>
+      item.category !== 'reminder' &&
+      item.category !== 'video' &&
+      item.categoryLabel !== '每日日历' &&
+      item.categoryLabel !== '提醒' &&
+      item.tag !== '提醒' &&
+      !item.title.includes('日历') &&
+      !item.title.includes('每日事项') &&
+      !item.title.includes('每日提醒')
   );
 
   // 综合过滤：分类 + 关键词搜索
@@ -181,10 +189,10 @@ export default function LatestStrategiesSection({
 
                 {/* 右侧主文字内容 */}
                 <div className="flex-1 min-w-0 flex flex-col justify-between h-full space-y-1.5">
-                  {/* 顶部标签行：分类、适用版本 */}
+                  {/* 顶部标签行：分类/Tag、适用版本 */}
                   <div className="flex items-center space-x-2 flex-wrap gap-y-1">
                     <span className="px-2 py-0.5 rounded-md bg-orange-500/15 text-orange-400 text-[10px] font-bold border border-orange-500/30">
-                      {article.categoryLabel}
+                      {(article.tag || article.categoryLabel).replace(/\([a-zA-Z-]+\)/g, '')}
                     </span>
                     {article.gameVersion && (
                       <span className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px] font-semibold border border-slate-700/60">

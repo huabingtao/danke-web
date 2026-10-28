@@ -64,7 +64,7 @@ export default function FeaturedSection({
               {/* 顶部标签 */}
               <div className="absolute top-3.5 left-3.5 flex items-center space-x-2">
                 <span className="px-2.5 py-1 rounded-xl bg-orange-500 text-slate-950 text-xs font-black shadow-md">
-                  {featured.categoryLabel}
+                  {(featured.tag || featured.categoryLabel).replace(/\([a-zA-Z-]+\)/g, '')}
                 </span>
                 {featured.gameVersion && (
                   <span className="px-2 py-0.5 rounded-lg bg-slate-900/90 text-slate-300 text-[11px] font-semibold border border-slate-700 backdrop-blur-md">
@@ -122,7 +122,7 @@ export default function FeaturedSection({
                 <div className="min-w-0 space-y-1">
                   <div className="flex items-center space-x-2">
                     <span className="text-[11px] font-bold text-amber-400/90 shrink-0">
-                      {article.tags && article.tags[0] ? article.tags[0] : '攻略精选'}
+                      {(article.tag || (article.tags && article.tags[0] ? article.tags[0] : '攻略精选')).replace(/\([a-zA-Z-]+\)/g, '')}
                     </span>
                     {article.gameVersion && (
                       <span className="text-[10px] text-slate-500 hidden sm:inline">

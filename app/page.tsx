@@ -10,12 +10,23 @@ export default async function Home() {
   try {
     const data = await fetchStrategies();
     if (data && Array.isArray(data) && data.length > 0) {
-      // 首页攻略门户：根据要求彻底过滤掉弹壳日历（reminder），作为纯粹攻略专区
-      const strategiesOnly = data.filter((item: any) => item.category !== 'reminder');
+      // 首页攻略门户：根据要求彻底过滤掉每日提醒（reminder / 日历）
+      const isReminder = (item: any) =>
+        item.category === 'reminder' ||
+        item.categoryLabel?.includes('提醒') ||
+        item.categoryLabel?.includes('日历') ||
+        item.title?.includes('【弹壳日历】') ||
+        item.title?.includes('日历') ||
+        item.title?.includes('每日事项') ||
+        item.title?.includes('每日提醒') ||
+        item.slug?.includes('reminder') ||
+        item.sourcePath?.includes('提醒/');
+
+      const strategiesOnly = data.filter((item: any) => !isReminder(item));
       const apiBase = getApiBase();
       initialArticles = strategiesOnly.map((item: any) => {
         let coverImg = item.cover;
-        if (coverImg && coverImg.startsWith('/uploads/')) {
+        if (coverImg && coverImg.startsWith('/uploads/') && apiBase && !apiBase.includes('localhost:3001')) {
           coverImg = `${apiBase}${coverImg}`;
         }
         // 格式化完整年月日 (YYYY-MM-DD)
@@ -27,19 +38,30 @@ export default async function Home() {
           fullDate = item.date.length === 5 ? `2026-${item.date}` : item.date;
         }
 
+        const rawTag =
+          item.tag ||
+          (Array.isArray(item.highlights) && item.highlights[0]) ||
+          item.categoryLabel ||
+          '攻略';
+        const tag = String(rawTag).replace(/\([a-zA-Z-]+\)/g, '').trim();
+        const cleanLabel = String(item.categoryLabel || tag).replace(/\([a-zA-Z-]+\)/g, '').trim();
+
         return {
           id: item.id || item.slug,
           slug: item.slug,
           title: item.title,
+          tag,
           category: item.category || 'event',
-          categoryLabel: item.categoryLabel || '战术攻略',
+          categoryLabel: cleanLabel,
           summary: item.summary || item.title,
           coverImage: coverImg || '/assets/strategy-cover-4th.png',
           publishedAt: fullDate,
-          tags: Array.isArray(item.highlights) ? item.highlights : ['弹壳特攻队', '攻略'],
+          tags: Array.isArray(item.highlights)
+            ? item.highlights.map((h: string) => String(h).replace(/\([a-zA-Z-]+\)/g, '').trim())
+            : ['弹壳特攻队', '攻略'],
           externalUrl: item.url,
           badge: item.badge,
-          isMustRead: item.slug?.includes('1000000159') || item.slug?.includes('1000000149'),
+          isMustRead: item.slug?.includes('1000000149') || item.slug?.includes('1000000157'),
         };
       });
     }

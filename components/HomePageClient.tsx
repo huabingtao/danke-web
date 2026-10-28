@@ -82,8 +82,41 @@ export default function HomePageClient({ initialArticles }: HomePageClientProps)
           onSelectArticle={handleArticleClick}
         />
 
-        {/* [预留插槽] 常用工具模块 */}
-        <HomeToolsSection availableTools={[]} />
+        {/* 4. Wiki 百科图鉴与核心工具快捷模块 */}
+        <HomeToolsSection
+          availableTools={[
+            {
+              id: 'wiki-encyclopedia',
+              name: '📚 全量百科图鉴中心 (158+词条)',
+              desc: '查询 SP/S特工、SS神装、1-10期红/金收藏品暴击率与暴伤词条、S宠物幽暗之灵及双生配件图鉴。',
+              sourceLabel: 'Wiki 核心',
+              url: '/items',
+            },
+            {
+              id: 'wiki-progression-calculator',
+              name: '🧮 五大养成消耗与节点速查器',
+              desc: 'SS神炼5阶段核心表、543/741/840/844特工核心、21/50/90/150异宠核心槽位与阶段差额计算器。',
+              sourceLabel: '精算矩阵',
+              url: '/calculator',
+            },
+            {
+              id: 'danke-rank',
+              name: '🚗 并列发车大厅 & 计时器',
+              desc: '活动组队并列毫秒级倒计时与班次预约锁定工具。',
+              sourceLabel: '实时工具',
+              url: 'https://dankerank.guaguahub.cn',
+              isExternal: true,
+            },
+            {
+              id: 'danke-market',
+              name: '🛒 欢乐牧场高价卖菜看板',
+              desc: '多人并发自主填报与高价卖菜实时匹配看板。',
+              sourceLabel: '活动看板',
+              url: 'https://dankemarket.guaguahub.cn',
+              isExternal: true,
+            },
+          ]}
+        />
 
         {/* 4. 最新深度攻略列表（纯图文精算，已完全剥离日历与视频） */}
         <LatestStrategiesSection

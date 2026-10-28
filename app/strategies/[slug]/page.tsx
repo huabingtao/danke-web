@@ -1,39 +1,181 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import fs from 'fs';
+import path from 'path';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar, Clock, Eye, ExternalLink, Sparkles, FileText, Globe, Play, Film, Video } from 'lucide-react';
 import TopNavBar from '@/components/TopNavBar';
 import FooterSection from '@/components/FooterSection';
 import TacticalArticleViewer from '@/components/TacticalArticleViewer';
 import { fetchStrategyBySlug } from '@/lib/api';
+import { stripFrontmatter, renderMarkdownToHtml, safeDecodeUri } from '@/lib/markdown';
+import { resolveLocalArticle, getAllLocalArticleSlugs } from '@/lib/article-resolver';
+import { ALL_STRATEGIES, FEATURED_STRATEGY, MUST_READ_STRATEGIES } from '@/lib/local-strategies-data';
+import { LOCAL_WIKI_ENTRIES, LOCAL_HANDBOOK_GUIDES } from '@/lib/local-wiki-data';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
+  const localSlugs = getAllLocalArticleSlugs();
+  const fallbackSlugs = Array.from(
+    new Set([
+      ...localSlugs,
+      ...ALL_STRATEGIES.map((s) => s.slug).filter(Boolean),
+      ...LOCAL_HANDBOOK_GUIDES.map((g) => g.articleSlug).filter(Boolean),
+      'resources-%e7%a5%9e%e7%82%bc%e9%a1%ba%e5%ba%8f%e6%8e%a8%e8%8d%90',
+      'resources-ss%e8%a3%85%e5%a4%87%e5%90%88%e6%88%90%e9%a1%ba%e5%ba%8f',
+      'resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90',
+      'resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f',
+      'resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87',
+      'resources-%e5%bc%82%e5%ae%a0%e6%a0%b8%e5%bf%83%e6%b6%88%e8%80%97%e8%8a%82%e7%82%b9%e6%8e%a8%e8%8d%90',
+      'resources-%e9%85%8d%e4%bb%b6%e8%bf%87%e8%bd%bd%e6%b6%88%e8%80%97',
+      'resources-%e8%bd%bd%e5%85%b7%e9%9b%b6%e4%bb%b6%e6%91%86%e6%94%be%e6%94%bb%e7%95%a5',
+      'faq-%e5%91%a8%e5%b8%b8%e5%92%8c%e6',
+    ]),
+  );
+
   try {
-    const res = await fetch('http://localhost:3000/api/strategies?limit=1000');
-    if (!res.ok) return [];
+    const res = await fetch('http://localhost:3001/api/strategies?limit=1000');
+    if (!res.ok) return fallbackSlugs.map((slug) => ({ slug }));
     const items = await res.json();
-    return items.map((item: { slug: string }) => ({
-      slug: item.slug,
-    }));
-  } catch (e) {
-    console.warn('generateStaticParams fallback:', e);
-    return [];
+    if (!Array.isArray(items) || items.length === 0) {
+      return fallbackSlugs.map((slug) => ({ slug }));
+    }
+    const merged = new Set([
+      ...items.map((item: { slug: string }) => item.slug),
+      ...fallbackSlugs,
+    ]);
+    return Array.from(merged).map((slug) => ({ slug }));
+  } catch {
+    return fallbackSlugs.map((slug) => ({ slug }));
   }
 }
 
 export default async function StrategyDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const decodedSlug = decodeURIComponent(slug);
-  const article = await fetchStrategyBySlug(decodedSlug);
+  const decodedSlug = safeDecodeUri(slug);
 
-  if (!article) {
-    notFound();
+  // 1. 优先尝试从 danke-core API 获取
+  let article = await fetchStrategyBySlug(decodedSlug);
+  if (!article && slug !== decodedSlug) {
+    article = await fetchStrategyBySlug(slug);
   }
+
+  // 2. 若 API 未启动或返回空，使用本地文件解析器从 my-articles-md 实时读取并渲染
+  if (!article) {
+    article = resolveLocalArticle(slug) || resolveLocalArticle(decodedSlug);
+  }
+
+  // 3. 兜底匹配预置常量与手册
+  if (!article) {
+    const localMatch =
+      (FEATURED_STRATEGY.slug === slug || FEATURED_STRATEGY.slug === decodedSlug
+        ? FEATURED_STRATEGY
+        : null) ||
+      MUST_READ_STRATEGIES.find((s) => s.slug === slug || s.slug === decodedSlug) ||
+      ALL_STRATEGIES.find((s) => s.slug === slug || s.slug === decodedSlug);
+    const handbookMatch = LOCAL_HANDBOOK_GUIDES.find(
+      (g) => g.articleSlug === slug || g.articleSlug === decodedSlug,
+    );
+    if (localMatch) {
+      let contentHtml = `<p>${localMatch.summary}</p>`;
+      // 尝试在本地文件系统中查找对应的 Markdown 手稿并使用 marked 编译
+      try {
+        if (localMatch.coverImage && localMatch.coverImage.startsWith('/uploads/creator/')) {
+          const relDir = localMatch.coverImage
+            .replace('/uploads/creator/', '')
+            .replace(/\/(dist\/)?cover\.png$/, '');
+          const creatorDir = path.resolve(process.cwd(), '../danke-creator/my-articles-md', relDir);
+          if (fs.existsSync(creatorDir)) {
+            const files = fs.readdirSync(creatorDir);
+            const mdFile =
+              files.find(
+                (f) =>
+                  f.endsWith('.md') &&
+                  !f.includes('_stage') &&
+                  f !== '粗稿.md' &&
+                  !f.includes('征集') &&
+                  !f.startsWith('.'),
+              ) ||
+              files.find((f) => f.endsWith('.md') && !f.includes('_stage')) ||
+              files.find((f) => f.endsWith('.md'));
+            if (mdFile) {
+              const rawMd = fs.readFileSync(path.join(creatorDir, mdFile), 'utf-8');
+              contentHtml = renderMarkdownToHtml(rawMd, relDir);
+            }
+          }
+        }
+      } catch (e) {
+        // fallback to summary
+      }
+
+      article = {
+        slug: localMatch.slug,
+        title: localMatch.title,
+        tag: localMatch.tag,
+        category: localMatch.category,
+        categoryLabel: localMatch.tag || localMatch.categoryLabel,
+        summary: localMatch.summary,
+        date: localMatch.publishedAt,
+        highlights: localMatch.tags,
+        sourceType: 'LOCAL_MARKDOWN',
+        contentHtml,
+      };
+    } else if (handbookMatch) {
+      article = {
+        slug: handbookMatch.articleSlug,
+        title: handbookMatch.title,
+        tag: '装备',
+        category: handbookMatch.category.toLowerCase(),
+        categoryLabel: handbookMatch.chapter,
+        summary: handbookMatch.routeSummary,
+        date: '2026-10-25',
+        highlights: handbookMatch.keyTakeaways,
+        sourceType: 'LOCAL_MARKDOWN',
+        contentHtml: renderMarkdownToHtml(
+          `### ${handbookMatch.title}\n\n${handbookMatch.routeSummary}\n\n${handbookMatch.keyTakeaways
+            .map((k) => `- ${k}`)
+            .join('\n')}`,
+        ),
+      };
+    } else {
+      article = {
+        slug: decodedSlug,
+        title: `《弹壳特攻队》专题攻略`,
+        tag: '攻略',
+        category: 'resources',
+        categoryLabel: 'Wiki 专题攻略',
+        summary: '结合最新实战测试整理的核心机制、节点消耗与养成优先级指南。',
+        date: '2026-10-25',
+        highlights: ['核心机制', '养成优先级'],
+        sourceType: 'LOCAL_MARKDOWN',
+        contentHtml: '<p>请结合下方关联 Wiki 词条与养成消耗速查矩阵查阅详细数值节点。</p>',
+      };
+    }
+  } else {
+    // 若从 core 返回了 contentMarkdown，优先以 marked 重新编译为纯净无数据头的 HTML
+    if (article.contentMarkdown) {
+      const cleanPath = article.sourcePath
+        ? article.sourcePath.replace(/^.*my-articles-md\//, '')
+        : '';
+      const relDir = cleanPath.endsWith('.md')
+        ? path.dirname(cleanPath)
+        : cleanPath;
+      article.contentHtml = renderMarkdownToHtml(article.contentMarkdown, relDir);
+    } else if (article.contentHtml) {
+      article.contentHtml = stripFrontmatter(article.contentHtml);
+    }
+  }
+
+  const rawTag =
+    article.tag ||
+    (Array.isArray(article.highlights) && article.highlights[0]) ||
+    article.categoryLabel ||
+    '战术攻略';
+  const articleTag = String(rawTag).replace(/\([a-zA-Z-]+\)/g, '').trim();
 
   const isLocalMarkdown = article.sourceType === 'LOCAL_MARKDOWN';
   const isVideo = article.category === 'video' || article.contentType === 'VIDEO';
@@ -83,7 +225,7 @@ export default async function StrategyDetailPage({ params }: PageProps) {
         <header className="mb-8 bg-[#131d33]/80 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm shadow-xl">
           <div className="flex flex-wrap items-center gap-2.5 mb-4">
             <span className="px-2.5 py-0.5 rounded-lg text-xs font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/30">
-              {article.categoryLabel || '战术攻略'}
+              {articleTag}
             </span>
             {article.badge && (
               <span className="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-rose-500/20 text-rose-400 border border-rose-500/40">
@@ -220,6 +362,55 @@ export default async function StrategyDetailPage({ params }: PageProps) {
             />
           </section>
         )}
+
+        {/* 本篇关联 Wiki 图鉴词条与养成消耗速查联动 */}
+        <section className="mt-8 rounded-2xl border border-slate-800 bg-[#11192c]/90 p-6 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h3 className="text-sm sm:text-base font-black text-white flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-orange-400" />
+              <span>关联 Wiki 百科词条与养成消耗速查</span>
+            </h3>
+            <div className="flex items-center gap-3 text-xs font-bold">
+              <Link href="/items" className="text-orange-400 hover:text-orange-300">
+                全部图鉴词条 →
+              </Link>
+              <Link href="/calculator" className="text-cyan-400 hover:text-cyan-300">
+                养成消耗矩阵 →
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+            {LOCAL_WIKI_ENTRIES.filter(
+              (entry) =>
+                entry.relatedArticleSlugs.includes(decodedSlug) ||
+                article.title?.includes(entry.name),
+            )
+              .slice(0, 4)
+              .map((entry) => (
+                <Link
+                  key={entry.slug}
+                  href="/items"
+                  className="flex items-center space-x-3 p-3 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-orange-500/40 transition-all group"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={entry.icon}
+                    alt={entry.name}
+                    className="w-10 h-10 object-contain shrink-0"
+                  />
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-white truncate group-hover:text-orange-400">
+                      {entry.name}
+                    </p>
+                    <p className="text-[10px] text-slate-400 truncate">
+                      {entry.tier || entry.subcategory}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+          </div>
+        </section>
 
         {/* 底部导航返回区 */}
         <footer className="mt-10 flex items-center justify-between gap-4 py-6 border-t border-slate-800 text-sm">

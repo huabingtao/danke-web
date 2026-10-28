@@ -131,3 +131,389 @@
 .animate-pulse-slow {
   animation: pulse-slow 4s ease-in-out infinite;
 }
+
+/* ==========================================================================
+   战术攻略 Markdown 渲染样式体系
+   移植并融合 cross-publisher (doocs/md) 微信排版精髓与暗色战术视觉
+   ========================================================================== */
+
+:root {
+  --md-primary-color: #f97316;
+  --md-primary-glow: rgba(249, 115, 22, 0.35);
+}
+
+.tactical-content {
+  font-size: 16px;
+  line-height: 1.85;
+  color: #cbd5e1;
+  word-break: break-word;
+}
+
+/* 一级标题 (H1) */
+.tactical-content h1,
+.tactical-content .h1 {
+  display: block;
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #ffffff;
+  padding-bottom: 0.6em;
+  margin: 1.5em 0 1.2em;
+  border-bottom: 2px solid rgba(249, 115, 22, 0.4);
+  position: relative;
+  letter-spacing: -0.01em;
+}
+
+.tactical-content h1::after,
+.tactical-content .h1::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 80px;
+  height: 2px;
+  background: var(--md-primary-color);
+  box-shadow: 0 0 10px var(--md-primary-glow);
+}
+
+/* 二级标题 (H2) - 核心特色战术徽章 */
+.tactical-content h2,
+.tactical-content .h2 {
+  display: inline-table;
+  padding: 0.35em 0.95em;
+  margin: 2.2em 0 1.2em;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  border-radius: 6px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 14px -2px rgba(249, 115, 22, 0.45);
+}
+
+.tactical-content h2 strong,
+.tactical-content .h2 strong {
+  color: #ffffff !important;
+}
+
+/* 三级标题 (H3) */
+.tactical-content h3,
+.tactical-content .h3 {
+  padding-left: 10px;
+  border-left: 3.5px solid var(--md-primary-color);
+  margin: 1.8em 0 0.9em;
+  color: #f1f5f9;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* 四级 / 五级标题 (H4 / H5) */
+.tactical-content h4,
+.tactical-content .h4 {
+  margin: 1.4em 0 0.7em;
+  color: #fb923c;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.tactical-content h5,
+.tactical-content .h5 {
+  margin: 1.2em 0 0.6em;
+  color: #fdba74;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* 正文段落 (Paragraph) */
+.tactical-content p,
+.tactical-content .p {
+  margin: 1.2em 0;
+  line-height: 1.85;
+  color: #cbd5e1;
+  font-size: 1.025rem;
+  letter-spacing: 0.015em;
+}
+
+/* 重点加粗 (Strong) */
+.tactical-content strong,
+.tactical-content .strong {
+  color: #fb923c;
+  font-weight: 700;
+  text-shadow: 0 0 12px rgba(249, 115, 22, 0.25);
+}
+
+/* 强调斜体 (Em) */
+.tactical-content em,
+.tactical-content .em {
+  font-style: italic;
+  color: #e2e8f0;
+}
+
+/* 引用块 (Blockquote) */
+.tactical-content blockquote,
+.tactical-content .blockquote {
+  margin: 1.6em 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--md-primary-color);
+  border-radius: 0 10px 10px 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  color: #94a3b8;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4);
+}
+
+.tactical-content blockquote p,
+.tactical-content .blockquote p {
+  margin: 0.4em 0;
+  color: #94a3b8;
+}
+
+/* 行内代码 (Codespan) */
+.tactical-content code:not(pre code),
+.tactical-content .codespan {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.88em;
+  color: #fb923c;
+  background: rgba(249, 115, 22, 0.12);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin: 0 3px;
+}
+
+/* 代码块 (Code Blocks - macOS 经典红黄绿点) */
+.tactical-content pre.hljs,
+.tactical-content .code__pre {
+  background: #090d16 !important;
+  border: 1px solid rgba(51, 65, 85, 0.75);
+  border-radius: 10px;
+  margin: 1.6em 0;
+  padding: 0 !important;
+  overflow: hidden;
+  box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.tactical-content .mac-sign {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px 8px;
+  background: rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  user-select: none;
+}
+
+.tactical-content .mac-sign svg {
+  display: block;
+}
+
+.tactical-content .line-numbers {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: #475569;
+  border-right: 1px solid rgba(51, 65, 85, 0.4);
+  user-select: none;
+  font-size: 0.85em;
+  padding-right: 12px;
+}
+
+.tactical-content .code-scroll {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+  color: #e2e8f0;
+}
+
+.tactical-content pre.code__pre > code,
+.tactical-content .hljs.code__pre > code {
+  display: block;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  color: inherit;
+  background: none;
+  line-height: 1.65;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+
+/* Highlight.js 暗色语法高亮体系 (Atom One Dark Inspired) */
+.tactical-content .hljs-keyword,
+.tactical-content .hljs-operator,
+.tactical-content .hljs-selector-tag {
+  color: #f472b6;
+}
+
+.tactical-content .hljs-string,
+.tactical-content .hljs-attribute {
+  color: #4ade80;
+}
+
+.tactical-content .hljs-number,
+.tactical-content .hljs-literal {
+  color: #fb923c;
+}
+
+.tactical-content .hljs-function,
+.tactical-content .hljs-title {
+  color: #60a5fa;
+}
+
+.tactical-content .hljs-comment,
+.tactical-content .hljs-quote {
+  color: #64748b;
+  font-style: italic;
+}
+
+.tactical-content .hljs-variable,
+.tactical-content .hljs-template-variable {
+  color: #f87171;
+}
+
+.tactical-content .hljs-built_in,
+.tactical-content .hljs-type {
+  color: #38bdf8;
+}
+
+.tactical-content .hljs-tag {
+  color: #94a3b8;
+}
+
+/* 表格 (Responsive Tables) */
+.tactical-content .table-scroll-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.8em 0;
+  border-radius: 10px;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  background: rgba(15, 23, 42, 0.6);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+}
+
+.tactical-content table,
+.tactical-content .preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  margin: 0;
+}
+
+.tactical-content th,
+.tactical-content .th {
+  background: rgba(30, 41, 59, 0.95);
+  color: #f97316;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 12px 16px;
+  border: 1px solid #334155;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.tactical-content td,
+.tactical-content .td {
+  padding: 11px 16px;
+  border: 1px solid rgba(51, 65, 85, 0.55);
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.tactical-content tr:nth-child(even) {
+  background: rgba(30, 41, 59, 0.35);
+}
+
+.tactical-content tr:hover {
+  background: rgba(249, 115, 22, 0.07);
+}
+
+/* 列表 (Lists) */
+.tactical-content ul,
+.tactical-content .ul {
+  padding-left: 1.4em;
+  margin: 1.2em 0;
+  list-style: none;
+}
+
+.tactical-content ol,
+.tactical-content .ol {
+  padding-left: 1.4em;
+  margin: 1.2em 0;
+  list-style: none;
+}
+
+.tactical-content li,
+.tactical-content .listitem {
+  position: relative;
+  margin: 0.5em 0;
+  color: #cbd5e1;
+  line-height: 1.8;
+  font-size: 1.025rem;
+}
+
+/* 图片与画框 (Images & Figures) */
+.tactical-content figure,
+.tactical-content .figure {
+  margin: 2em auto;
+  text-align: center;
+  max-width: 100%;
+}
+
+.tactical-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  box-shadow: 0 12px 36px -6px rgba(0, 0, 0, 0.65), 0 0 18px -4px rgba(249, 115, 22, 0.15);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tactical-content img:hover {
+  transform: scale(1.01);
+}
+
+.tactical-content figcaption,
+.tactical-content .figcaption {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-top: 10px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* 分割线 (Horizontal Rule) */
+.tactical-content hr,
+.tactical-content .hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.5), transparent);
+  margin: 2.8em 0;
+}
+
+/* 链接 (Links) */
+.tactical-content a {
+  color: #f97316;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(249, 115, 22, 0.5);
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.tactical-content a:hover {
+  color: #fdba74;
+  border-bottom-style: solid;
+}
+
+/* 引用链接列表 (Footnotes) */
+.tactical-content p.footnotes {
+  margin-top: 2em;
+  padding: 1.2em 1.5em;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  font-size: 0.85rem;
+  color: #94a3b8;
+  line-height: 1.8;
+}
