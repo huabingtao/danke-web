@@ -6,18 +6,92 @@ export interface WikiMilestone {
   isKeyNode?: boolean;
 }
 
+export interface EquipQualitySkill {
+  quality: string;
+  label: string;
+  effect: string;
+  color: string;
+}
+
+export interface EquipTabDetail {
+  qualitySkills?: EquipQualitySkill[];
+  godforge?: WikiMilestone[];
+  chaosFusion?: WikiMilestone[];
+  alienRefinement?: WikiMilestone[];
+}
+
+export interface PetInnateSkill {
+  name: string;
+  description: string;
+  icon: string;
+}
+
+export interface PetAwakenStarItem {
+  star: number;
+  tier: 'yellow' | 'red';
+  lines: string[];
+}
+
+export interface PetSkillItem {
+  name: string;
+  description: string;
+  icon: string;
+  type?: 'support' | 'passive';
+  tierRange?: string;
+}
+
+export interface PetDetailData {
+  innateSkills: PetInnateSkill[];
+  awakeningStars: PetAwakenStarItem[];
+  supportSkills?: PetSkillItem[];
+  passives?: PetSkillItem[];
+}
+
+export interface TechQualitySkill {
+  quality: number;
+  label: string;
+  effect: string;
+  color: string;
+}
+
+export interface TechHarmonyItem {
+  grade: number;
+  reqLevel: number;
+  desc: string;
+}
+
+export interface TechOverloadItem {
+  level: number;
+  reqLevel: number;
+  desc: string;
+}
+
+export interface TechPartTabDetail {
+  baseStats: {
+    atk: number;
+    hp: number;
+    partType: string;
+  };
+  qualitySkills: TechQualitySkill[];
+  harmony: TechHarmonyItem[];
+  overload: TechOverloadItem[];
+}
+
 export interface WikiEntryAttributes {
   slot?: string;
   baseStats?: string[];
   milestones?: WikiMilestone[];
   acquisition?: string;
   synergy?: string;
+  equipTabs?: EquipTabDetail;
+  petDetail?: PetDetailData;
+  techTabs?: TechPartTabDetail;
 }
 
 export interface WikiEntryItem {
   slug: string;
   name: string;
-  category: 'AGENT' | 'EQUIPMENT' | 'COLLECTIBLE' | 'PET' | 'TECH_PART' | 'MOUNT' | 'MECHANIC';
+  category: 'AGENT' | 'EQUIPMENT' | 'COLLECTIBLE' | 'PET' | 'TECH_PART' | 'MOUNT' | 'MECHANIC' | 'BUFF';
   subcategory?: string;
   edition?: string;
   rarity: 'SS' | 'SP' | 'S' | 'LEGENDARY' | 'EPIC' | 'COMMON';
@@ -574,7 +648,7 @@ export const LOCAL_PROGRESSION_MATRICES: ProgressionMatrixItem[] = [
       },
       {
         "module": "🛸 载具选择与零件摆放",
-        "priority1": "主力候选：末世战马 / 幽焰逐影（幽灵狼）",
+        "priority1": "主力候选：末世战马 / 幽焰逐影",
         "priority2": "过渡载具：电动平衡车 / 科技滑板",
         "priority3": "闲置载具装满剩余零件吃同步率属性",
         "rule": "先铺满格子连成横线（横线特效仅出战车生效），全部铺满金后再用多余零件合红！"
@@ -623,16 +697,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-nezha",
     "name": "哪吒",
     "category": "AGENT",
-    "subcategory": "SP神火特工",
+    "subcategory": "SP",
     "rarity": "SP",
-    "tier": "T0 神火基石",
     "icon": "/wiki-assets/特工/哪吒.png",
     "summary": "神火特工体系绝对基石，提供核心「神火」持续灼烧环境，伏尔甘与洛基的连携增伤均强依赖哪吒。",
     "tags": [
-      "SP特工",
-      "神火基石",
-      "紫焰降魔",
-      "三昧真火"
+      "全体特工生命+5%",
+      "全体特工升级时恢复5%生命",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -663,16 +735,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-vulcan",
     "name": "伏尔甘",
     "category": "AGENT",
-    "subcategory": "SP神火特工",
+    "subcategory": "SP",
     "rarity": "SP",
-    "tier": "T0 乘区核心",
     "icon": "/wiki-assets/特工/伏尔甘.png",
     "summary": "神火特工第二弹核心，自带神火与裂伤双乘区加成，觉醒1红星即可让武器技能开局等级+1，回响之战质变利器。",
     "tags": [
-      "SP特工",
-      "神火淬炼",
-      "火神熔炉",
-      "开局技能+1"
+      "全体特工生命+5%",
+      "全体特工升级时恢复5%生命",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -699,16 +769,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-loki",
     "name": "洛基",
     "category": "AGENT",
-    "subcategory": "SP神火特工",
+    "subcategory": "SP",
     "rarity": "SP",
-    "tier": "T0 连携余烬",
     "icon": "/wiki-assets/特工/洛基.png",
     "summary": "神火特工第三弹核心，神火结束后附加「恶意余烬」多层阶梯增伤，4红星实现100%必中触发。",
     "tags": [
-      "SP特工",
-      "恶意余烬",
-      "神火连携",
-      "4红星质变"
+      "全体特工生命+5%",
+      "全体特工升级时恢复5%生命",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -740,17 +808,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-vitor",
     "name": "维托尔",
     "category": "AGENT",
-    "subcategory": "S级主力特工",
-    "rarity": "SS",
-    "tier": "T0 中后期主C",
+    "subcategory": "S",
+    "rarity": "S",
     "icon": "/wiki-assets/特工/维托尔.png",
     "summary": "543增强版、741（112核）、840（141核）绝对主力出战特工，神火狂啸与高额首领爆发核心。",
     "tags": [
-      "主力特工",
-      "543阵容",
-      "741阵容",
-      "840阵容",
-      "爆发核心"
+      "全体特工攻击+10%",
+      "全体特工恢复效果+5%",
+      "全体特工暴击伤害+10%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -782,16 +847,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-yiling",
     "name": "伊狑",
     "category": "AGENT",
-    "subcategory": "S级顶配特工",
-    "rarity": "SS",
-    "tier": "T0 844顶配主C",
+    "subcategory": "S",
+    "rarity": "S",
     "icon": "/wiki-assets/特工/伊狑.png",
     "summary": "844顶配阵容（156核）出战主C，可额外召唤第1助战位宠物协同作战，配合红5河豚或超武燃烧瓶/火箭补足挂毒。",
     "tags": [
-      "844阵容",
-      "双宠出战",
-      "顶配主C",
-      "S特工"
+      "全体特工攻击+10%",
+      "全体特工恢复效果+5%",
+      "全体特工暴击伤害+10%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -813,16 +876,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-taloshia",
     "name": "塔洛西娅",
     "category": "AGENT",
-    "subcategory": "S级核心特工",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T0 开荒主C / 后期右位",
     "icon": "/wiki-assets/特工/塔洛西娅.png",
     "summary": "攒够120个S碎片后的首选特工！前期一路主C至觉醒红5且面板裂伤达150%，后期在741/840/844中稳坐右位红4协同。",
     "tags": [
-      "120碎片首选",
-      "裂伤核心",
-      "543主C",
-      "右位红4协同"
+      "全体特工攻击+10%",
+      "全体特工恢复效果+5%",
+      "全体特工暴击伤害+10%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -849,16 +910,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-rinne",
     "name": "凛音",
     "category": "AGENT",
-    "subcategory": "S级挂毒特工",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T0 左位挂毒核心",
     "icon": "/wiki-assets/特工/凛音.png",
     "summary": "543/741/840阵容左位灵魂辅助，提供极其稳定的Boss挂毒（中毒易伤）覆盖，搭配时务必始终放在左边槽位。",
     "tags": [
-      "左位固定",
-      "全程挂毒",
-      "协同核心",
-      "S特工"
+      "全体特工攻击+10%",
+      "全体特工恢复效果+5%",
+      "全体特工暴击伤害+10%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -890,15 +949,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-common",
     "name": "科萌",
     "category": "AGENT",
-    "subcategory": "初始特工",
+    "subcategory": "普通",
     "rarity": "COMMON",
-    "tier": "T1 开荒过渡 / 连携常客",
     "icon": "/wiki-assets/特工/科萌.png",
     "summary": "新手初始特工，在攒满120个S碎片换塔洛西娅前全力使用；后期在543丐版中任右位红4，并提供通用连携被动。",
     "tags": [
-      "新手开荒",
-      "543丐版右位",
-      "通用连携"
+      "全体特工暴击伤害+5%",
+      "全体特工升级时恢复5%生命",
+      "全体特工暴击率+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -924,15 +982,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E6%9D%A8%E5%A4%A7%E5%B8%88",
     "name": "杨大师",
     "category": "AGENT",
-    "subcategory": "S级特工",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T1 经典特工",
     "icon": "/wiki-assets/特工/杨大师.png",
     "summary": "经典阴阳太极体系S特工，可切换狂风掌与秘传气功弹施加阴阳易伤。",
     "tags": [
-      "S级特工",
-      "T1 经典特工",
-      "特工图鉴"
+      "全体特工攻击+10%",
+      "全体特工恢复效果+5%",
+      "全体特工暴击率+10%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -954,15 +1011,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E5%A8%81%E5%BD%BB",
     "name": "威彻",
     "category": "AGENT",
-    "subcategory": "S级特工",
-    "rarity": "S",
-    "tier": "T2 战术特工",
+    "subcategory": "普通",
+    "rarity": "COMMON",
     "icon": "/wiki-assets/特工/威彻.png",
     "summary": "具备极高单体穿透与机械协同能力的S级特工。",
     "tags": [
-      "S级特工",
-      "T2 战术特工",
-      "特工图鉴"
+      "全体特工攻击+5%",
+      "全体特工暴击率+5%",
+      "全体特工暴击伤害+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -984,15 +1040,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E4%B9%94%E4%BC%8A",
     "name": "乔伊",
     "category": "AGENT",
-    "subcategory": "S级特工",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T1 战术特工",
     "icon": "/wiki-assets/特工/乔伊.png",
     "summary": "新世代战术爆发型S特工，具备强力范围压制与连携增益。",
     "tags": [
-      "S级特工",
-      "T1 战术特工",
-      "特工图鉴"
+      "全体特工攻击+10%",
+      "全体特工恢复效果+5%",
+      "全体特工暴击伤害+10%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1014,15 +1069,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E9%87%91",
     "name": "金",
     "category": "AGENT",
-    "subcategory": "普通特工",
+    "subcategory": "普通",
     "rarity": "COMMON",
-    "tier": "T1 暴击协同",
     "icon": "/wiki-assets/特工/金.png",
     "summary": "拥有招牌被动「直觉（暴击率加成）」，前期协同位与金5全属性必练特工。",
     "tags": [
-      "普通特工",
-      "T1 暴击协同",
-      "特工图鉴"
+      "全体特工攻击+5%",
+      "全体特工暴击率+5%",
+      "全体特工暴击伤害+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1044,15 +1098,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E6%9C%88%E5%92%8F",
     "name": "月咏",
     "category": "AGENT",
-    "subcategory": "普通特工",
+    "subcategory": "普通",
     "rarity": "COMMON",
-    "tier": "T2 全队属性",
     "icon": "/wiki-assets/特工/月咏.png",
     "summary": "升至金5星可为全体特工提供宝贵的面板攻击力加成。",
     "tags": [
-      "普通特工",
-      "T2 全队属性",
-      "特工图鉴"
+      "全体特工攻击+5%",
+      "全体特工暴击率+5%",
+      "全体特工暴击伤害+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1074,15 +1127,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E6%B2%83%E5%B0%94%E9%BB%98",
     "name": "沃尔默",
     "category": "AGENT",
-    "subcategory": "普通特工",
+    "subcategory": "普通",
     "rarity": "COMMON",
-    "tier": "T2 探测增伤",
     "icon": "/wiki-assets/特工/沃尔默.png",
     "summary": "提供声波探测易伤与全特工面板属性加成。",
     "tags": [
-      "普通特工",
-      "T2 探测增伤",
-      "特工图鉴"
+      "全体特工生命+5%",
+      "全体特工恢复效果+5%",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1104,15 +1156,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E8%89%BE%E7%90%B3%E5%A8%9C",
     "name": "艾琳娜",
     "category": "AGENT",
-    "subcategory": "普通特工",
+    "subcategory": "普通",
     "rarity": "COMMON",
-    "tier": "T2 全队属性",
     "icon": "/wiki-assets/特工/艾琳娜.png",
     "summary": "升星解锁全体特工攻击/暴伤图鉴加成。",
     "tags": [
-      "普通特工",
-      "T2 全队属性",
-      "特工图鉴"
+      "全体特工生命+5%",
+      "全体特工恢复效果+5%",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1134,15 +1185,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E5%87%AF%E8%92%82%E6%96%AF",
     "name": "凯蒂斯",
     "category": "AGENT",
-    "subcategory": "普通特工",
+    "subcategory": "普通",
     "rarity": "COMMON",
-    "tier": "T2 医疗无人机",
     "icon": "/wiki-assets/特工/凯蒂斯.png",
     "summary": "召唤医疗无人机恢复血量，升星提供全特工基础属性。",
     "tags": [
-      "普通特工",
-      "T2 医疗无人机",
-      "特工图鉴"
+      "全体特工生命+5%",
+      "全体特工恢复效果+5%",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1164,15 +1214,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E8%8E%B1%E6%98%82%E7%BA%B3%E5%A4%9A",
     "name": "莱昂纳多",
     "category": "AGENT",
-    "subcategory": "SP联动特工（蓝龟）",
+    "subcategory": "SP",
     "rarity": "SP",
-    "tier": "T0 联动裂伤",
     "icon": "/wiki-assets/特工/莱昂纳多.png",
     "summary": "忍者神龟联动SP特工（蓝龟），提供高额裂伤与联动连携技能，金5加暴击率。",
     "tags": [
-      "SP联动特工（蓝龟）",
-      "T0 联动裂伤",
-      "特工图鉴"
+      "全体特工生命+5%",
+      "全体特工升级时恢复5%生命",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1194,15 +1243,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E6%8B%89%E6%96%90%E5%B0%94",
     "name": "拉斐尔",
     "category": "AGENT",
-    "subcategory": "SP联动特工（红龟）",
+    "subcategory": "SP",
     "rarity": "SP",
-    "tier": "T0 联动暴击",
     "icon": "/wiki-assets/特工/拉斐尔.png",
     "summary": "忍者神龟联动SP特工（红龟），金5提供全特工暴击率+8%，联动连携优选。",
     "tags": [
-      "SP联动特工（红龟）",
-      "T0 联动暴击",
-      "特工图鉴"
+      "全体特工生命+5%",
+      "全体特工升级时恢复5%生命",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1224,15 +1272,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E5%A4%9A%E7%BA%B3%E6%B3%B0%E7%BD%97",
     "name": "多纳泰罗",
     "category": "AGENT",
-    "subcategory": "SP联动特工（紫龟）",
+    "subcategory": "SP",
     "rarity": "SP",
-    "tier": "T1 联动科技",
     "icon": "/wiki-assets/特工/多纳泰罗.png",
     "summary": "忍者神龟联动SP特工（紫龟），升星提供全特工属性与联动被动。",
     "tags": [
-      "SP联动特工（紫龟）",
-      "T1 联动科技",
-      "特工图鉴"
+      "全体特工生命+5%",
+      "全体特工升级时恢复5%生命",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1254,15 +1301,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E7%B1%B3%E5%BC%80%E6%9C%97%E5%9F%BA%E7%BD%97",
     "name": "米开朗基罗",
     "category": "AGENT",
-    "subcategory": "SP联动特工（黄龟）",
+    "subcategory": "SP",
     "rarity": "SP",
-    "tier": "T1 联动旋风",
     "icon": "/wiki-assets/特工/米开朗基罗.png",
     "summary": "忍者神龟联动SP特工（黄龟），高频旋转打击与联动连携增益。",
     "tags": [
-      "SP联动特工（黄龟）",
-      "T1 联动旋风",
-      "特工图鉴"
+      "全体特工生命+5%",
+      "全体特工升级时恢复5%生命",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1284,15 +1330,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E6%96%AF%E6%99%AE%E6%9E%97%E7%89%B9",
     "name": "斯普林特",
     "category": "AGENT",
-    "subcategory": "SP联动特工（老鼠大师）",
+    "subcategory": "SP",
     "rarity": "SP",
-    "tier": "T1 宗师被动",
     "icon": "/wiki-assets/特工/斯普林特.png",
     "summary": "忍者神龟联动宗师（老鼠），提供强力被动加成与全特工图鉴属性。",
     "tags": [
-      "SP联动特工（老鼠大师）",
-      "T1 宗师被动",
-      "特工图鉴"
+      "全体特工生命+5%",
+      "全体特工恢复效果+5%",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1314,15 +1359,14 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "agent-%E7%88%B1%E6%99%AE%E8%8E%89%E5%B0%94",
     "name": "爱普莉尔",
     "category": "AGENT",
-    "subcategory": "SP联动特工（记者）",
+    "subcategory": "SP",
     "rarity": "SP",
-    "tier": "T1 战地记者",
     "icon": "/wiki-assets/特工/爱普莉尔.png",
     "summary": "忍者神龟联动特工（记者），金5提供全特工暴击率加成。",
     "tags": [
-      "SP联动特工（记者）",
-      "T1 战地记者",
-      "特工图鉴"
+      "全体特工生命+5%",
+      "全体特工恢复效果+5%",
+      "全体特工攻击+5%（满级效果）"
     ],
     "attributes": {
       "slot": "特工",
@@ -1341,16 +1385,207 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 22
   },
   {
+    "slug": "agent-章鱼哥",
+    "name": "章鱼哥",
+    "category": "AGENT",
+    "subcategory": "普通",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/特工/章鱼哥.png",
+    "summary": "一直生活在比奇堡，过着平凡的生活，言辞犀利、热爱音乐。只会使用自己独特的专属武器【单簧管】进行范围音波声刃攻击。",
+    "tags": [
+      "普通",
+      "音波声刃",
+      "联动特工",
+      "比奇堡"
+    ],
+    "attributes": {
+      "milestones": [
+        {
+          "stage": "1星",
+          "effect": "吹奏单簧管释放环形穿透声刃，击退附近敌群"
+        },
+        {
+          "stage": "2星",
+          "effect": "攻击力 +100，移动速度 +10%"
+        },
+        {
+          "stage": "3星",
+          "effect": "【D小调】单簧管音波攻击间隔降低 40%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "4星",
+          "effect": "生命上限 +1000，受击减免 +5%"
+        },
+        {
+          "stage": "5星",
+          "effect": "暴击率 +5%，全体特工基础面板加成"
+        },
+        {
+          "stage": "6星",
+          "effect": "【华丽变奏】致命乐章击败敌人时的范围爆炸伤害翻倍",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "海绵宝宝联动限定活动抽取 / 专属特工碎片兑换"
+    },
+    "relatedArticleSlugs": [],
+    "sort": 17
+  },
+  {
+    "slug": "agent-海绵宝宝",
+    "name": "海绵宝宝",
+    "category": "AGENT",
+    "subcategory": "普通",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/特工/海绵宝宝.png",
+    "summary": "比奇堡的模范市民，积极乐观、热情善良。手持特制金牌锅铲快速近战挥舞，挥击时附带油花飞溅与强力击退。",
+    "tags": [
+      "普通",
+      "特制锅铲",
+      "联动特工",
+      "比奇堡"
+    ],
+    "attributes": {
+      "milestones": [
+        {
+          "stage": "1星",
+          "effect": "使用锅铲攻击最近敌人，击中造成范围眩晕击退"
+        },
+        {
+          "stage": "2星",
+          "effect": "攻击力 +100，生命上限 +500"
+        },
+        {
+          "stage": "3星",
+          "effect": "【金牌厨师】锅铲攻击范围大幅提升 40%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "4星",
+          "effect": "生命上限 +1000，掉落蟹黄堡恢复生命"
+        },
+        {
+          "stage": "5星",
+          "effect": "暴击伤害 +10%，全体特工基础面板加成"
+        },
+        {
+          "stage": "6星",
+          "effect": "【高速马达】全自动涡轮铲攻击间隔降低 20%，伤害提升 25%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "海绵宝宝联动限定活动抽取 / 专属特工碎片兑换"
+    },
+    "relatedArticleSlugs": [],
+    "sort": 18
+  },
+  {
+    "slug": "agent-派大星",
+    "name": "派大星",
+    "category": "AGENT",
+    "subcategory": "普通",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/特工/派大星.png",
+    "summary": "海绵宝宝最好的好朋友。拥有健硕的海星体魄，使用威力强劲的海星拳重击前方面敌群，可进阶为强悍的海星空手道。",
+    "tags": [
+      "普通",
+      "海星空手道",
+      "联动特工",
+      "比奇堡"
+    ],
+    "attributes": {
+      "milestones": [
+        {
+          "stage": "1星",
+          "effect": "使用强力海星拳向前直拳轰击，击飞路径敌人"
+        },
+        {
+          "stage": "2星",
+          "effect": "攻击力 +100，生命上限 +800"
+        },
+        {
+          "stage": "3星",
+          "effect": "【快速挥拳】海星拳挥拳覆盖范围增加 40%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "4星",
+          "effect": "生命上限 +1200，受击产生弹性缓冲"
+        },
+        {
+          "stage": "5星",
+          "effect": "暴击伤害 +10%，全体特工基础面板加成"
+        },
+        {
+          "stage": "6星",
+          "effect": "【天赋爆发】海星空手道攻击间隔降低 20%，伤害提升 25%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "海绵宝宝联动限定活动抽取 / 专属特工碎片兑换"
+    },
+    "relatedArticleSlugs": [],
+    "sort": 19
+  },
+  {
+    "slug": "agent-珊迪",
+    "name": "珊迪",
+    "category": "AGENT",
+    "subcategory": "普通",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/特工/珊迪.png",
+    "summary": "一只来自德克萨斯的勇敢松鼠科学家，也是身手矫健的专业牛仔。挥舞飞绳坚果全方位回旋绞杀敌人，可进阶为无敌气泡庇护。",
+    "tags": [
+      "普通",
+      "飞绳坚果",
+      "联动特工",
+      "比奇堡"
+    ],
+    "attributes": {
+      "milestones": [
+        {
+          "stage": "1星",
+          "effect": "挥舞飞绳坚果攻击一圈敌人，坚果可进阶为无敌泡泡"
+        },
+        {
+          "stage": "2星",
+          "effect": "攻击力 +100，移动速度 +10%"
+        },
+        {
+          "stage": "3星",
+          "effect": "【超强臂力】飞绳坚果攻击范围提升 25%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "4星",
+          "effect": "生命上限 +1000，泡泡持续时间延长"
+        },
+        {
+          "stage": "5星",
+          "effect": "暴击率 +5%，全体特工基础面板加成"
+        },
+        {
+          "stage": "6星",
+          "effect": "【加速泡泡】无敌泡泡转速提高 20%，伤害提高 25%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "海绵宝宝联动限定活动抽取 / 专属特工碎片兑换"
+    },
+    "relatedArticleSlugs": [],
+    "sort": 20
+  },
+  {
     "slug": "equip-ss-%E5%8F%8C%E7%BB%9D%E6%9E%AA",
     "name": "双绝枪",
     "category": "EQUIPMENT",
-    "subcategory": "SS神器",
+    "subcategory": "SS",
     "rarity": "SS",
-    "tier": "No.1 首选必做",
     "icon": "/wiki-assets/装备/SS级装备/ss武器-双绝枪-原始形态.png",
     "summary": "全游第一顺位必做SS神装！提供最高额直接攻击力面板、全武器技能增伤与「毁灭之痕」独立易伤；神炼顺位第2（紧随衣服之后）。",
     "tags": [
-      "SS神器",
+      "SS",
       "No.1必做",
       "武器",
       "神炼核心位",
@@ -1375,7 +1610,195 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）"
+      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "攻击+15%",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "创星：每发射2次永恒之耀触发一次能量过载，增加自身技能伤害30%持续10s可以叠加2次",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "创星破灭：血量越低突刺伤害越高",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "攻击+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "破灭新生：突刺时会发出破坏能量，被毁灭之痕命中的目标额外受到10%伤害",
+            "color": "bg-rose-500"
+          },
+          {
+            "quality": "SS",
+            "label": "超凡",
+            "effect": "破灭新生：永恒之耀的最外圈会生压制之力",
+            "color": "bg-gradient-to-r from-rose-500 via-amber-400 to-cyan-400"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "永恒神铸1星",
+            "effect": "光刻：永恒之耀的回收也会记录能量过载次数，创星和破灭的初始等级提升为3",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸2星",
+            "effect": "攻击+10%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸3星",
+            "effect": "超星：能量过载单层增伤效果提高为35%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸4星",
+            "effect": "最终攻击+4000",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸5星",
+            "effect": "积玉：能量过载效果可以叠加3次",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸1星",
+            "effect": "攻击+10%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸2星",
+            "effect": "乱殇：破坏能量伤害提高80%，被毁灭之痕命中的目标额外受到20%伤害",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸3星",
+            "effect": "最终攻击+4000",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸4星",
+            "effect": "瞬影：突刺在血量低时最多降低1秒基础攻击间隔",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸5星",
+            "effect": "最终攻击+8000",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [
+          {
+            "stage": "混沌1星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌2星",
+            "effect": "陨星：破坏能量发射时，额外发射追踪目标的混沌陨星，命中附加10%易伤，效果持续10秒（不叠加）"
+          },
+          {
+            "stage": "混沌3星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌4星",
+            "effect": "对衰弱目标伤害+20%"
+          },
+          {
+            "stage": "混沌5星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌6星",
+            "effect": "碎星：混沌陨星命中敌人后，触发混沌碎星攻击"
+          },
+          {
+            "stage": "混沌7星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌8星",
+            "effect": "对冰缓目标伤害+30%"
+          },
+          {
+            "stage": "混沌9星",
+            "effect": "等级上限+10"
+          },
+          {
+            "stage": "混沌10星",
+            "effect": "跃迁：破坏能量命中BOSS后，会锁定boss的气息，飞出后会追踪boss再造成一次伤害。（破坏能量基础伤害降低30%）"
+          }
+        ],
+        "alienRefinement": [
+          {
+            "stage": "神炼Lv.1",
+            "effect": "达到触发条件时，获得一个触发效果，并触发异星神炼技能：英魂冲锋，召唤3个无畏英魂发动冲锋"
+          },
+          {
+            "stage": "神炼Lv.2",
+            "effect": "解锁一个新的触发条件 攻击+10%"
+          },
+          {
+            "stage": "神炼Lv.3",
+            "effect": "解锁一个新的触发效果 异星神炼技能升级：无畏英魂伤害增加"
+          },
+          {
+            "stage": "神炼Lv.4",
+            "effect": "对裂伤目标伤害+15%"
+          },
+          {
+            "stage": "神炼Lv.5",
+            "effect": "神炼增伤：触发双绝枪异星神练技能后，伤害+3%，最多提升6次"
+          },
+          {
+            "stage": "神炼Lv.6",
+            "effect": "解锁一个新的触发条件 攻击+15%"
+          },
+          {
+            "stage": "神炼Lv.7",
+            "effect": "解锁一个新的触发效果 异星神炼技能升级：无畏英魂命中后，额外生成无双枪阵"
+          },
+          {
+            "stage": "神炼Lv.8",
+            "effect": "过量超星：能量过载单层增伤效果额外提升15%"
+          },
+          {
+            "stage": "神炼Lv.9",
+            "effect": "合成破灭新生后，技能伤害+105%"
+          },
+          {
+            "stage": "神炼Lv.10",
+            "effect": "解锁一个新的触发条件 攻击+20%"
+          },
+          {
+            "stage": "神炼Lv.11",
+            "effect": "技能伤害+50%"
+          },
+          {
+            "stage": "神炼Lv.12",
+            "effect": "对裂伤目标伤害+25%"
+          },
+          {
+            "stage": "神炼Lv.13",
+            "effect": "神炼追加：双绝枪的神炼增伤+1%"
+          }
+        ]
+      }
     },
     "relatedArticleSlugs": [
       "resources-ss%e8%a3%85%e5%a4%87%e5%90%88%e6%88%90%e9%a1%ba%e5%ba%8f",
@@ -1388,13 +1811,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-ss-%E5%86%B0%E9%9C%9C%E6%88%98%E9%9D%B4",
     "name": "冰霜战靴",
     "category": "EQUIPMENT",
-    "subcategory": "SS神器",
+    "subcategory": "SS",
     "rarity": "SS",
-    "tier": "No.2 爆发质变",
     "icon": "/wiki-assets/装备/SS级装备/ss鞋子-冰霜战靴.png",
     "summary": "第二件必做SS神装！独有「冰霜血脉」叠满5层提供高达 +60% 伤害加成，并对冰缓目标额外 +15% 增伤，合成门槛低且提升立竿见影。",
     "tags": [
-      "SS神器",
+      "SS",
       "No.2必做",
       "鞋子",
       "冰霜血脉",
@@ -1414,7 +1836,142 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）"
+      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "基础移动速度+3",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "生命+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "冰晶路径：移动留下冰晶路径，冰晶路径存在时间10秒，消散时发生冰晶爆炸，对于触碰冰晶路径和冰晶爆炸的敌人，附带持续10秒的冰缓效果（不叠加）",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "生命+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "对冰缓伤害+15%",
+            "color": "bg-rose-500"
+          },
+          {
+            "quality": "SS",
+            "label": "超凡",
+            "effect": "冰霜血脉：移动开始充能，速度越快充能越快，停止移动充能衰减；充能满了增加1层冰霜血脉，每层+12%伤害，效果持续15秒，上限5层，重复刷新时长",
+            "color": "bg-gradient-to-r from-rose-500 via-amber-400 to-cyan-400"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "永恒神铸1星",
+            "effect": "冰甲：每层冰霜血脉+2%能量护盾，+4%护盾增伤",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸2星",
+            "effect": "生命+10%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸3星",
+            "effect": "冰甲进阶：护盾增伤+21%；每获得25%护盾值，移动速度+10%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸4星",
+            "effect": "最终生命+16000",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸5星",
+            "effect": "寒冰突破：充能层数+1",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸1星",
+            "effect": "生命+10%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸2星",
+            "effect": "冰晶绽放：冰缓伤害+20%；",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸3星",
+            "effect": "最终生命+16000",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸4星",
+            "effect": "冰箭：对冰缓伤害+20%；冰晶路径数量超过30个时，引爆所有冰晶路径，并发射追踪冰箭；冰箭命中附加冰缓、10%易伤，效果持续10秒（不叠加）",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸5星",
+            "effect": "最终生命+32000",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [
+          {
+            "stage": "混沌1星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌2星",
+            "effect": "冰霜龙卷：移动进行充能，当冰霜血脉达到满层后，生成冰霜龙卷，替代本体移动产生冰晶路径；护盾增伤+20%"
+          },
+          {
+            "stage": "混沌3星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌4星",
+            "effect": "技能伤害+20%"
+          },
+          {
+            "stage": "混沌5星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌6星",
+            "effect": "寒冰护盾：移动获得护盾，速度越快获得护盾越快，每30秒最多获得50%护盾；每层冰霜血脉+1%伤害"
+          },
+          {
+            "stage": "混沌7星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌8星",
+            "effect": "对冰缓目标伤害+30%"
+          },
+          {
+            "stage": "混沌9星",
+            "effect": "等级上限+10"
+          },
+          {
+            "stage": "混沌10星",
+            "effect": "疾风步伐：移动时进入疾风状态，移速与拾取范围持续提升；静止超过2秒后状态消失；每层冰霜血脉+1.1%伤害；对冰缓目标伤害+30%"
+          }
+        ],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-ss%e8%a3%85%e5%a4%87%e5%90%88%e6%88%90%e9%a1%ba%e5%ba%8f",
@@ -1427,13 +1984,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-ss-%E6%98%9F%E8%BE%B0%E6%9D%9F%E8%85%B0",
     "name": "星辰束腰",
     "category": "EQUIPMENT",
-    "subcategory": "SS神器",
+    "subcategory": "SS",
     "rarity": "SS",
-    "tier": "No.3 攻防一体",
     "icon": "/wiki-assets/装备/SS级装备/ss腰带-星辰束腰.png",
     "summary": "常规第三件SS神装（微氪/中氪若用高星扭曲腰带可暂存背包），满能量提供 +25% 攻击力，总能量高于90%时额外 +30% 技能伤害。",
     "tags": [
-      "SS神器",
+      "SS",
       "No.3推荐",
       "腰带",
       "技能增伤",
@@ -1452,7 +2008,195 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "普通/微氪玩家通常穿戴S级扭曲腰带（配金牛座星辉），不建议为了神炼强转SS腰带"
         }
       ],
-      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）"
+      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "恢复效果+35%",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "生命+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "硬甲：受击时触发5秒硬甲（60秒冷却），期间免疫所有伤害，撞击可以秒杀小怪",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "生命+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "永恒充能：每500次命中掉落能量球（能量球有同场最多数量限制），收集可用于提升能量等级，最高5级，每级能量+5%伤害倍率，能量会随时间衰减",
+            "color": "bg-rose-500"
+          },
+          {
+            "quality": "SS",
+            "label": "超凡",
+            "effect": "超强化：总能量在90%以上时，额外+30%技能伤害",
+            "color": "bg-gradient-to-r from-rose-500 via-amber-400 to-cyan-400"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "永恒神铸1星",
+            "effect": "无双：掉落能量球所需命中次数-100，每能量等级额外+5%伤害倍率",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸2星",
+            "effect": "生命+10%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸3星",
+            "effect": "压制：4级以上即可触发超强化，每能量等级额外+5%技能伤害",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸4星",
+            "effect": "最终生命+16000",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸5星",
+            "effect": "终极永恒：掉落能量球所需命中次数-100，每能量等级额外+10%暴击伤害",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸1星",
+            "effect": "生命+10%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸2星",
+            "effect": "秘法：开局满能量等级，获得能量球时额外回复2%能量护盾，护盾增伤+10%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸3星",
+            "effect": "最终生命+16000",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸4星",
+            "effect": "破坏抑制：能量衰减速度减半，护盾增伤+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸5星",
+            "effect": "最终生命+32000",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [
+          {
+            "stage": "混沌1星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌2星",
+            "effect": "能量激荡：永恒充能5级之后，额外掉落超级能量球，拾取后进入能量激荡状态，后续拾取延续状态。期间技能伤害+20%。"
+          },
+          {
+            "stage": "混沌3星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌4星",
+            "effect": "暴击伤害+20%"
+          },
+          {
+            "stage": "混沌5星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌6星",
+            "effect": "能量扩散：每8秒发射冲击波，命中可为永恒充能和能量激荡充能，每层永恒充能+3%伤害倍率"
+          },
+          {
+            "stage": "混沌7星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌8星",
+            "effect": "技能伤害+30%"
+          },
+          {
+            "stage": "混沌9星",
+            "effect": "等级上限+10"
+          },
+          {
+            "stage": "混沌10星",
+            "effect": "能量屏障：进入能量激荡状态获得50%护盾，护盾增伤+30%"
+          }
+        ],
+        "alienRefinement": [
+          {
+            "stage": "神炼Lv.1",
+            "effect": "达到触发条件时，获得一个触发效果，并触发异星神炼技能：雷霆之锤，召唤雷电之影，挥舞电光缠绕的雷锤，攻击敌人"
+          },
+          {
+            "stage": "神炼Lv.2",
+            "effect": "解锁一个新的触发条件 生命+10%"
+          },
+          {
+            "stage": "神炼Lv.3",
+            "effect": "解锁一个新的触发效果 异星神炼技能升级：雷霆之锤伤害增加"
+          },
+          {
+            "stage": "神炼Lv.4",
+            "effect": "对冰缓目标伤害+40%"
+          },
+          {
+            "stage": "神炼Lv.5",
+            "effect": "神炼增伤：触发星辰束腰异星神练技能后，伤害+3%，最多提升6次"
+          },
+          {
+            "stage": "神炼Lv.6",
+            "effect": "解锁一个新的触发条件 生命+15%"
+          },
+          {
+            "stage": "神炼Lv.7",
+            "effect": "解锁一个新的触发效果 异星神炼技能升级：雷霆之锤轰击之后，额外展开雷电场域"
+          },
+          {
+            "stage": "神炼Lv.8",
+            "effect": "超频加载：能量激荡期间增加3%伤害倍率"
+          },
+          {
+            "stage": "神炼Lv.9",
+            "effect": "极限突破：超强化状态下，每层能量等级额外+1%伤害倍率"
+          },
+          {
+            "stage": "神炼Lv.10",
+            "effect": "解锁一个新的触发条件 生命+20%"
+          },
+          {
+            "stage": "神炼Lv.11",
+            "effect": "技能伤害+40%"
+          },
+          {
+            "stage": "神炼Lv.12",
+            "effect": "暴击伤害+60%"
+          },
+          {
+            "stage": "神炼Lv.13",
+            "effect": "神炼追加：星辰束腰的神炼增伤+1%"
+          }
+        ]
+      }
     },
     "relatedArticleSlugs": [
       "resources-ss%e8%a3%85%e5%a4%87%e5%90%88%e6%88%90%e9%a1%ba%e5%ba%8f",
@@ -1465,13 +2209,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-ss-%E5%A4%A9%E5%90%AF%E6%88%98%E8%A1%A3",
     "name": "天启战衣",
     "category": "EQUIPMENT",
-    "subcategory": "SS神器",
+    "subcategory": "SS",
     "rarity": "SS",
-    "tier": "No.4 永恒3质变 / 神炼第1顺位",
     "icon": "/wiki-assets/装备/SS级装备/ss衣服-天启战衣.png",
     "summary": "神器核心够做「永恒3」时果断合成！永恒3解锁「血量高于10%时受伤先扣血再扣盾」，完美联动神铸3破坏项链实现残血满盾狂暴！神炼开启第一顺位。",
     "tags": [
-      "SS神器",
+      "SS",
       "永恒3质变",
       "神炼第1顺位",
       "护盾增伤",
@@ -1496,7 +2239,195 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）"
+      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "开局技能选择次数+1",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "生命+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "逆境：濒死时获得30%血量上限的能量护盾",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "生命+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "无念：技能造成的伤害提升20%，但死亡就会失效",
+            "color": "bg-rose-500"
+          },
+          {
+            "quality": "SS",
+            "label": "超凡",
+            "effect": "加护：通过补给恢复血量时可额外恢复10%能量护盾，护盾恢复不会超过其上限（100%血量上限）",
+            "color": "bg-gradient-to-r from-rose-500 via-amber-400 to-cyan-400"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "永恒神铸1星",
+            "effect": "戟盾：护盾增伤+10%（存在护盾时，伤害提升） 不竭：持续10秒没有受到伤害，能量护盾每秒2.5%缓慢恢复（不会超过护盾上限）",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸2星",
+            "effect": "生命+10%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸3星",
+            "effect": "护盾增伤+10% 破坏反噬：血量值高于10%，受伤先消耗血量再消耗护盾",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸4星",
+            "effect": "最终生命+16000",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸5星",
+            "effect": "攻守兼备：能量护盾值越高，伤害越高，每25%护盾值，护盾增伤+5%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸1星",
+            "effect": "生命+10%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸2星",
+            "effect": "逆鳞：护盾值高于血量值，技能伤害+10%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸3星",
+            "effect": "最终生命+16000",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸4星",
+            "effect": "无念提升的技能伤害+15%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸5星",
+            "effect": "最终生命+32000",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [
+          {
+            "stage": "混沌1星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌2星",
+            "effect": "剑盾：每累计获得30%护盾，获得10%护盾增伤，上限1层"
+          },
+          {
+            "stage": "混沌3星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌4星",
+            "effect": "技能伤害+20%"
+          },
+          {
+            "stage": "混沌5星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌6星",
+            "effect": "守护：开局获得100%护盾；技能伤害+20%"
+          },
+          {
+            "stage": "混沌7星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌8星",
+            "effect": "对中毒目标伤害+30%"
+          },
+          {
+            "stage": "混沌9星",
+            "effect": "等级上限+10"
+          },
+          {
+            "stage": "混沌10星",
+            "effect": "盾之心：每层剑盾累计需要护盾减少15%；上限层数+3"
+          }
+        ],
+        "alienRefinement": [
+          {
+            "stage": "神炼Lv.1",
+            "effect": "达到触发条件时，获得一个触发效果，并触发异星神炼技能：元素融合，引动元素力量产生元素冲击，标记敌人并在其身上发生爆炸"
+          },
+          {
+            "stage": "神炼Lv.2",
+            "effect": "解锁一个新的触发条件 生命+10%"
+          },
+          {
+            "stage": "神炼Lv.3",
+            "effect": "解锁一个新的触发效果 异星神炼技能升级：元素融合伤害增加"
+          },
+          {
+            "stage": "神炼Lv.4",
+            "effect": "暴击伤害+40%"
+          },
+          {
+            "stage": "神炼Lv.5",
+            "effect": "神炼增伤：触发天启战衣异星神练技能后，伤害+3%，最多提升6次"
+          },
+          {
+            "stage": "神炼Lv.6",
+            "effect": "解锁一个新的触发条件 生命+15%"
+          },
+          {
+            "stage": "神炼Lv.7",
+            "effect": "解锁一个新的触发效果 异星神炼技能升级：增加元素冲击的伤害，增加在敌人身上的爆炸次数"
+          },
+          {
+            "stage": "神炼Lv.8",
+            "effect": "过量剑盾：剑盾上限层数+2"
+          },
+          {
+            "stage": "神炼Lv.9",
+            "effect": "护盾值每高于血量值10%，对裂伤目标伤害+5%，上限15%"
+          },
+          {
+            "stage": "神炼Lv.10",
+            "effect": "解锁一个新的触发条件 生命+20%"
+          },
+          {
+            "stage": "神炼Lv.11",
+            "effect": "护盾增伤+20%"
+          },
+          {
+            "stage": "神炼Lv.12",
+            "effect": "技能伤害+40%"
+          },
+          {
+            "stage": "神炼Lv.13",
+            "effect": "神炼追加：天启战衣的神炼增伤+1%"
+          }
+        ]
+      }
     },
     "relatedArticleSlugs": [
       "resources-ss%e8%a3%85%e5%a4%87%e5%90%88%e6%88%90%e9%a1%ba%e5%ba%8f",
@@ -1509,13 +2440,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-ss-%E6%9C%88%E6%AE%87%E6%8A%A4%E6%89%8B",
     "name": "月殇护手",
     "category": "EQUIPMENT",
-    "subcategory": "SS神器",
+    "subcategory": "SS",
     "rarity": "SS",
-    "tier": "No.5 暴击面板 / 神炼核心位",
     "icon": "/wiki-assets/装备/SS级装备/ss手套-月殇护手.png",
     "summary": "提供极高基础攻击面板与暴击加成（急需面板推主线时可提至第3件做）；神炼开启第3顺位，与武器并列优先追神炼3和神炼5。",
     "tags": [
-      "SS神器",
+      "SS",
       "高额攻击面板",
       "暴击加成",
       "神炼核心位",
@@ -1535,7 +2465,195 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）"
+      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "战意：战斗中每攻击命中500次，暴击率+5%，上限为30%",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "攻击+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "愈战愈勇：暴击杀死怪物时，恢复0.5%能量护盾（每秒最多5次）",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "攻击+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "护盾增伤+10%",
+            "color": "bg-rose-500"
+          },
+          {
+            "quality": "SS",
+            "label": "超凡",
+            "effect": "光之审判：每10秒发动一次永恒光束，发动前10秒锁定标记1只boss进入攻击积蓄状态，期间对该boss造成总伤害的100%将转化为积蓄伤害，在积蓄状态结束后通过光束打出（积蓄伤害不再受到攻击倍率加成）",
+            "color": "bg-gradient-to-r from-rose-500 via-amber-400 to-cyan-400"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "永恒神铸1星",
+            "effect": "超暴击Ⅰ：暴击率超过100%，暴击伤害+30%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸2星",
+            "effect": "攻击+10%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸3星",
+            "effect": "超暴击Ⅱ：暴击率超过130%，技能伤害+30%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸4星",
+            "effect": "最终攻击+4000",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸5星",
+            "effect": "超暴击Ⅲ：暴击率超过150%，暴击伤害+100%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸1星",
+            "effect": "攻击+10%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸2星",
+            "effect": "回转：护盾增伤+20%，发动永恒光束后，回复10%能量护盾",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸3星",
+            "effect": "最终攻击+4000",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸4星",
+            "effect": "终极进化：永恒光束积蓄期间，暴击率+20%，积蓄伤害+30%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸5星",
+            "effect": "最终攻击+8000",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [
+          {
+            "stage": "混沌1星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌2星",
+            "effect": "公平审判：击杀100名敌人，或者发动一次永恒光束，获得20%护盾增伤，持续30秒，重复触发刷新时间。"
+          },
+          {
+            "stage": "混沌3星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌4星",
+            "effect": "暴击伤害+20%"
+          },
+          {
+            "stage": "混沌5星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌6星",
+            "effect": "战意不休：进入战斗后，暴击伤害提升120%，暴击率提升40%，随后每秒衰减12%暴击伤害、4%暴击率，持续10秒后效果重置。"
+          },
+          {
+            "stage": "混沌7星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌8星",
+            "effect": "对中毒目标伤害+30%"
+          },
+          {
+            "stage": "混沌9星",
+            "effect": "等级上限+10"
+          },
+          {
+            "stage": "混沌10星",
+            "effect": "完美状态：击杀100名敌人，或者发动一次永恒光束，移除战意不休衰减效果；护盾增伤+20%"
+          }
+        ],
+        "alienRefinement": [
+          {
+            "stage": "神炼Lv.1",
+            "effect": "达到触发条件时，获得一个触发效果，并触发异星神炼技能：月相弦弓，展开能量弓，吸收月球辐射，凝成箭矢攻击敌人"
+          },
+          {
+            "stage": "神炼Lv.2",
+            "effect": "解锁一个新的触发条件 攻击+10%"
+          },
+          {
+            "stage": "神炼Lv.3",
+            "effect": "解锁一个新的触发效果 异星神炼技能升级：月相弦弓，伤害增加"
+          },
+          {
+            "stage": "神炼Lv.4",
+            "effect": "暴击伤害+40%"
+          },
+          {
+            "stage": "神炼Lv.5",
+            "effect": "神炼增伤：触发月殇护手异星神练技能后，伤害+3%，最多提升6次"
+          },
+          {
+            "stage": "神炼Lv.6",
+            "effect": "解锁一个新的触发条件 攻击+15%"
+          },
+          {
+            "stage": "神炼Lv.7",
+            "effect": "解锁一个新的触发效果 异星神炼技能升级：月相弦弓，增加伤害，并且额外多发射1轮"
+          },
+          {
+            "stage": "神炼Lv.8",
+            "effect": "暴击超越：暴击率超过170%，暴击伤害+120%"
+          },
+          {
+            "stage": "神炼Lv.9",
+            "effect": "审判之光：击杀100名敌人，或者发动一次永恒光束，获得80%护盾增伤，每场战斗触发一次"
+          },
+          {
+            "stage": "神炼Lv.10",
+            "effect": "解锁一个新的触发条件 攻击+20%"
+          },
+          {
+            "stage": "神炼Lv.11",
+            "effect": "护盾增伤+120%"
+          },
+          {
+            "stage": "神炼Lv.12",
+            "effect": "暴击伤害+140%"
+          },
+          {
+            "stage": "神炼Lv.13",
+            "effect": "神炼追加：月殇护手的神炼增伤+1%"
+          }
+        ]
+      }
     },
     "relatedArticleSlugs": [
       "resources-ss%e8%a3%85%e5%a4%87%e5%90%88%e6%88%90%e9%a1%ba%e5%ba%8f",
@@ -1548,13 +2666,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-ss-%E7%A5%9E%E7%BD%9A%E9%A1%B9%E9%93%BE",
     "name": "神罚项链",
     "category": "EQUIPMENT",
-    "subcategory": "SS神器",
+    "subcategory": "SS",
     "rarity": "SS",
-    "tier": "No.6 大后期凑套",
     "icon": "/wiki-assets/装备/SS级装备/ss项链-神罚项链.png",
     "summary": "六件SS神装中基础增幅最低，前中期回响之战与远征表现不如神铸3破坏项链，仅在大后期追求全身混沌融能高星（混36/混45）时合成。",
     "tags": [
-      "SS神器",
+      "SS",
       "大后期拼图",
       "混沌融能",
       "项链"
@@ -1572,7 +2689,195 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "配合全身SS凑齐混36（双刀）/ 混45（圣剑）总星数时再行启用"
         }
       ],
-      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）"
+      "acquisition": "宇宙巡礼神铸合成（消耗永恒之石 + 破坏之石 + 基础科技素材 + 神器核心）",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "仇恨：被命中时，给伤害来源附加衰弱效果，降低其10%的攻击",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "攻击+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "守势：技能升级时恢复15%能量护盾值",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "攻击+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "潜能释放：战斗中学习的所有被动技能可以进阶到红星（含角色专属）",
+            "color": "bg-rose-500"
+          },
+          {
+            "quality": "SS",
+            "label": "超凡",
+            "effect": "增幅：对衰弱目标伤害+25%",
+            "color": "bg-gradient-to-r from-rose-500 via-amber-400 to-cyan-400"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "永恒神铸1星",
+            "effect": "狂怒：技能升级时+20秒狂怒，期间技能伤害+50%，击杀怪物可以延长狂怒时间，最长200秒",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸2星",
+            "effect": "攻击+10%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸3星",
+            "effect": "奇劲：护盾值越高，对衰弱目标伤害越高，每20%能量护盾值，对衰弱目标伤害+2%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "永恒神铸4星",
+            "effect": "最终攻击+4000",
+            "isKeyNode": false
+          },
+          {
+            "stage": "永恒神铸5星",
+            "effect": "超限：能量护盾上限+40%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸1星",
+            "effect": "攻击+10%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸2星",
+            "effect": "潜攻：每学习2级被动技能，暴击伤害+2%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸3星",
+            "effect": "最终攻击+4000",
+            "isKeyNode": true
+          },
+          {
+            "stage": "破坏神铸4星",
+            "effect": "神力：被动技能初始学习等级+1，每进阶1个红星被动，暴击伤害+10%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "破坏神铸5星",
+            "effect": "最终攻击+8000",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [
+          {
+            "stage": "混沌1星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌2星",
+            "effect": "怒火：每累计获得1级技能，增加10秒狂怒时间，期间增加25%暴击伤害，上限200秒"
+          },
+          {
+            "stage": "混沌3星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌4星",
+            "effect": "技能伤害+20%"
+          },
+          {
+            "stage": "混沌5星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌6星",
+            "effect": "超限：当前每拥有一个超武或者红星被动，增加10%技能伤害，上限4层"
+          },
+          {
+            "stage": "混沌7星",
+            "effect": "等级上限+5"
+          },
+          {
+            "stage": "混沌8星",
+            "effect": "对衰弱目标伤害+30%"
+          },
+          {
+            "stage": "混沌9星",
+            "effect": "等级上限+10"
+          },
+          {
+            "stage": "混沌10星",
+            "effect": "指令突破：战斗开始时获得3个技能，战斗中可以重新选择1次技能，每累计获得5级技能，对衰弱目标伤害+8%，上限5层"
+          }
+        ],
+        "alienRefinement": [
+          {
+            "stage": "神炼Lv.1",
+            "effect": "达到触发条件时，获得一个触发效果，并触发异星神炼技能：裂隙流星，空间发生撕裂，从中飞出流星轰击敌人"
+          },
+          {
+            "stage": "神炼Lv.2",
+            "effect": "解锁一个新的触发条件 攻击+10%"
+          },
+          {
+            "stage": "神炼Lv.3",
+            "effect": "解锁一个新的触发效果 异星神炼技能升级：裂隙流星伤害增加"
+          },
+          {
+            "stage": "神炼Lv.4",
+            "effect": "对衰弱目标伤害+60%"
+          },
+          {
+            "stage": "神炼Lv.5",
+            "effect": "神炼增伤：触发神罚项链异星神练技能后，伤害+3%，最多提升6次"
+          },
+          {
+            "stage": "神炼Lv.6",
+            "effect": "解锁一个新的触发条件 攻击+15%"
+          },
+          {
+            "stage": "神炼Lv.7",
+            "effect": "解锁一个新的触发效果 异星神炼技能升级：裂隙流星额外追加威力更大的流星攻击"
+          },
+          {
+            "stage": "神炼Lv.8",
+            "effect": "奇劲增强：当前每拥有20%能量护盾，对衰弱目标伤害+20%"
+          },
+          {
+            "stage": "神炼Lv.9",
+            "effect": "神力增强：每获得1个红星被动，增加40%暴击伤害，上限3层"
+          },
+          {
+            "stage": "神炼Lv.10",
+            "effect": "解锁一个新的触发条件 攻击+20%"
+          },
+          {
+            "stage": "神炼Lv.11",
+            "effect": "护盾增伤+60%"
+          },
+          {
+            "stage": "神炼Lv.12",
+            "effect": "对裂伤目标伤害+15%"
+          },
+          {
+            "stage": "神炼Lv.13",
+            "effect": "神炼追加：神罚项链的神炼增伤+1%"
+          }
+        ]
+      }
     },
     "relatedArticleSlugs": [
       "resources-ss%e8%a3%85%e5%a4%87%e5%90%88%e6%88%90%e9%a1%ba%e5%ba%8f",
@@ -1585,13 +2890,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-s-%E7%A0%B4%E5%9D%8F%E8%80%85%E5%BE%BD%E8%AE%B0%EF%BC%88%E7%A0%B4%E5%9D%8F%E9%A1%B9%E9%93%BE%EF%BC%89",
     "name": "破坏者徽记（破坏项链）",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T0 传家宝神装",
     "icon": "/wiki-assets/装备/S级装备/破坏者徽记.png",
     "summary": "能用到退游的传家宝S项链！血量越低暴击率与暴伤越高，神铸3「信徒」击杀小怪重置狂暴时间，搭配SS天启战衣永恒3堪称绝配。",
     "tags": [
-      "S级装备",
+      "S",
       "传家宝",
       "低血高暴击",
       "神铸3质变",
@@ -1611,7 +2915,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "每次升级时，获得5秒狂暴状态，增加40%伤害",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "攻击+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "自身血量越低造成伤害越高（低于50%生命时生效，最高提高40%）",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "攻击+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "自身血量越低暴击率越高（低于50%生命时生效，最高提高40%）",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "狂热：自身血量越低获得战斗经验越多（低于50%生命时生效，最高增加40%）",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "攻击+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "信徒：狂暴状态下击杀怪物可以重置持续时间",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1622,13 +2979,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-s-%E6%89%AD%E6%9B%B2%E8%85%B0%E5%B8%A6%EF%BC%88%E6%B7%B7%E4%B9%B1%E8%85%B0%E5%B8%A6%EF%BC%89",
     "name": "扭曲腰带（混乱腰带）",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T0 最强S腰带",
     "icon": "/wiki-assets/装备/S级装备/混沌腰带-扭曲腰带.png",
     "summary": "除破坏项链外保值率最高的S级神装！提供90%~160%高频能量波动增伤，配合第10期红藏「金牛座星辉」与宠物套爆发极强，微氪无需换SS腰带。",
     "tags": [
-      "S级装备",
+      "S",
       "能量波动",
       "金牛座星辉强化",
       "腰带"
@@ -1647,7 +3003,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "恢复效果+20%",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "生命+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "能量波动：你的所有技能伤害会在80%到150%之间随机浮动",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "生命+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "定向偏斜：能量波动的下限提高到90%，上限提高到160%",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "乱流：波动下限降低10%，波动上限提高20%",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "生命+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "超越极限：波动上限提高20%",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1658,13 +3067,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-s-%E4%BA%A1%E8%80%85%E4%B9%8B%E7%94%B2%EF%BC%88%E6%B7%B7%E6%B2%8C%E8%A1%A3%E6%9C%8D%EF%BC%89",
     "name": "亡者之甲（混沌衣服）",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T0 推关开荒神衣",
     "icon": "/wiki-assets/装备/S级装备/混沌衣服-亡者之甲.png",
     "summary": "主线卡关与200关飞碟领主救星！合红需6件本体，死亡后进入20秒幽灵无敌状态，击杀小怪可不断续时，是做出永恒3天启战衣前的绝对主力。",
     "tags": [
-      "S级装备",
+      "S",
       "推关神器",
       "幽灵无敌续时",
       "衣服"
@@ -1678,7 +3086,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "亡语：角色死亡不会立即失败，可以进入幽灵状态10秒，幽灵状态下无敌且无法恢复生命，如果在此期间击杀最终BOSS则战斗胜利",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "生命+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "超灵形态：幽灵状态下增加30%的攻击，并且幽灵状态延长为20秒",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "生命+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "地狱使者：幽灵状态下击杀怪物可以延长该状态的持续时间（不能超过上限值）",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "怨灵：幽灵状态攻击额外增加20%攻击力",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "生命+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "留恋：幽灵状态的上限时间增加10秒",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1689,13 +3150,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-s-%E6%B0%B8%E6%81%92%E6%88%98%E8%A1%A3",
     "name": "永恒战衣",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T1 满血复活衣",
     "icon": "/wiki-assets/装备/S级装备/永恒战衣.png",
     "summary": "提供多次满血复活与复活后攻击/移速加成，在天启战衣未达永恒3前是回响之战与BOSS战的稳健选择。",
     "tags": [
-      "S级装备",
+      "S",
       "复活增伤",
       "永恒套",
       "衣服"
@@ -1709,7 +3169,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "可以满生命复活1次",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "生命+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "复活后攻击力+15%，移动速度+15%",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "生命+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "额外增加1次复活",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "感悟：复活后获得1次技能选择",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "生命+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "机械飞升：复活属性额外提升5%",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1717,16 +3230,106 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 32
   },
   {
+    "slug": "equip-s-破坏者风衣",
+    "name": "破坏者风衣",
+    "category": "EQUIPMENT",
+    "subcategory": "S",
+    "rarity": "S",
+    "icon": "/wiki-assets/装备/S级装备/破坏者风衣.png",
+    "summary": "破坏系列专属铠甲，濒死时触发持续疯狂吸血与免疫死亡状态，红色品质吸血过量转化为能量护盾。",
+    "tags": [
+      "S",
+      "衣服",
+      "疯狂吸血",
+      "护盾转化"
+    ],
+    "attributes": {
+      "slot": "衣服",
+      "synergy": "破坏系列套装",
+      "milestones": [
+        {
+          "stage": "神铸1星",
+          "effect": "【装甲效能】拥有能量护盾时，获得20%伤害减免",
+          "isKeyNode": true
+        },
+        {
+          "stage": "神铸2星",
+          "effect": "生命 +20%"
+        },
+        {
+          "stage": "神铸3星",
+          "effect": "【再度疯狂】疯狂次数 +1",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "濒死时获得5秒疯狂状态，所有技能伤害均可吸血（每场战斗1次，复活可重置）",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "生命+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "疯狂状态延长至10秒，并且免疫死亡",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "生命+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "疯狂状态下吸血超过血量上限的部分可以转化为能量护盾",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "装甲效能：拥有能量护盾时，获得20%伤害减免",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "生命+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "再度疯狂：疯狂次数+1",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
+    },
+    "relatedArticleSlugs": [],
+    "sort": 31
+  },
+  {
     "slug": "equip-s-%E7%A0%B4%E5%9D%8F%E8%80%85%E6%89%8B%E7%94%B2%EF%BC%88%E7%A0%B4%E5%9D%8F%E6%89%8B%E5%A5%97%EF%BC%89",
     "name": "破坏者手甲（破坏手套）",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T1 首领增伤手套",
     "icon": "/wiki-assets/装备/S级装备/破坏手套.png",
     "summary": "对精英与首领敌人额外造成50%高额伤害，并附带血量斩杀光环，合成SS月殇护手前的最佳过渡手套。",
     "tags": [
-      "S级装备",
+      "S",
       "首领增伤+50%",
       "破坏套",
       "手套"
@@ -1740,7 +3343,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "破坏本性：直接秒杀血量低于20%的非Boss敌人",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "攻击+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "血脉压制：对精英/BOSS敌人伤害增加50%",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "攻击+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "腥红光环：自身一定范围内的敌人会逐渐凋零（每0.1秒流失1%生命，对BOSS不生效）",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "深红：猩红光环增加内层效果，内层伤害次数翻倍",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "攻击+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "破坏之王：直接秒杀血量低于10%的BOSS",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1751,13 +3407,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-s-%E7%A0%B4%E5%9D%8F%E8%80%85%E5%85%B7%E8%B6%B3%EF%BC%88%E7%A0%B4%E5%9D%8F%E9%9E%8B%EF%BC%89",
     "name": "破坏者具足（破坏鞋）",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T1 移速增伤鞋",
     "icon": "/wiki-assets/装备/S级装备/破坏者具足.png",
     "summary": "红色品质根据移动速度比例转化为高额伤害加成，是合成第二件SS神装「冰霜战靴」前的毕业S鞋。",
     "tags": [
-      "S级装备",
+      "S",
       "移速转增伤",
       "破坏套",
       "鞋子"
@@ -1771,7 +3426,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "基础移动速度+2",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "生命+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "顶尖物种：每击杀500只怪物，移动速度增加10%（上限50%）",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "生命+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "掠食者：对于移动速度低于自身的怪物会按照一定比例增加伤害（最高增加50%）",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "饱腹：顶尖物种生效时额外增加20%生命上限（最高100%）",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "生命+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "危险代谢：血量越低，移动速度越快（低于50%生命时生效，最高提高40%）",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1782,13 +3490,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-s-%E6%B0%B8%E6%81%92%E9%A1%B9%E9%93%BE",
     "name": "永恒项链",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T2 全被动增幅",
     "icon": "/wiki-assets/装备/S级装备/永恒项链.png",
     "summary": "对满血目标造成额外伤害并强化局内所有被动技能效果，前期过渡好手，中后期转神铸3破坏项链。",
     "tags": [
-      "S级装备",
+      "S",
       "被动强化",
       "永恒套",
       "项链"
@@ -1801,7 +3508,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "战斗中所有被动技能效果 +15%"
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "目标血量越高造成伤害越高",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "攻击+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "对满血敌人额外造成伤害",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "攻击+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "战斗中所有被动效果+15%",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "新星：首个学习的被动技能可以进阶红星（不适用于角色专属被动）",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "攻击+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "潜力挖掘：被动效果提高到20%",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1812,13 +3572,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-s-%E6%B0%B8%E6%81%92%E6%89%8B%E5%A5%97",
     "name": "永恒手套",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T2 暴击回血",
     "icon": "/wiki-assets/装备/S级装备/永恒手套.png",
     "summary": "提供高额暴击率与暴击伤害加成，神铸1星解锁暴击击杀回血，续航能力极佳。",
     "tags": [
-      "S级装备",
+      "S",
       "暴击回血",
       "永恒套",
       "手套"
@@ -1831,7 +3590,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "暴击击败怪物恢复生命值，推图续航利器"
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "自身血量高于50%时攻击力增加20%",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "攻击+15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "攻击时有10%几率暴击",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "攻击+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "额外增加10%暴击率，暴击伤害增加100%",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "暴虐：暴击杀死怪物时恢复1%生命（每秒最多10次）",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "攻击+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "巨人克星：击杀精英/Boss后增加3%暴击率",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1842,13 +3654,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-s-%E7%A0%B4%E5%9D%8F%E4%B9%8B%E5%8A%9B",
     "name": "破坏之力",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T2 黑洞护盾枪",
     "icon": "/wiki-assets/装备/S级装备/破坏之力.png",
     "summary": "发射黑洞牵引敌群并在超武形态下生成无敌护盾，是合成SS双绝枪的核心祭品材料。",
     "tags": [
-      "S级装备",
+      "S",
       "黑洞控场",
       "SS合成材料",
       "武器"
@@ -1861,7 +3672,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "拆解获得破坏之石，用于合成与神铸SS双绝枪"
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "攻击+15%",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "所有子弹范围增加15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "归零：释放的黑洞消失后会触发爆炸",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "攻击+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "新生：产生的能量罩破裂后会触发强力爆炸",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "质量效应：两个黑洞接触会进行融合",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "攻击+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "能量坍缩：融合的黑洞伤害增加",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1872,13 +3736,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-s-%E8%BF%BD%E5%85%89%E8%80%85",
     "name": "追光者",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T2 永恒剑气",
     "icon": "/wiki-assets/装备/S级装备/永恒武器-追光者.png",
     "summary": "大范围剑气斩击武器，拆解可得永恒之石，是合成与神铸SS双绝枪的必备永恒系材料。",
     "tags": [
-      "S级装备",
+      "S",
       "剑气清屏",
       "SS合成材料",
       "武器"
@@ -1891,7 +3754,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "拆解获得永恒之石，用于合成与永恒神铸SS装备"
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "攻击+15%",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "所有攻击间隔减少15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "每5次攻击触发回旋斩",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "攻击+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "每10次攻击会留下一个剑阵",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "御剑术：额外生成一个跟随剑阵",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "攻击+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "巨剑术：剑阵会随时间放大",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1902,13 +3818,12 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "slug": "equip-s-%E6%B7%B7%E4%B9%B1%E4%B9%8B%E5%89%91",
     "name": "混乱之剑",
     "category": "EQUIPMENT",
-    "subcategory": "S级装备",
+    "subcategory": "S",
     "rarity": "S",
-    "tier": "T2 混沌融能材料",
     "icon": "/wiki-assets/装备/S级装备/混沌武器-混乱之剑.png",
     "summary": "混沌系S武器，拆解获得混沌之石，是开启SS神装「混沌融合（混18~混45）」的核心材料。",
     "tags": [
-      "S级装备",
+      "S",
       "混沌之石材料",
       "武器"
     ],
@@ -1920,7 +3835,60 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "拆解提供混沌之石，支撑SS武器斧头/镰刀/双刀/圣剑形态进化"
         }
       ],
-      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换"
+      "acquisition": "S级军备箱抽取 / S级杰出装备自选宝箱兑换",
+      "equipTabs": {
+        "qualitySkills": [
+          {
+            "quality": "2",
+            "label": "优秀",
+            "effect": "攻击+15%",
+            "color": "bg-emerald-500"
+          },
+          {
+            "quality": "3",
+            "label": "精良",
+            "effect": "所有技能伤害增加15%",
+            "color": "bg-blue-500"
+          },
+          {
+            "quality": "4",
+            "label": "杰出",
+            "effect": "禁锢：被混乱之剑击杀的敌人会被禁锢灵魂，禁锢的灵魂越多，增加的技能伤害越高（最多30%），被击中后灵魂溃散",
+            "color": "bg-purple-500"
+          },
+          {
+            "quality": "5",
+            "label": "史诗",
+            "effect": "攻击+25%",
+            "color": "bg-amber-400"
+          },
+          {
+            "quality": "6",
+            "label": "传奇",
+            "effect": "灵爆：灵魂溃散时只会减少100并会触发全屏高额伤害，伤害量与灵魂数量有关（低于100个灵魂时不会触发）",
+            "color": "bg-rose-500"
+          }
+        ],
+        "godforge": [
+          {
+            "stage": "神铸1星",
+            "effect": "噬心者：刺击对非无敌小怪一击必杀（只对首个命中怪物生效）",
+            "isKeyNode": true
+          },
+          {
+            "stage": "神铸2星",
+            "effect": "攻击+20%",
+            "isKeyNode": false
+          },
+          {
+            "stage": "神铸3星",
+            "effect": "深度恐惧：禁锢属性上限提升到50%",
+            "isKeyNode": true
+          }
+        ],
+        "chaosFusion": [],
+        "alienRefinement": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%a3%85%e5%a4%87%e7%af%87"
@@ -1928,45 +3896,78 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 39
   },
   {
-    "slug": "collectible-leg-ep1-%E5%9F%BA%E5%9B%A0%E7%BC%96%E8%BE%91%E5%99%A8",
-    "name": "基因编辑器",
+    "slug": "collectible-leg-ep1-%E4%BA%BA%E7%B1%BB%E5%9F%BA%E5%9B%A0%E5%9B%BE%E8%B0%B1",
+    "name": "人类基因图谱",
     "category": "COLLECTIBLE",
     "subcategory": "传奇收藏品",
     "edition": "第1期",
     "rarity": "LEGENDARY",
-    "tier": "T1 套装核心",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第1期/基因编辑器.png",
-    "summary": "经典「冰霜战靴套」组件，全套各3黄星即可获得每层冰霜血脉 +10%护盾增伤与对冰缓目标 +50%伤害。",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第6期/人类基因图谱.png",
+    "summary": "地球防御总部为了避免“大灾变”可能带来的严重后果，用最先进的技术制作出了人类基因图谱，作为人类的火种永久保存。",
     "tags": [
       "第1期",
-      "传奇红藏",
-      "暴击率",
-      "冰鞋套",
-      "冰缓增伤",
-      "暴击率"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第1期 · 传奇收藏品",
-      "synergy": "冰霜战靴典藏套（基因编辑器 + 梦境拼图 + 复制宝镜 + 赛博图腾柱）",
+      "synergy": "典藏套装：智慧传承",
       "milestones": [
         {
+          "stage": "黄1星",
+          "effect": "混乱之剑攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "混乱之剑攻击+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "黄3星",
-          "effect": "冰霜战靴每层冰霜血脉 +10%护盾增伤，对冰缓目标伤害 +50%",
+          "effect": "混乱之剑优秀品质技能增强 所有技能伤害+15%+10%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "混乱之剑攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "混乱之剑杰出品质技能增强 禁锢：被混乱之剑击杀的敌人会被禁锢灵魂，禁锢的灵魂越多，增加的技能伤害越高（最多30%+20%），被击中后灵魂溃散",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "混乱之剑攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "混乱之剑攻击+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红3星",
-          "effect": "冰霜血脉充能层数上限 +1，暴击率 +10%",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "混乱之剑攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "混乱之剑传奇品质技能增强 灵爆：灵魂溃散时只会减少100并会触发全屏高额伤害，伤害量与灵魂数量有关（低于100个灵魂时不会触发），全屏伤害+60%",
           "isKeyNode": true
         }
       ],
       "acquisition": "第1期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 240
+    "sort": 101,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep1-%E8%BF%9C%E5%8F%A4%E6%99%BA%E6%85%A7%E4%B9%8B%E4%B9%A6",
@@ -1975,170 +3976,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第1期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第1期/远古智慧之书.png",
-    "summary": "第1期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "summary": "来自太古时期的神秘书籍，上面记录了不可思议的智慧，作者不详。",
     "tags": [
       "第1期",
-      "传奇红藏",
-      "暴击率"
+      "传奇",
+      "暴击率+10%"
     ],
     "attributes": {
       "slot": "第1期 · 传奇收藏品",
-      "synergy": "第1期典藏馆共鸣组合",
+      "synergy": "典藏套装：智慧传承",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄1星",
+          "effect": "破坏之力攻击+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "破坏之力攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏之力优秀品质技能增强 所有子弹范围增加15%+10%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "破坏之力攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏之力杰出品质技能增强 归零：释放的黑洞消失后会触发爆炸，爆炸伤害+60%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏之力攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏之力攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏之力攻击+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "破坏之力传奇品质技能增强 新生：产生的能量罩破裂后会触发强力爆炸，爆炸伤害+60%",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第1期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 241
-  },
-  {
-    "slug": "collectible-epic-ep1-%E5%8F%A4%E8%80%81%E7%9A%84%E5%8C%BB%E5%AD%A6%E4%B9%A6%E7%B1%8D",
-    "name": "古老的医学书籍",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第1期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第1期/古老的医学书籍.png",
-    "summary": "第1期史诗金收藏，专属强化【永恒腰带】。升至红3星解锁「暴击伤害 +5%」。",
-    "tags": [
-      "第1期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "永恒腰带"
-    ],
-    "attributes": {
-      "slot": "第1期 · 史诗收藏品",
-      "synergy": "专属强化：永恒腰带",
-      "baseStats": [
-        "专属强化：永恒腰带"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【永恒腰带】被动效果 +15% +6%",
-          "isKeyNode": false
-        }
-      ],
-      "acquisition": "第1期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 442
-  },
-  {
-    "slug": "collectible-epic-ep1-%E6%95%91%E4%B8%96%E4%B8%BB%E7%9A%84%E9%81%97%E7%89%A9",
-    "name": "救世主的遗物",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第1期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第1期/救世主的遗物.png",
-    "summary": "第1期史诗金收藏，专属强化【破坏者手甲】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第1期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "破坏者手甲"
-    ],
-    "attributes": {
-      "slot": "第1期 · 史诗收藏品",
-      "synergy": "专属强化：破坏者手甲",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：破坏者手甲"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【破坏者手甲】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第1期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 443
-  },
-  {
-    "slug": "collectible-epic-ep1-%E8%97%8F%E8%BA%AB%E4%B9%8B%E6%89%80%E5%9C%B0%E5%9B%BE",
-    "name": "藏身之所地图",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第1期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第1期/藏身之所地图.png",
-    "summary": "第1期史诗金收藏，专属强化【扭曲腰带】。升至红3星解锁「暴击伤害 +5%」。",
-    "tags": [
-      "第1期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "扭曲腰带"
-    ],
-    "attributes": {
-      "slot": "第1期 · 史诗收藏品",
-      "synergy": "专属强化：扭曲腰带",
-      "baseStats": [
-        "专属强化：扭曲腰带"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【扭曲腰带】被动效果 +15% +6%",
-          "isKeyNode": false
-        }
-      ],
-      "acquisition": "第1期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 444
+    "sort": 102,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep1-%E9%BB%84%E9%87%91%E9%A4%90%E5%85%B7",
@@ -2147,43 +4050,294 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第1期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第1期/黄金餐具.png",
-    "summary": "第1期史诗金收藏，专属强化【永恒项链】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
+    "summary": "昂贵的纯金餐具，曾经是身份和财富的象征，“大灾变”期间其价值与普通餐具并无区别。",
     "tags": [
       "第1期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "永恒项链"
+      "史诗",
+      "暴击伤害+5%"
     ],
     "attributes": {
       "slot": "第1期 · 史诗收藏品",
-      "synergy": "专属强化：永恒项链",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：永恒项链"
-      ],
+      "synergy": "典藏套装：闪闪发光的遗失物",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "永恒项链攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒项链攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒项链优秀品质技能增强 目标血量越高造成伤害越高(最高增加50%+20%)",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【永恒项链】被动效果 +15% +6%，最终攻击 +2000",
+          "stage": "黄4星",
+          "effect": "永恒项链攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒项链杰出品质技能增强 对满血敌人额外造成100%+40%伤害",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒项链攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒项链攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒项链攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "永恒项链传奇品质技能增强 战斗中所有被动效果+15%+6%",
           "isKeyNode": true
         }
       ],
-      "acquisition": "第1期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第1期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 153,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep1-%E5%8F%A4%E8%80%81%E7%9A%84%E5%8C%BB%E5%AD%A6%E4%B9%A6%E7%B1%8D",
+    "name": "古老的医学书籍",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第1期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第1期/古老的医学书籍.png",
+    "summary": "来自人类早期的医学书籍，里面记载的古老药方对现代某些疾病依然有奇效。",
+    "tags": [
+      "第1期",
+      "史诗",
+      "暴击率+5%"
     ],
-    "sort": 445
+    "attributes": {
+      "slot": "第1期 · 史诗收藏品",
+      "synergy": "典藏套装：荒野求生",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "破坏者风衣生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者风衣生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者风衣技能增强 疯狂状态持续时间+2秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "破坏者风衣生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者风衣技能增强 疯狂状态持续时间+2秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者风衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者风衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏者风衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏者风衣传奇品质技能增强 疯狂状态下吸血超过血量上限的部分可以转化为能量护盾，护盾转化率+40%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第1期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 154,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep1-%E6%95%91%E4%B8%96%E4%B8%BB%E7%9A%84%E9%81%97%E7%89%A9",
+    "name": "救世主的遗物",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第1期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第1期/救世主的遗物.png",
+    "summary": "一只嵌有名贵宝石的黄金杯子，来源不详。",
+    "tags": [
+      "第1期",
+      "史诗",
+      "暴击伤害+5%"
+    ],
+    "attributes": {
+      "slot": "第1期 · 史诗收藏品",
+      "synergy": "典藏套装：闪闪发光的遗失物",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "破坏者手甲攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者手甲攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者手甲优秀品质技能增强 破坏本性：直接秒杀的非Boss敌人的血量提高8%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "破坏者手甲攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者手甲杰出品质技能增强 血脉压制：对精英/BOSS敌人伤害额外+20%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者手甲攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者手甲攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏者手甲攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏者手甲传奇品质技能增强 腥红光环：自身一定范围内的敌人会逐渐凋零（每0.1秒流失1%+0.4%生命，对BOSS不生效）",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第1期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 155,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep1-%E8%97%8F%E8%BA%AB%E4%B9%8B%E6%89%80%E7%9A%84%E5%9C%B0%E5%9B%BE",
+    "name": "藏身之所的地图",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第1期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第1期/藏身之所地图.png",
+    "summary": "“大灾变”时期的无价之宝，真正安全的藏身之所胜过一切。",
+    "tags": [
+      "第1期",
+      "史诗",
+      "暴击伤害+5%"
+    ],
+    "attributes": {
+      "slot": "第1期 · 史诗收藏品",
+      "synergy": "典藏套装：荒野求生",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "扭曲腰带生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "扭曲腰带生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "扭曲腰带优秀品质技能增强 恢复效果+20%+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "扭曲腰带生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "扭曲腰带技能增强 能量波动上限额外提高10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "扭曲腰带技能增强 能量波动上限额外提高10%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第1期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 156,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep2-%E4%B8%8D%E6%9C%BD%E7%9A%84%E5%B9%B8%E8%BF%90%E7%A1%AC%E5%B8%81",
@@ -2192,39 +4346,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第2期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第2期/不朽的幸运硬币.png",
-    "summary": "第2期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "summary": "能改变人运势的神奇硬币，即使之前厄运缠身，持有后也会好运不断。",
     "tags": [
       "第2期",
-      "传奇红藏",
-      "暴击率"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第2期 · 传奇收藏品",
-      "synergy": "第2期典藏馆共鸣组合",
+      "synergy": "典藏套装：异界宝藏",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄1星",
+          "effect": "追光者攻击+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "追光者攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "追光者优秀品质技能增强 触发回旋斩所需次数-1，触发剑阵所需次数-2，回旋斩伤害+10%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "追光者攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "追光者杰出品质技能增强 触发回旋斩所需次数-1，触发剑阵所需次数-2，剑阵伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "追光者攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "追光者攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "追光者攻击+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "追光者传奇品质技能增强 回旋斩和剑阵伤害+20%",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第2期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 246
+    "sort": 231,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep2-%E6%98%9F%E9%99%85%E8%B7%83%E8%BF%81%E7%9F%A9%E9%98%B5%E5%9B%BE%E7%BA%B8",
@@ -2233,38 +4420,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第2期",
     "rarity": "LEGENDARY",
-    "tier": "T1 无人机套",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第2期/星际跃迁矩阵图纸.png",
-    "summary": "「跨越星际的触手」双生无人机套核心，老区玩家最易成型的10黄星/20黄星无人机增伤套装。",
+    "summary": "来自外星文明的矩阵图纸，可以造出在宇宙中快速穿梭的矩阵，可惜部分材料极难获取。",
     "tags": [
       "第2期",
-      "传奇红藏",
-      "暴击率",
-      "无人机套",
-      "双生无人机强化",
-      "暴击率"
+      "传奇",
+      "暴击率+10%"
     ],
     "attributes": {
       "slot": "第2期 · 传奇收藏品",
-      "synergy": "跨越星际的触手（星际跃迁矩阵图纸 + 超能神经元 + 水力推动脚蹼 + 克莱因瓶）",
+      "synergy": "典藏套装：跨越星系的触手",
       "milestones": [
         {
-          "stage": "套装10黄星",
-          "effect": "双生无人机导弹数量 +5%，单发伤害 +5%"
+          "stage": "黄1星",
+          "effect": "精确制导系统攻击+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "套装20黄星",
-          "effect": "双生无人机导弹数量 +10%，单发伤害 +10%",
+          "stage": "黄2星",
+          "effect": "精确制导系统攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "无人机技能增强 无人机导弹数量+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "精确制导系统攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "无人机技能增强 无人机导弹单发伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "精确制导系统攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "精确制导系统攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "精确制导系统攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "无人机技能增强 无人机导弹数量+10%，单发伤害+10%",
           "isKeyNode": true
         }
       ],
       "acquisition": "第2期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 247
+    "sort": 232,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep2-%E5%B9%B8%E8%BF%90%E6%8A%A4%E8%BA%AB%E7%AC%A6",
@@ -2273,131 +4494,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第2期",
     "rarity": "EPIC",
-    "tier": "红3暴击率+5%",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第2期/幸运护身符.png",
-    "summary": "第2期史诗金收藏，专属强化【破坏者徽记（破坏项链）】。升至红3星解锁「暴击率 +5%」，升满额外提供 +2000 最终攻击力面板！",
+    "summary": "奇迹般地挡住了外星武器致命一击的护身符，佩戴者确实非常幸运。",
     "tags": [
       "第2期",
-      "史诗金藏",
-      "暴击率",
-      "暴击率 +5%",
-      "满星+2000攻击",
-      "破坏者徽记（破坏项链）"
+      "史诗",
+      "暴击率+5%"
     ],
     "attributes": {
       "slot": "第2期 · 史诗收藏品",
-      "synergy": "专属强化：破坏者徽记（破坏项链）",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：破坏者徽记（破坏项链）"
-      ],
+      "synergy": "典藏套装：幸好找到了所有记录",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击率 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【破坏者徽记（破坏项链）】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第2期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 302
-  },
-  {
-    "slug": "collectible-epic-ep2-%E7%A5%9E%E7%A7%98%E5%85%89%E7%8E%AF",
-    "name": "神秘光环",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第2期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第2期/神秘光环.png",
-    "summary": "第2期史诗金收藏，专属强化【永恒手套】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第2期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "永恒手套"
-    ],
-    "attributes": {
-      "slot": "第2期 · 史诗收藏品",
-      "synergy": "专属强化：永恒手套",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：永恒手套"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【永恒手套】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第2期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 448
-  },
-  {
-    "slug": "collectible-epic-ep2-%E8%B6%85%E7%BA%A7%E7%94%B5%E8%B7%AF%E6%9D%BF",
-    "name": "超级电路板",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第2期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第2期/超级电路板.png",
-    "summary": "第2期史诗金收藏，专属强化【永恒战衣】。升至红3星解锁「暴击伤害 +5%」。",
-    "tags": [
-      "第2期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "永恒战衣"
-    ],
-    "attributes": {
-      "slot": "第2期 · 史诗收藏品",
-      "synergy": "专属强化：永恒战衣",
-      "baseStats": [
-        "专属强化：永恒战衣"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【永恒战衣】被动效果 +15% +6%",
+          "stage": "黄1星",
+          "effect": "破坏者徽记攻击+2%",
           "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者徽记攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者徽记优秀品质技能增强 效果触发所需的生命值提高25%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "破坏者徽记攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者徽记杰出品质技能增强 自身血量越低造成伤害越高，特性的伤害提升上限+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者徽记攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者徽记攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏者徽记攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏者徽记传奇品质技能增强 自身血量越低暴击率越高，特性的暴击率提升上限+10%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第2期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第2期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 449
+    "sort": 283,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep2-%E9%A1%B6%E5%B0%96%E7%A7%91%E5%AD%A6%E5%AE%B6%E7%9A%84%E7%AC%94%E8%AE%B0",
@@ -2406,41 +4568,220 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第2期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第2期/顶尖科学家的笔记.png",
-    "summary": "第2期史诗金收藏，专属强化【永恒战靴】。升至红3星解锁「暴击伤害 +5%」。",
+    "summary": "记载了地球防御总部最前沿科学实验数据的珍贵笔记，有很高的学术价值。",
     "tags": [
       "第2期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "永恒战靴"
+      "史诗",
+      "暴击率+5%"
     ],
     "attributes": {
       "slot": "第2期 · 史诗收藏品",
-      "synergy": "专属强化：永恒战靴",
-      "baseStats": [
-        "专属强化：永恒战靴"
-      ],
+      "synergy": "典藏套装：幸好找到了所有记录",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "迷惘之靴生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "迷惘之靴生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "迷惘之靴优秀品质技能增强 迷失的切换时间减少10秒",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【永恒战靴】被动效果 +15% +6%",
+          "stage": "黄4星",
+          "effect": "迷惘之靴生命+2%",
           "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "迷惘之靴杰出品质技能增强 绝地反击的反向增伤+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "迷惘之靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "迷惘之靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "迷惘之靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "迷惘之靴传奇品质技能增强 绝地反击的反向增伤+10%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第2期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第2期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 285,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep2-%E8%B6%85%E7%BA%A7%E7%94%B5%E8%B7%AF%E6%9D%BF",
+    "name": "超级电路板",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第2期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第2期/超级电路板.png",
+    "summary": "从地球防御总部精密设备上拆下来的电路板，超高性能的集成电路使其可以轻松处理不可思议的数据量。",
+    "tags": [
+      "第2期",
+      "史诗",
+      "暴击伤害+5%"
     ],
-    "sort": 450
+    "attributes": {
+      "slot": "第2期 · 史诗收藏品",
+      "synergy": "典藏套装：超维技术",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "高效维持装置生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "高效维持装置生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "火箭发射器技能增强 火箭弹发射冷却时间-0.5秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "高效维持装置生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "火箭发射器技能增强 火箭弹伤害提升5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "高效维持装置生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "高效维持装置生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "高效维持装置生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "火箭发射器技能增强 鲨嘴炮增加1发",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第2期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 286,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep2-%E7%A5%9E%E7%A7%98%E5%85%89%E7%8E%AF",
+    "name": "神秘光环",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第2期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第2期/神秘光环.png",
+    "summary": "一个神秘的光环，可对周围环境中的一切起到增益效果。",
+    "tags": [
+      "第2期",
+      "史诗",
+      "暴击伤害+5%"
+    ],
+    "attributes": {
+      "slot": "第2期 · 史诗收藏品",
+      "synergy": "典藏套装：风之图腾",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "能量扩散器攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "能量扩散器攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "燃烧瓶技能增强 燃烧瓶火焰伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "能量扩散器攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "燃烧瓶技能增强 燃油桶重伤效果+5%额外承受伤害",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "能量扩散器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "能量扩散器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "能量扩散器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "燃烧瓶技能增强 燃烧的伤害频率提升",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第2期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 298,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep3-%E5%A4%A9%E4%BD%BF%E4%B9%8B%E6%B3%AA%E6%B0%B4%E6%99%B6",
@@ -2449,121 +4790,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第3期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第3期/天使之泪水晶.png",
-    "summary": "第3期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "summary": "一颗来自地外星系的泪状水晶，靠近它的人都会感觉到内心平和，如沐春风。",
     "tags": [
       "第3期",
-      "传奇红藏",
-      "暴击率"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第3期 · 传奇收藏品",
-      "synergy": "第3期典藏馆共鸣组合",
+      "synergy": "典藏套装：打开虚空之门",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄1星",
+          "effect": "纳米机器人生命+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "纳米机器人生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "榴莲技能增强 铁蒺藜的尖刺伤害+100%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "纳米机器人生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "榴莲技能增强 榴莲和铁蒺藜伤害+20%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "纳米机器人生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "纳米机器人生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "纳米机器人生命+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "榴莲技能增强 榴莲和铁蒺藜伤害频率+30%",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第3期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 251
-  },
-  {
-    "slug": "collectible-leg-ep3-%E5%BC%82%E7%95%8C%E5%A5%87%E9%92%A5",
-    "name": "异界奇钥",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第3期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第3期/异界奇钥.png",
-    "summary": "第3期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
-    "tags": [
-      "第3期",
-      "传奇红藏",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第3期 · 传奇收藏品",
-      "synergy": "第3期典藏馆共鸣组合",
-      "milestones": [
-        {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
-        },
-        {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
-        }
-      ],
-      "acquisition": "第3期收藏品宝箱 / 传奇收藏品自选宝箱"
-    },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 252
-  },
-  {
-    "slug": "collectible-leg-ep3-%E6%98%9F%E6%A0%B8%E5%AE%9D%E9%92%BB",
-    "name": "星核宝钻",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第3期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第3期/星核宝钻.png",
-    "summary": "第3期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
-    "tags": [
-      "第3期",
-      "传奇红藏",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第3期 · 传奇收藏品",
-      "synergy": "第3期典藏馆共鸣组合",
-      "milestones": [
-        {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
-        },
-        {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
-        }
-      ],
-      "acquisition": "第3期收藏品宝箱 / 传奇收藏品自选宝箱"
-    },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 253
+    "sort": 351,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep3-%E7%8B%AC%E8%A7%92%E5%85%BD%E7%9A%84%E8%A7%92",
@@ -2572,82 +4864,220 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第3期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第3期/独角兽的角.png",
-    "summary": "第3期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "summary": "未知生物遗留的角，蕴藏着不可思议的魔法能量，根据史前资料推测是独角兽的角。",
     "tags": [
       "第3期",
-      "传奇红藏",
-      "暴击率"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第3期 · 传奇收藏品",
-      "synergy": "第3期典藏馆共鸣组合",
+      "synergy": "典藏套装：赛博仙境",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄1星",
+          "effect": "机械骨骼系统生命+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "机械骨骼系统生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "守卫者技能增强 击退效果+50%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "机械骨骼系统生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "守卫者技能增强 守卫者和捍卫者伤害+40%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "机械骨骼系统生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "机械骨骼系统生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "机械骨骼系统生命+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "守卫者技能增强 守卫者和捍卫者伤害+80%",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第3期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 254
+    "sort": 352,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-epic-ep3-%E4%BB%99%E5%A2%83%E7%8E%89%E9%9C%B2",
-    "name": "仙境玉露",
+    "slug": "collectible-leg-ep3-%E5%BC%82%E7%95%8C%E5%A5%87%E9%92%A5",
+    "name": "异界奇钥",
     "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
+    "subcategory": "传奇收藏品",
     "edition": "第3期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第3期/仙境玉露.png",
-    "summary": "第3期史诗金收藏，专属强化【迷惘之靴】。升至红3星解锁「暴击伤害 +5%」。",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第3期/异界奇钥.png",
+    "summary": "偶然开启了通往异世界大门的钥匙，正确的激活方式不详。",
     "tags": [
       "第3期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "迷惘之靴"
+      "传奇",
+      "暴击率+10%"
     ],
     "attributes": {
-      "slot": "第3期 · 史诗收藏品",
-      "synergy": "专属强化：迷惘之靴",
-      "baseStats": [
-        "专属强化：迷惘之靴"
-      ],
+      "slot": "第3期 · 传奇收藏品",
+      "synergy": "典藏套装：打开虚空之门",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "量子偏振器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "量子偏振器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "足球技能增强 足球和量子球伤害+20%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【迷惘之靴】被动效果 +15% +6%",
+          "stage": "黄4星",
+          "effect": "量子偏振器攻击+3%",
           "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "足球技能增强 量子球持续时间+1秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "量子偏振器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "量子偏振器攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "量子偏振器攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "足球技能增强 足球和量子球伤害+25%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第3期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第3期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 375,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep3-%E6%98%9F%E6%A0%B8%E5%AE%9D%E9%92%BB",
+    "name": "星核宝钻",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第3期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第3期/星核宝钻.png",
+    "summary": "整颗星球坍缩成了钻石大小，内部凝聚着无法想象的能量。",
+    "tags": [
+      "第3期",
+      "传奇",
+      "暴击率+10%"
     ],
-    "sort": 455
+    "attributes": {
+      "slot": "第3期 · 传奇收藏品",
+      "synergy": "典藏套装：改写星系的记忆",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "相位转换器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "相位转换器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "雷电发射器技能增强 雷电发射器和狂雷电池的雷电伤害+20%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "相位转换器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "雷电发射器技能增强 狂雷电池扩散电波伤害+20%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "相位转换器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "相位转换器攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "相位转换器攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "雷电发射器技能增强 雷电发射器和狂雷电池伤害+40%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第3期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 376,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep3-%E5%8F%B2%E8%AF%97%E6%B3%A5%E6%9D%BF",
@@ -2656,41 +5086,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第3期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第3期/史诗泥板.png",
-    "summary": "第3期史诗金收藏，专属强化【亡者之甲】。升至红3星解锁「暴击伤害 +5%」。",
+    "summary": "上面用古老的文字记录了传奇英雄的历险故事。",
     "tags": [
       "第3期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "亡者之甲"
+      "史诗",
+      "暴击率+5%"
     ],
     "attributes": {
       "slot": "第3期 · 史诗收藏品",
-      "synergy": "专属强化：亡者之甲",
-      "baseStats": [
-        "专属强化：亡者之甲"
-      ],
+      "synergy": "典藏套装：变强的副作用",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "亡者之甲生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "亡者之甲生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "亡者之甲杰出品质技能增强 幽灵状态上限时间+3秒",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【亡者之甲】被动效果 +15% +6%",
+          "stage": "黄4星",
+          "effect": "亡者之甲生命+2%",
           "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "亡者之甲杰出品质技能增强 幽灵状态上限时间+3秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "亡者之甲生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "亡者之甲生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "亡者之甲生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "亡者之甲杰出品质技能增强 超灵：幽灵状态增加10%的攻击",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第3期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第3期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 456
+    "sort": 403,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep3-%E6%B4%AA%E8%8D%92%E6%88%98%E9%BC%93",
@@ -2699,43 +5160,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第3期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第3期/洪荒战鼓.png",
-    "summary": "第3期史诗金收藏，专属强化【混沌手套】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
+    "summary": "听到鼓声的所有人都会不同程度地热血沸腾，充满斗志。",
     "tags": [
       "第3期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "混沌手套"
+      "史诗",
+      "暴击伤害+5%"
     ],
     "attributes": {
       "slot": "第3期 · 史诗收藏品",
-      "synergy": "专属强化：混沌手套",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：混沌手套"
-      ],
+      "synergy": "典藏套装：变强的副作用",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "永恒手套攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒手套攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒手套优秀品质技能增强 攻击力增加20%所需血量-25%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【混沌手套】被动效果 +15% +6%，最终攻击 +2000",
+          "stage": "黄4星",
+          "effect": "永恒手套攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒手套神铸技能增强 暴虐恢复生命+0.5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "永恒手套传奇品质技能增强 暴击伤害额外增加20%",
           "isKeyNode": true
         }
       ],
-      "acquisition": "第3期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第3期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 457
+    "sort": 404,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep3-%E7%83%88%E7%84%B0%E7%BA%A2%E7%BE%BD",
@@ -2744,166 +5234,146 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第3期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第3期/烈焰红羽.png",
-    "summary": "第3期史诗金收藏，专属强化【分裂之石】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
+    "summary": "周身环绕烈焰的红色羽毛，火焰无法被熄灭，羽毛也无法被焚毁。",
     "tags": [
       "第3期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "分裂之石"
+      "史诗",
+      "暴击率+5%"
     ],
     "attributes": {
       "slot": "第3期 · 史诗收藏品",
-      "synergy": "专属强化：分裂之石",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：分裂之石"
-      ],
+      "synergy": "典藏套装：平行宇宙",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "破坏者具足生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者具足生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者具足杰出品质技能增强 顶尖物种击杀数-200",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【分裂之石】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第3期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 458
-  },
-  {
-    "slug": "collectible-leg-ep4-%E7%94%9F%E5%91%BD%E6%B2%99%E6%BC%8F",
-    "name": "生命沙漏",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第4期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第4期/生命沙漏.png",
-    "summary": "第4期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
-    "tags": [
-      "第4期",
-      "传奇红藏",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第4期 · 传奇收藏品",
-      "synergy": "第4期典藏馆共鸣组合",
-      "milestones": [
+          "stage": "黄4星",
+          "effect": "破坏者具足生命+2%",
+          "isKeyNode": false
+        },
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄5星",
+          "effect": "破坏者具足神铸技能增强 危险代谢所需血量+25%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者具足生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者具足生命+3%",
+          "isKeyNode": false
         },
         {
           "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "effect": "暴击率+5%",
           "isKeyNode": true
         },
         {
+          "stage": "红4星",
+          "effect": "破坏者具足生命+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "破坏者具足神铸技能增强 饱腹：顶尖物种额外增加5%伤害(上限25%)",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第4期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第3期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 259
+    "sort": 405,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-leg-ep4-%E7%9C%9F%E8%A7%86%E4%B9%8B%E7%9C%BC",
-    "name": "真视之眼",
+    "slug": "collectible-epic-ep3-%E4%BB%99%E5%A2%83%E7%8E%89%E9%9C%B2",
+    "name": "仙境玉露",
     "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第4期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第4期/真视之眼.png",
-    "summary": "第4期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "subcategory": "史诗收藏品",
+    "edition": "第3期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第3期/仙境玉露.png",
+    "summary": "来自异空间的奇香液体，呈淡绿色，饮用后可延年益寿，副作用不详。",
     "tags": [
-      "第4期",
-      "传奇红藏",
-      "暴击率"
+      "第3期",
+      "史诗",
+      "暴击伤害+5%"
     ],
     "attributes": {
-      "slot": "第4期 · 传奇收藏品",
-      "synergy": "第4期典藏馆共鸣组合",
+      "slot": "第3期 · 史诗收藏品",
+      "synergy": "典藏套装：平行宇宙",
       "milestones": [
         {
+          "stage": "黄1星",
+          "effect": "破坏者束腰生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者束腰生命+2%",
+          "isKeyNode": false
+        },
+        {
           "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "effect": "破坏者束腰优秀品质技能增强 恢复效果+20%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "破坏者束腰生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者束腰神铸技能增强 超重力：红洞伤害+50%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者束腰生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者束腰生命+3%",
+          "isKeyNode": false
         },
         {
           "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "effect": "暴击伤害+5%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
-        }
-      ],
-      "acquisition": "第4期收藏品宝箱 / 传奇收藏品自选宝箱"
-    },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 260
-  },
-  {
-    "slug": "collectible-leg-ep4-%E8%99%9A%E7%A9%BA%E4%B9%8B%E8%8A%B1",
-    "name": "虚空之花",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第4期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第4期/虚空之花.png",
-    "summary": "第4期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
-    "tags": [
-      "第4期",
-      "传奇红藏",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第4期 · 传奇收藏品",
-      "synergy": "第4期典藏馆共鸣组合",
-      "milestones": [
-        {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "红4星",
+          "effect": "破坏者束腰生命+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "红5星",
+          "effect": "破坏者束腰神铸技能增强 触发硬化所需击杀数-100",
           "isKeyNode": true
-        },
-        {
-          "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
         }
       ],
-      "acquisition": "第4期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第3期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 261
+    "sort": 406,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep4-%E9%AB%98%E7%BA%AC%E5%BA%A6%E8%83%BD%E9%87%8F%E9%AD%94%E6%96%B9",
@@ -2912,299 +5382,294 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第4期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第4期/高纬度能量魔方.png",
-    "summary": "第4期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "summary": "蕴藏着高纬度秘密的神秘魔方，每转动一下都要消耗不可思议的能量。",
     "tags": [
       "第4期",
-      "传奇红藏",
-      "暴击率"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第4期 · 传奇收藏品",
-      "synergy": "第4期典藏馆共鸣组合",
+      "synergy": "典藏套装：超能失控",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄1星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒战衣精良品质技能增强 复活额外恢复30%能量护盾",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒战衣神铸品质技能增强 感悟：第2次复活技能选择次数+1",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒战衣生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒战衣生命+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "永恒战衣传奇品质技能增强 技能伤害+20%",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第4期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 262
+    "sort": 479,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-epic-ep4-%E5%85%83%E7%B4%A0%E6%8C%87%E7%8E%AF",
-    "name": "元素指环",
+    "slug": "collectible-leg-ep4-%E8%99%9A%E7%A9%BA%E4%B9%8B%E8%8A%B1",
+    "name": "虚空之花",
     "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
+    "subcategory": "传奇收藏品",
     "edition": "第4期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第4期/元素指环.png",
-    "summary": "第4期史诗金收藏，专属强化【双生回旋镖 / 回旋镖】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第4期/虚空之花.png",
+    "summary": "盛开在虚空中的花朵，只能看到，无法触碰或采摘。",
     "tags": [
       "第4期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "双生回旋镖 / 回旋镖"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
-      "slot": "第4期 · 史诗收藏品",
-      "synergy": "专属强化：双生回旋镖 / 回旋镖",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生回旋镖 / 回旋镖"
-      ],
+      "slot": "第4期 · 传奇收藏品",
+      "synergy": "典藏套装：无效增强",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生回旋镖 / 回旋镖】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第4期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 463
-  },
-  {
-    "slug": "collectible-epic-ep4-%E6%A0%B8%E8%83%BD%E7%94%B5%E6%B1%A0",
-    "name": "核能电池",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第4期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第4期/核能电池.png",
-    "summary": "第4期史诗金收藏，专属强化【破坏之力】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第4期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "破坏之力"
-    ],
-    "attributes": {
-      "slot": "第4期 · 史诗收藏品",
-      "synergy": "专属强化：破坏之力",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：破坏之力"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【破坏之力】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第4期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 464
-  },
-  {
-    "slug": "collectible-epic-ep4-%E7%AD%89%E7%A6%BB%E5%AD%90%E5%89%91",
-    "name": "等离子剑",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第4期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第4期/等离子剑.png",
-    "summary": "第4期史诗金收藏，专属强化【双生立场 / 立场发生器】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第4期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "双生立场 / 立场发生器"
-    ],
-    "attributes": {
-      "slot": "第4期 · 史诗收藏品",
-      "synergy": "专属强化：双生立场 / 立场发生器",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生立场 / 立场发生器"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生立场 / 立场发生器】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第4期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 465
-  },
-  {
-    "slug": "collectible-epic-ep4-%E9%BB%84%E9%87%91%E5%8F%B7%E8%A7%92",
-    "name": "黄金号角",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第4期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第4期/黄金号角.png",
-    "summary": "第4期史诗金收藏，专属强化【双生板砖 / 重力控制器】。升至红3星解锁「暴击伤害 +5%」。",
-    "tags": [
-      "第4期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "双生板砖 / 重力控制器"
-    ],
-    "attributes": {
-      "slot": "第4期 · 史诗收藏品",
-      "synergy": "专属强化：双生板砖 / 重力控制器",
-      "baseStats": [
-        "专属强化：双生板砖 / 重力控制器"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生板砖 / 重力控制器】被动效果 +15% +6%",
+          "stage": "黄1星",
+          "effect": "永恒腰带生命+3%",
           "isKeyNode": false
-        }
-      ],
-      "acquisition": "第4期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 466
-  },
-  {
-    "slug": "collectible-leg-ep5-%E5%91%BD%E8%BF%90%E5%A4%9A%E9%9D%A2%E9%AA%B0",
-    "name": "命运多面骰",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第5期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第5期/命运多面骰.png",
-    "summary": "第5期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
-    "tags": [
-      "第5期",
-      "传奇红藏",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第5期 · 传奇收藏品",
-      "synergy": "第5期典藏馆共鸣组合",
-      "milestones": [
-        {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "永恒腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒腰带精良品质技能增强 恢复效果+10%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
-        }
-      ],
-      "acquisition": "第5期收藏品宝箱 / 传奇收藏品自选宝箱"
-    },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 267
-  },
-  {
-    "slug": "collectible-leg-ep5-%E6%84%8F%E8%AF%86%E5%90%8C%E6%AD%A5%E5%A4%B4%E7%9B%94",
-    "name": "意识同步头盔",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第5期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第5期/意识同步头盔.png",
-    "summary": "第5期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
-    "tags": [
-      "第5期",
-      "传奇红藏",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第5期 · 传奇收藏品",
-      "synergy": "第5期典藏馆共鸣组合",
-      "milestones": [
-        {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄4星",
+          "effect": "永恒腰带生命+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄5星",
+          "effect": "永恒腰带杰出品质技能增强 无敌效果触发间隔-20秒",
           "isKeyNode": true
         },
         {
+          "stage": "红1星",
+          "effect": "永恒腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒腰带生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒腰带生命+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "永恒腰带传奇品质技能增强 无敌状态攻击力+20%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第5期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第4期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 480,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep4-%E7%9C%9F%E8%A7%86%E4%B9%8B%E7%9C%BC",
+    "name": "真视之眼",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第4期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第4期/真视之眼.png",
+    "summary": "可以无视一切阻碍，看到事物真正的本质。",
+    "tags": [
+      "第4期",
+      "传奇",
+      "暴击率+10%"
     ],
-    "sort": 268
+    "attributes": {
+      "slot": "第4期 · 传奇收藏品",
+      "synergy": "典藏套装：多元宇宙视角",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "反物质生成器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "反物质生成器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "钻头弹技能增强 钻头弹和哨箭的伤害+15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "反物质生成器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "钻头弹技能增强 钻头弹和哨箭的伤害+15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "反物质生成器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "反物质生成器攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "反物质生成器攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "钻头弹技能增强 钻头弹和哨箭的伤害+30%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第4期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 481,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep4-%E7%94%9F%E5%91%BD%E6%B2%99%E6%BC%8F",
+    "name": "生命沙漏",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第4期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第4期/生命沙漏.png",
+    "summary": "相传在生命来到尽头时逆转沙漏，就可以获得相同时长的生命。",
+    "tags": [
+      "第4期",
+      "传奇",
+      "暴击率+10%"
+    ],
+    "attributes": {
+      "slot": "第4期 · 传奇收藏品",
+      "synergy": "典藏套装：超维技术",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "高效维持装置生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "高效维持装置生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "火箭发射器技能增强 火箭发射器和鲨嘴炮伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "高效维持装置生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "火箭发射器技能增强 火箭发射器和鲨嘴炮伤害+15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "高效维持装置生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "高效维持装置生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "高效维持装置生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "火箭发射器技能增强 火箭发射器和鲨嘴炮伤害+20%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第4期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 482,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep5-%E7%BA%B3%E7%B1%B3%E6%8B%9F%E6%80%81%E9%9D%A2%E5%85%B7",
@@ -3213,80 +5678,590 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第5期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第5期/纳米拟态面具.png",
-    "summary": "第5期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "summary": "可以完美模拟不同种族的面孔，几乎没有破绽。",
     "tags": [
       "第5期",
-      "传奇红藏",
-      "暴击率"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第5期 · 传奇收藏品",
-      "synergy": "第5期典藏馆共鸣组合",
+      "synergy": "典藏套装：摹仿秀",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄1星",
+          "effect": "能量收集器生命+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "能量收集器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "力场发生器技能增强 溶解力场和压制力场伤害+14%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "能量收集器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "力场发生器技能增强 溶解力场和压制力场伤害+14%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "能量收集器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "能量收集器生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "能量收集器生命+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "力场发生器技能增强 溶解力场和压制力场伤害频率提升25%",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第5期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 269
+    "sort": 511,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-leg-ep5-%E9%A2%84%E8%A8%80%E5%A1%94%E7%BD%97%E7%89%8C",
-    "name": "预言塔罗牌",
+    "slug": "collectible-leg-ep5-%E5%91%BD%E8%BF%90%E5%A4%9A%E9%9D%A2%E9%AA%B0",
+    "name": "命运多面骰",
     "category": "COLLECTIBLE",
     "subcategory": "传奇收藏品",
     "edition": "第5期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第5期/预言塔罗牌.png",
-    "summary": "第5期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第5期/命运多面骰.png",
+    "summary": "每一面都有着不同的命运，掷出者首次掷出生效，无法反悔。",
     "tags": [
       "第5期",
-      "传奇红藏",
-      "暴击率"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第5期 · 传奇收藏品",
-      "synergy": "第5期典藏馆共鸣组合",
+      "synergy": "典藏套装：金手指",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄1星",
+          "effect": "传导辅助器生命+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "传导辅助器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "回旋镖技能增强 回旋镖和磁力镖伤害+15%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "传导辅助器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "回旋镖技能增强 回旋镖和磁力镖伤害+15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "传导辅助器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "传导辅助器生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "传导辅助器生命+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "回旋镖技能增强 回旋镖和磁力镖伤害+30%",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第5期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 512,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep5-%E7%BB%B4%E5%BA%A6%E7%AE%94",
+    "name": "维度箔",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第5期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第7期/维度箔.png",
+    "summary": "可以提高或降低维度的箔片，来源不详。",
+    "tags": [
+      "第5期",
+      "传奇",
+      "暴击率+10%"
     ],
-    "sort": 270
+    "attributes": {
+      "slot": "第5期 · 传奇收藏品",
+      "synergy": "典藏套装：超维技术",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "破坏者风衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者风衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者风衣技能增强 疯狂状态持续时间+3秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "破坏者风衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者风衣技能增强 疯狂状态持续时间+3秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者风衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者风衣生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏者风衣生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏者风衣传奇品质技能增强 疯狂状态下吸血超过血量上限的部分可以转化为能量护盾，护盾转化率+60%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第5期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 513,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep5-%E6%84%8F%E8%AF%86%E5%90%8C%E6%AD%A5%E5%A4%B4%E7%9B%94",
+    "name": "意识同步头盔",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第5期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第5期/意识同步头盔.png",
+    "summary": "可以将佩戴者的意识同步到其他载体。",
+    "tags": [
+      "第5期",
+      "传奇",
+      "暴击率+10%"
+    ],
+    "attributes": {
+      "slot": "第5期 · 传奇收藏品",
+      "synergy": "典藏套装：无人驾驶最安全",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒战靴传奇品质技能增强 火焰伤害额外+15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒战靴传奇品质技能增强 火焰伤害额外+15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒战靴生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒战靴生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "永恒战靴传奇品质技能增强 深度烧伤：被火焰灼烧的敌人受到额外+20%伤害",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第5期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 514,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep4-%E6%A0%B8%E8%83%BD%E7%94%B5%E6%B1%A0",
+    "name": "核能电池",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第4期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第4期/核能电池.png",
+    "summary": "有着近乎无限能量的电池，副作用是会对使用它的仪器产生辐射破坏。",
+    "tags": [
+      "第4期",
+      "史诗",
+      "暴击伤害+5%"
+    ],
+    "attributes": {
+      "slot": "第4期 · 史诗收藏品",
+      "synergy": "典藏套装：酿酒偏方",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "重力控制器生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "重力控制器生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "板砖技能增强 板砖和铁哑铃冷却时间-0.5秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "重力控制器生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "板砖技能增强 板砖和铁哑铃伤害范围+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "重力控制器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "重力控制器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "重力控制器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "板砖技能增强 板砖和铁哑铃伤害+15%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第4期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 533,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep4-%E7%AD%89%E7%A6%BB%E5%AD%90%E5%89%91",
+    "name": "等离子剑",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第4期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第4期/等离子剑.png",
+    "summary": "将等离子压缩成剑形释放，具有极强的破坏力。",
+    "tags": [
+      "第4期",
+      "史诗",
+      "暴击率+5%"
+    ],
+    "attributes": {
+      "slot": "第4期 · 史诗收藏品",
+      "synergy": "典藏套装：尝试所有可能性",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "湮灭装置攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "湮灭装置攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "激光发射器技能增强 激光发射器和湮灭射线冷却时间-1秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "湮灭装置攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "激光发射器技能增强 激光发射器和湮灭射线伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "湮灭装置攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "湮灭装置攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "湮灭装置攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "激光发射器技能增强 激光发射器和湮灭射线伤害+5%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第4期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 534,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep4-%E9%BB%84%E9%87%91%E5%8F%B7%E8%A7%92",
+    "name": "黄金号角",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第4期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第4期/黄金号角.png",
+    "summary": "通过号角吹出的声音有着振奋人心的神奇魔力。",
+    "tags": [
+      "第4期",
+      "史诗",
+      "暴击率+5%"
+    ],
+    "attributes": {
+      "slot": "第4期 · 史诗收藏品",
+      "synergy": "典藏套装：特别的演唱会",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "分裂之石攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "分裂之石攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "分裂之石传奇品质技能增强 恢复生命时同时恢复等量护盾值",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "分裂之石攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "分裂之石神铸品质技能增强 多模态：每产生1次分身技能冷却-1.5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "分裂之石攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "分裂之石攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "分裂之石攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "分裂之石杰出品质技能增强 每产生1次分身，技能伤害+3%，最高30%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第4期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 535,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep4-%E5%85%83%E7%B4%A0%E6%8C%87%E7%8E%AF",
+    "name": "元素指环",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第4期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第4期/元素指环.png",
+    "summary": "可以召唤5种不同元素的指环，威力非常强大。",
+    "tags": [
+      "第4期",
+      "史诗",
+      "暴击伤害+5%"
+    ],
+    "attributes": {
+      "slot": "第4期 · 史诗收藏品",
+      "synergy": "典藏套装：五行剑圣",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "混沌手套攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "混沌手套攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "混沌手套传奇品质技能增强 赦免：恢复生命时恢复等量的能量护盾",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "混沌手套攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "混沌手套神铸品质技能增强 普渡：触发复活审判时直接流放另一只怪物的概率+50%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "混沌手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "混沌手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "混沌手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "混沌手套杰出品质技能增强 终极审判：触发死亡审判时额外杀死1只怪物",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第4期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 536,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep5-%E5%8F%8D%E9%87%8D%E5%8A%9B%E8%A3%85%E7%BD%AE",
@@ -3295,41 +6270,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第5期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第5期/反重力装置.png",
-    "summary": "第5期史诗金收藏，专属强化【破坏者束腰】。升至红3星解锁「暴击伤害 +5%」。",
+    "summary": "穿戴的人可以无视地球重力影响，不易控制。",
     "tags": [
       "第5期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "破坏者束腰"
+      "史诗",
+      "暴击伤害+5%"
     ],
     "attributes": {
       "slot": "第5期 · 史诗收藏品",
-      "synergy": "专属强化：破坏者束腰",
-      "baseStats": [
-        "专属强化：破坏者束腰"
-      ],
+      "synergy": "典藏套装：赛博仙境",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "机械骨骼系统生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "机械骨骼系统生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "守卫者技能增强 守卫者和捍卫者伤害+10%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【破坏者束腰】被动效果 +15% +6%",
+          "stage": "黄4星",
+          "effect": "机械骨骼系统生命+2%",
           "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "守卫者技能增强 守卫者和捍卫者伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "机械骨骼系统生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "机械骨骼系统生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "机械骨骼系统生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "守卫者技能增强 守卫者和捍卫者伤害+20%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第5期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第5期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 471
+    "sort": 565,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep5-%E6%B0%B4%E5%8A%9B%E6%8E%A8%E5%8A%A8%E8%84%9A%E8%B9%BC",
@@ -3338,86 +6344,146 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第5期",
     "rarity": "EPIC",
-    "tier": "红3暴击率+5%",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第5期/水力推动脚蹼.png",
-    "summary": "第5期史诗金收藏，专属强化【双生无人机（跨越星际的触手套装核心）】。升至红3星解锁「暴击率 +5%」，升满额外提供 +2000 最终攻击力面板！",
+    "summary": "通过抽取并高压射出海水作为推进力的脚蹼，速度极快。",
     "tags": [
       "第5期",
-      "史诗金藏",
-      "暴击率",
-      "暴击率 +5%",
-      "满星+2000攻击",
-      "双生无人机（跨越星际的触手套装核心）"
+      "史诗",
+      "暴击率+5%"
     ],
     "attributes": {
       "slot": "第5期 · 史诗收藏品",
-      "synergy": "专属强化：双生无人机（跨越星际的触手套装核心）",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生无人机（跨越星际的触手套装核心）"
-      ],
+      "synergy": "典藏套装：跨越星系的触手",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击率 +5%",
+          "stage": "黄1星",
+          "effect": "精确制导系统攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "精确制导系统攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "无人机技能增强 无人机导弹单发伤害+3%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生无人机（跨越星际的触手套装核心）】被动效果 +15% +6%，最终攻击 +2000",
+          "stage": "黄4星",
+          "effect": "精确制导系统攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "无人机技能增强 无人机导弹数量+3%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "精确制导系统攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "精确制导系统攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "精确制导系统攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "无人机技能增强 无人机导弹数量+5%，单发伤害+5%",
           "isKeyNode": true
         }
       ],
-      "acquisition": "第5期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第5期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 305
+    "sort": 566,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-epic-ep5-%E8%B6%85%E4%BA%BA%E7%B1%BB%E8%8D%AF%E5%93%81",
-    "name": "超人类药品",
+    "slug": "collectible-epic-ep5-%E8%B6%85%E4%BA%BA%E7%B1%BB%E8%8D%AF%E7%89%87",
+    "name": "超人类药片",
     "category": "COLLECTIBLE",
     "subcategory": "史诗收藏品",
     "edition": "第5期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第5期/超人类药品.png",
-    "summary": "第5期史诗金收藏，专属强化【破坏者风衣】。升至红3星解锁「暴击伤害 +5%」。",
+    "summary": "有50%的几率使服用者获得短期超能力，也可能产生严重的副作用。",
     "tags": [
       "第5期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "破坏者风衣"
+      "史诗",
+      "暴击率+5%"
     ],
     "attributes": {
       "slot": "第5期 · 史诗收藏品",
-      "synergy": "专属强化：破坏者风衣",
-      "baseStats": [
-        "专属强化：破坏者风衣"
-      ],
+      "synergy": "典藏套装：海底是凡人的禁地",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "追光者攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "追光者攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "追光者优秀品质技能增强 回旋斩伤害+10%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【破坏者风衣】被动效果 +15% +6%",
+          "stage": "黄4星",
+          "effect": "追光者攻击+2%",
           "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "追光者杰出品质技能增强 剑阵伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "追光者攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "追光者攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "追光者攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "追光者传奇品质技能增强 回旋斩和剑阵伤害+20%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第5期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第5期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 472
+    "sort": 567,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep5-%E9%80%9A%E8%AE%AF%E6%B5%B7%E8%9E%BA",
@@ -3426,165 +6492,294 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第5期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第5期/通讯海螺.png",
-    "summary": "第5期史诗金收藏，专属强化【双生立场 / 立场发生器】。升至红3星解锁「暴击伤害 +5%」。",
+    "summary": "可以在海底自由通讯的道具，来自鲛人科技。",
     "tags": [
       "第5期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "双生立场 / 立场发生器"
+      "史诗",
+      "暴击伤害+5%"
     ],
     "attributes": {
       "slot": "第5期 · 史诗收藏品",
-      "synergy": "专属强化：双生立场 / 立场发生器",
-      "baseStats": [
-        "专属强化：双生立场 / 立场发生器"
-      ],
+      "synergy": "典藏套装：超维技术",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
+          "stage": "黄1星",
+          "effect": "破坏之力攻击+2%",
+          "isKeyNode": false
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生立场 / 立场发生器】被动效果 +15% +6%",
+          "stage": "黄2星",
+          "effect": "破坏之力攻击+2%",
           "isKeyNode": false
-        }
-      ],
-      "acquisition": "第5期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 473
-  },
-  {
-    "slug": "collectible-leg-ep6-%E4%BA%BA%E7%B1%BB%E5%9F%BA%E5%9B%A0%E5%9B%BE%E8%B0%B1",
-    "name": "人类基因图谱",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第6期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第6期/人类基因图谱.png",
-    "summary": "第6期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
-    "tags": [
-      "第6期",
-      "传奇红藏",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第6期 · 传奇收藏品",
-      "synergy": "第6期典藏馆共鸣组合",
-      "milestones": [
+        },
         {
           "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
-        },
-        {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "effect": "破坏之力杰出品质技能增强 归零：释放的黑洞消失后会触发爆炸，爆炸伤害+20%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
-        }
-      ],
-      "acquisition": "第6期收藏品宝箱 / 传奇收藏品自选宝箱"
-    },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 274
-  },
-  {
-    "slug": "collectible-leg-ep6-%E6%A2%A6%E5%A2%83%E6%98%BE%E5%BD%B1%E6%B6%B2",
-    "name": "梦境显影液",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第6期",
-    "rarity": "LEGENDARY",
-    "tier": "T0 必做",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第6期/梦境显影液.png",
-    "summary": "「实现童年的梦想」宠物套组件，与记忆编辑器搭配凑齐25黄星即可实现异宠共鸣全程覆盖。",
-    "tags": [
-      "第6期",
-      "传奇红藏",
-      "暴击率",
-      "T0 必做",
-      "6大必做红藏",
-      "宠物共鸣套",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第6期 · 传奇收藏品",
-      "synergy": "实现童年的梦想（记忆编辑器 + 时间回溯齿轮 + 空间回溯齿轮 + 梦境显影液）",
-      "milestones": [
+          "stage": "黄4星",
+          "effect": "破坏之力攻击+2%",
+          "isKeyNode": false
+        },
         {
           "stage": "黄5星",
-          "effect": "配合记忆编辑器红5凑满25星，解锁异宠共鸣持续时间 +1秒",
+          "effect": "破坏之力传奇品质技能增强 新生：产生的能量罩破裂后会触发强力爆炸，爆炸伤害+20%",
           "isKeyNode": true
         },
         {
+          "stage": "红1星",
+          "effect": "破坏之力攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏之力攻击+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红3星",
-          "effect": "暴击率 +10%",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏之力攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏之力传奇品质技能增强 归零：黑洞爆炸伤害+20% 新生：能量罩爆炸伤害+20%",
           "isKeyNode": true
         }
       ],
-      "acquisition": "第6期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第5期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 106
+    "sort": 568,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-leg-ep6-%E7%99%BE%E5%8F%98%E5%85%B1%E7%94%9F%E4%BD%93",
-    "name": "百变共生体",
+    "slug": "collectible-leg-ep6-%E5%8E%9F%E5%AD%90%E6%9C%BA%E5%99%A8%E4%BA%BA",
+    "name": "原子机器人",
     "category": "COLLECTIBLE",
     "subcategory": "传奇收藏品",
     "edition": "第6期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第6期/百变共生体.png",
-    "summary": "第6期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第9期/原子机器人.png",
+    "summary": "比纳米机器人更为先进，可以清除一切病灶，恢复身体健康。",
     "tags": [
       "第6期",
-      "传奇红藏",
-      "暴击率"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第6期 · 传奇收藏品",
-      "synergy": "第6期典藏馆共鸣组合",
+      "synergy": "典藏套装：尝试所有可能性",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄1星",
+          "effect": "湮灭装置攻击+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "湮灭装置攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "激光发射器技能增强 激光发射器和湮灭射线伤害+15%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "湮灭装置攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "激光发射器技能增强 激光发射器和湮灭射线伤害+15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "湮灭装置攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "湮灭装置攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "湮灭装置攻击+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "激光发射器技能增强 激光发射器和湮灭射线伤害+30%",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第6期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 641,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep6-%E6%97%B6%E5%85%89%E6%B0%94%E6%81%AF%E7%93%B6",
+    "name": "时光气息瓶",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第6期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第8期/时光气息瓶.png",
+    "summary": "不可思议的气体，吸取后可以延长生命，甚至复活。",
+    "tags": [
+      "第6期",
+      "传奇",
+      "暴击伤害+10%"
     ],
-    "sort": 275
+    "attributes": {
+      "slot": "第6期 · 传奇收藏品",
+      "synergy": "典藏套装：酿酒偏方",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "重力控制器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "重力控制器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "板砖技能增强 板砖和铁哑铃伤害+25%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "重力控制器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "板砖技能增强 板砖和铁哑铃伤害+25%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "重力控制器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "重力控制器生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "重力控制器生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "板砖技能增强 板砖和铁哑铃伤害+80%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第6期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 642,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep6-%E9%BE%99%E7%89%99",
+    "name": "龙牙",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第6期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第9期/龙牙.png",
+    "summary": "巨龙陨落后遗留的牙齿，具有强悍的威能。",
+    "tags": [
+      "第6期",
+      "传奇",
+      "暴击率+10%"
+    ],
+    "attributes": {
+      "slot": "第6期 · 传奇收藏品",
+      "synergy": "典藏套装：坚不可摧",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "破坏者束腰生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者束腰生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者束腰优秀品质技能增强 恢复效果+30%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "破坏者束腰生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者束腰神铸技能增强 超重力：红洞伤害+100%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者束腰生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者束腰生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏者束腰生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏者束腰神铸技能增强 触发硬化所需击杀数-150",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第6期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 643,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep6-%E8%B6%85%E8%83%BD%E7%A5%9E%E7%BB%8F%E5%85%83",
@@ -3593,174 +6788,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第6期",
     "rarity": "LEGENDARY",
-    "tier": "T1 无人机套",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第6期/超能神经元.png",
-    "summary": "「跨越星际的触手」双生无人机套核心组件，配合水力推动脚蹼与克莱因瓶大幅提升毁灭者导弹密度。",
+    "summary": "可以反噬宿主的神经元，将宿主变成未知的强大物种。",
     "tags": [
       "第6期",
-      "传奇红藏",
-      "暴击率",
-      "无人机套",
-      "双生无人机强化",
-      "暴击率"
+      "传奇",
+      "暴击率+10%"
     ],
     "attributes": {
       "slot": "第6期 · 传奇收藏品",
-      "synergy": "跨越星际的触手",
+      "synergy": "典藏套装：跨越星系的触手",
       "milestones": [
         {
-          "stage": "套装20黄星",
-          "effect": "双生无人机导弹数量 +10%，单发伤害 +10%",
+          "stage": "黄1星",
+          "effect": "破坏者手甲攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者手甲攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者手甲优秀品质技能增强 破坏本性：直接秒杀的非Boss敌人的血量提高12%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "破坏者手甲攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者手甲传奇品质技能增强 腥红光环：自身一定范围内的敌人会逐渐凋零（每0.1秒流失1%+0.6%生命，对BOSS不生效）",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者手甲攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者手甲攻击+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红3星",
-          "effect": "暴击率 +10%",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏者手甲攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏者手甲杰出品质技能增强 血脉压制：对精英/BOSS敌人伤害额外+30%",
           "isKeyNode": true
         }
       ],
       "acquisition": "第6期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 276
-  },
-  {
-    "slug": "collectible-epic-ep6-%E5%85%8B%E8%8E%B1%E5%9B%A0%E7%93%B6",
-    "name": "克莱因瓶",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第6期",
-    "rarity": "EPIC",
-    "tier": "红3暴击率+5%",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第6期/克莱因瓶.png",
-    "summary": "第6期史诗金收藏，专属强化【双生无人机（跨越星际的触手套装核心）】。升至红3星解锁「暴击率 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第6期",
-      "史诗金藏",
-      "暴击率",
-      "暴击率 +5%",
-      "满星+2000攻击",
-      "双生无人机（跨越星际的触手套装核心）"
-    ],
-    "attributes": {
-      "slot": "第6期 · 史诗收藏品",
-      "synergy": "专属强化：双生无人机（跨越星际的触手套装核心）",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生无人机（跨越星际的触手套装核心）"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击率 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生无人机（跨越星际的触手套装核心）】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第6期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 306
-  },
-  {
-    "slug": "collectible-epic-ep6-%E5%8F%8D%E7%B2%92%E5%AD%90%E8%91%AB%E8%8A%A6",
-    "name": "反粒子葫芦",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第6期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第6期/反粒子葫芦.png",
-    "summary": "第6期史诗金收藏，专属强化【双生榴莲 / 铁蒺藜】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第6期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "双生榴莲 / 铁蒺藜"
-    ],
-    "attributes": {
-      "slot": "第6期 · 史诗收藏品",
-      "synergy": "专属强化：双生榴莲 / 铁蒺藜",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生榴莲 / 铁蒺藜"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生榴莲 / 铁蒺藜】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第6期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 477
-  },
-  {
-    "slug": "collectible-epic-ep6-%E5%BE%AE%E5%9E%8B%E4%BA%BA%E9%80%A0%E5%A4%AA%E9%98%B3",
-    "name": "微型人造太阳",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第6期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第6期/微型人造太阳.png",
-    "summary": "第6期史诗金收藏，专属强化【双生足球 / 量子偏振器】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第6期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "双生足球 / 量子偏振器"
-    ],
-    "attributes": {
-      "slot": "第6期 · 史诗收藏品",
-      "synergy": "专属强化：双生足球 / 量子偏振器",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生足球 / 量子偏振器"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生足球 / 量子偏振器】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第6期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 478
+    "sort": 644,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep6-%E8%BF%B7%E4%BD%A0%E6%88%B4%E6%A3%AE%E7%90%83",
@@ -3769,166 +6862,294 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第6期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第6期/迷你戴森球.png",
-    "summary": "第6期史诗金收藏，专属强化【双生雷电 / 雷电发射器】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
+    "summary": "戴森球的实验体，可以高效地吸收其包裹住的能量。",
     "tags": [
       "第6期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "双生雷电 / 雷电发射器"
+      "史诗",
+      "暴击伤害+5%"
     ],
     "attributes": {
       "slot": "第6期 · 史诗收藏品",
-      "synergy": "专属强化：双生雷电 / 雷电发射器",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生雷电 / 雷电发射器"
-      ],
+      "synergy": "典藏套装：改写星系的记忆",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "相位转换器攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "相位转换器攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "雷电发射器技能增强 雷电发射器和狂雷电池的雷电伤害+8%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生雷电 / 雷电发射器】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第6期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 479
-  },
-  {
-    "slug": "collectible-leg-ep7-%E5%A4%8D%E5%88%B6%E5%AE%9D%E9%95%9C",
-    "name": "复制宝镜",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第7期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第7期/复制宝镜.png",
-    "summary": "第7期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
-    "tags": [
-      "第7期",
-      "传奇红藏",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第7期 · 传奇收藏品",
-      "synergy": "第7期典藏馆共鸣组合",
-      "milestones": [
+          "stage": "黄4星",
+          "effect": "相位转换器攻击+2%",
+          "isKeyNode": false
+        },
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄5星",
+          "effect": "雷电发射器技能增强 狂雷电池扩散电波伤害+8%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "相位转换器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "相位转换器攻击+3%",
+          "isKeyNode": false
         },
         {
           "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "effect": "暴击伤害+5%",
           "isKeyNode": true
         },
         {
+          "stage": "红4星",
+          "effect": "相位转换器攻击+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "雷电发射器技能增强 雷电发射器和狂雷电池伤害+12%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第7期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第6期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 280
+    "sort": 695,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-leg-ep7-%E6%97%B6%E9%97%B4%E7%BA%BF%E9%AD%94%E6%96%B9",
-    "name": "时间线魔方",
+    "slug": "collectible-epic-ep6-%E5%BE%AE%E5%9E%8B%E4%BA%BA%E9%80%A0%E5%A4%AA%E9%98%B3",
+    "name": "微型人造太阳",
     "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第7期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第7期/时间线魔方.png",
-    "summary": "第7期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "subcategory": "史诗收藏品",
+    "edition": "第6期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第6期/微型人造太阳.png",
+    "summary": "发出的光能和热能已经超过了太阳，然而持续时间较短。",
     "tags": [
-      "第7期",
-      "传奇红藏",
-      "暴击率"
+      "第6期",
+      "史诗",
+      "暴击伤害+5%"
     ],
     "attributes": {
-      "slot": "第7期 · 传奇收藏品",
-      "synergy": "第7期典藏馆共鸣组合",
+      "slot": "第6期 · 史诗收藏品",
+      "synergy": "典藏套装：打开虚空之门",
       "milestones": [
         {
+          "stage": "黄1星",
+          "effect": "量子偏振器攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "量子偏振器攻击+2%",
+          "isKeyNode": false
+        },
+        {
           "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "effect": "足球技能增强 足球和量子球伤害+6%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "量子偏振器攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "足球技能增强 足球和量子球伤害+6%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "量子偏振器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "量子偏振器攻击+3%",
+          "isKeyNode": false
         },
         {
           "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "effect": "暴击伤害+5%",
           "isKeyNode": true
         },
         {
+          "stage": "红4星",
+          "effect": "量子偏振器攻击+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "足球技能增强 足球和量子球伤害+12%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第7期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第6期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 281
+    "sort": 696,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-leg-ep7-%E7%BB%B4%E5%BA%A6%E7%AE%94",
-    "name": "维度箔",
+    "slug": "collectible-epic-ep6-%E5%85%8B%E8%8E%B1%E5%9B%A0%E7%93%B6",
+    "name": "克莱因瓶",
     "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第7期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第7期/维度箔.png",
-    "summary": "第7期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "subcategory": "史诗收藏品",
+    "edition": "第6期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第6期/克莱因瓶.png",
+    "summary": "存在于四维空间的奇异瓶子。",
     "tags": [
-      "第7期",
-      "传奇红藏",
-      "暴击率"
+      "第6期",
+      "史诗",
+      "暴击率+5%"
     ],
     "attributes": {
-      "slot": "第7期 · 传奇收藏品",
-      "synergy": "第7期典藏馆共鸣组合",
+      "slot": "第6期 · 史诗收藏品",
+      "synergy": "典藏套装：跨越星系的触手",
       "milestones": [
         {
+          "stage": "黄1星",
+          "effect": "永恒战衣生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒战衣生命+2%",
+          "isKeyNode": false
+        },
+        {
           "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "effect": "永恒战衣精良品质技能增强 复活额外恢复15%能量护盾",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "永恒战衣生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒战衣精良品质技能增强 复活额外恢复20%能量护盾",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
         },
         {
           "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "effect": "暴击率+5%",
           "isKeyNode": true
         },
         {
+          "stage": "红4星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "永恒战衣传奇品质技能增强 技能伤害+10%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第7期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第6期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 697,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep6-%E5%8F%8D%E7%B2%92%E5%AD%90%E8%91%AB%E8%8A%A6",
+    "name": "反粒子葫芦",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第6期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第6期/反粒子葫芦.png",
+    "summary": "来自其他宇宙区域的葫芦，其中储存着大量的反粒子。",
+    "tags": [
+      "第6期",
+      "史诗",
+      "暴击率+5%"
     ],
-    "sort": 282
+    "attributes": {
+      "slot": "第6期 · 史诗收藏品",
+      "synergy": "典藏套装：打开虚空之门",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "纳米机器人生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "纳米机器人生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "榴莲技能增强 铁蒺藜的尖刺伤害+50%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "纳米机器人生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "榴莲技能增强 榴莲和铁蒺藜伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "纳米机器人生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "纳米机器人生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "纳米机器人生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "榴莲技能增强 榴莲和铁蒺藜伤害+30%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第6期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 698,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep7-%E8%B5%9B%E5%8D%9A%E5%9B%BE%E8%85%BE%E6%9F%B1",
@@ -3937,331 +7158,294 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第7期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第7期/赛博图腾柱.png",
-    "summary": "第7期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "summary": "科技与信仰融合，产生奇异的效果",
     "tags": [
       "第7期",
-      "传奇红藏",
-      "暴击率"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第7期 · 传奇收藏品",
-      "synergy": "第7期典藏馆共鸣组合",
+      "synergy": "典藏套装：风之图腾",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄1星",
+          "effect": "能量扩散器攻击+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "能量扩散器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "燃烧瓶、燃油桶技能增强 火焰伤害+20%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "能量扩散器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "燃烧瓶、燃油桶技能增强 燃油桶重伤效果+10%额外承受伤害",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "能量扩散器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "能量扩散器攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "能量扩散器攻击+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "燃烧瓶、燃油桶技能增强 火焰伤害+40%",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第7期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 283
+    "sort": 771,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-epic-ep7-%E5%85%BD%E7%81%AB%E4%B9%8B%E7%82%89",
-    "name": "兽火之炉",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第7期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第7期/兽火之炉.png",
-    "summary": "第7期史诗金收藏，专属强化【双生钻头 / 哨箭】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第7期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "双生钻头 / 哨箭"
-    ],
-    "attributes": {
-      "slot": "第7期 · 史诗收藏品",
-      "synergy": "专属强化：双生钻头 / 哨箭",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生钻头 / 哨箭"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生钻头 / 哨箭】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第7期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 484
-  },
-  {
-    "slug": "collectible-epic-ep7-%E5%AE%87%E5%AE%99%E7%BD%97%E7%9B%98",
-    "name": "宇宙罗盘",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第7期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第7期/宇宙罗盘.png",
-    "summary": "第7期史诗金收藏，专属强化【追光者】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第7期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "追光者"
-    ],
-    "attributes": {
-      "slot": "第7期 · 史诗收藏品",
-      "synergy": "专属强化：追光者",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：追光者"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【追光者】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第7期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 485
-  },
-  {
-    "slug": "collectible-epic-ep7-%E6%97%A0%E9%99%90%E9%9F%B3%E7%AC%A6",
-    "name": "无限音符",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第7期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第7期/无限音符.png",
-    "summary": "第7期史诗金收藏，专属强化【混乱之剑】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第7期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "混乱之剑"
-    ],
-    "attributes": {
-      "slot": "第7期 · 史诗收藏品",
-      "synergy": "专属强化：混乱之剑",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：混乱之剑"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【混乱之剑】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第7期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 486
-  },
-  {
-    "slug": "collectible-epic-ep7-%E8%99%AB%E6%B4%9E%E6%8E%A2%E6%B5%8B%E5%99%A8",
-    "name": "虫洞探测器",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第7期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第7期/虫洞探测器.png",
-    "summary": "第7期史诗金收藏，专属强化【双生回旋镖 / 回旋镖】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第7期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "双生回旋镖 / 回旋镖"
-    ],
-    "attributes": {
-      "slot": "第7期 · 史诗收藏品",
-      "synergy": "专属强化：双生回旋镖 / 回旋镖",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生回旋镖 / 回旋镖"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生回旋镖 / 回旋镖】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第7期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 487
-  },
-  {
-    "slug": "collectible-leg-ep8-%E6%97%B6%E5%85%89%E6%B0%94%E6%81%AF%E7%93%B6",
-    "name": "时光气息瓶",
+    "slug": "collectible-leg-ep7-%E5%A4%8D%E5%88%B6%E5%AE%9D%E9%95%9C",
+    "name": "复制宝镜",
     "category": "COLLECTIBLE",
     "subcategory": "传奇收藏品",
-    "edition": "第8期",
+    "edition": "第7期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第8期/时光气息瓶.png",
-    "summary": "第8期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第7期/复制宝镜.png",
+    "summary": "可以复制任何内容的宝镜，无论被复制的有没有实体",
     "tags": [
-      "第8期",
-      "传奇红藏",
-      "暴击率"
+      "第7期",
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
-      "slot": "第8期 · 传奇收藏品",
-      "synergy": "第8期典藏馆共鸣组合",
+      "slot": "第7期 · 传奇收藏品",
+      "synergy": "典藏套装：摹仿秀",
       "milestones": [
         {
+          "stage": "黄1星",
+          "effect": "永恒项链攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒项链攻击+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "effect": "永恒项链优秀品质技能增强 目标血量越高造成伤害越高(最高增加50%+35%)",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "永恒项链攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒项链杰出品质技能增强 对满血敌人额外造成100%+60%伤害",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒项链攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒项链攻击+4%",
+          "isKeyNode": false
         },
         {
           "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "effect": "暴击伤害+10%",
           "isKeyNode": true
         },
         {
+          "stage": "红4星",
+          "effect": "永恒项链攻击+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
-        }
-      ],
-      "acquisition": "第8期收藏品宝箱 / 传奇收藏品自选宝箱"
-    },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 288
-  },
-  {
-    "slug": "collectible-leg-ep8-%E6%97%B6%E9%97%B4%E5%9B%9E%E6%BA%AF%E9%BD%BF%E8%BD%AE",
-    "name": "时间回溯齿轮",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第8期",
-    "rarity": "LEGENDARY",
-    "tier": "T1 宠物套",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第8期/时间回溯齿轮.png",
-    "summary": "「实现童年的梦想」宠物套核心组件，推荐升至黄5星凑齐25星共鸣持续时间+1秒。",
-    "tags": [
-      "第8期",
-      "传奇红藏",
-      "暴击率",
-      "宠物共鸣套",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第8期 · 传奇收藏品",
-      "synergy": "实现童年的梦想",
-      "milestones": [
-        {
-          "stage": "黄5星",
-          "effect": "凑齐套装25黄星：异宠共鸣持续时间 +1秒",
+          "effect": "永恒项链传奇品质技能增强 战斗中所有被动效果+15%+10%",
           "isKeyNode": true
         }
       ],
-      "acquisition": "第8期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第7期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 289
+    "sort": 772,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-leg-ep8-%E7%A9%BA%E9%97%B4%E5%9B%9E%E6%BA%AF%E9%BD%BF%E8%BD%AE",
-    "name": "空间回溯齿轮",
+    "slug": "collectible-leg-ep7-%E6%A2%A6%E5%A2%83%E6%8B%BC%E5%9B%BE",
+    "name": "梦境拼图",
     "category": "COLLECTIBLE",
     "subcategory": "传奇收藏品",
-    "edition": "第8期",
+    "edition": "第7期",
     "rarity": "LEGENDARY",
-    "tier": "T1 宠物套",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第8期/空间回溯齿轮.png",
-    "summary": "「实现童年的梦想」宠物套核心组件，强化混乱腰带与异宠同步率。",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/梦境拼图.png",
+    "summary": "能自由编辑梦境内容的拼图",
     "tags": [
-      "第8期",
-      "传奇红藏",
-      "暴击率",
-      "宠物共鸣套",
-      "混乱腰带强化",
-      "暴击率"
+      "第7期",
+      "传奇",
+      "暴击率+10%"
     ],
     "attributes": {
-      "slot": "第8期 · 传奇收藏品",
-      "synergy": "实现童年的梦想",
+      "slot": "第7期 · 传奇收藏品",
+      "synergy": "典藏套装：多元宇宙视角",
       "milestones": [
         {
+          "stage": "黄1星",
+          "effect": "永恒手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒手套神铸技能增强 暴虐恢复生命+1%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "永恒手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "黄5星",
-          "effect": "凑齐套装25黄星：异宠共鸣持续时间 +1秒",
+          "effect": "永恒手套神铸技能增强 暴虐恢复生命+1%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒手套攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒手套攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "永恒手套传奇品质技能增强 暴击伤害额外增加40%",
           "isKeyNode": true
         }
       ],
-      "acquisition": "第8期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第7期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 773,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep7-%E5%9F%BA%E5%9B%A0%E7%BC%96%E8%BE%91%E5%99%A8",
+    "name": "基因编辑器",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第7期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第1期/基因编辑器.png",
+    "summary": "经过改造的基因可以孕育出不可思议的物种",
+    "tags": [
+      "第7期",
+      "传奇",
+      "暴击率+10%"
     ],
-    "sort": 290
+    "attributes": {
+      "slot": "第7期 · 传奇收藏品",
+      "synergy": "典藏套装：人类起源",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "破坏者具足生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者具足生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者具足神铸技能增强 饱腹：顶尖物种额外增加1.5%伤害(上限7.5%)",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "破坏者具足生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者具足神铸技能增强 饱腹：顶尖物种额外增加1.5%伤害(上限7.5%)",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者具足生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者具足生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏者具足生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏者具足神铸技能增强 饱腹：顶尖物种额外增加8%伤害(上限40%)",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第7期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 774,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep8-%E8%AE%B0%E5%BF%86%E7%BC%96%E8%BE%91%E5%99%A8",
@@ -4270,176 +7454,590 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第8期",
     "rarity": "LEGENDARY",
-    "tier": "T0 必做",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第8期/记忆编辑器.png",
-    "summary": "「实现童年的梦想」宠物套绝对核心，强化破坏项链与异宠共鸣持续时间，建议优先冲刺红 5 星。",
+    "summary": "可以对记忆进行编写，包括那些想不起来的部分。",
     "tags": [
       "第8期",
-      "传奇红藏",
-      "暴击率",
-      "T0 必做",
-      "6大必做红藏",
-      "暴击率",
-      "宠物共鸣套",
-      "破坏项链专属"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第8期 · 传奇收藏品",
-      "synergy": "实现童年的梦想（记忆编辑器 + 时间回溯齿轮 + 空间回溯齿轮 + 梦境显影液）",
+      "synergy": "典藏套装：改写星系的记忆",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活套装「实现童年的梦想」：异宠同步率 +10%"
+          "stage": "黄1星",
+          "effect": "破坏者徽记攻击+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "暴击率 +10%，异宠共鸣减伤 +20%",
+          "stage": "黄2星",
+          "effect": "破坏者徽记攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者徽记传奇品质技能增强 自身血量越低暴击率越高，暴击率上限+20%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "破坏者徽记攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者徽记传奇品质技能增强 自身血量越低暴击率越高，暴击率上限+20%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者徽记攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者徽记攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏者徽记攻击+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "配合其余三件黄5达成25黄星：异宠共鸣持续时间 +1秒（全程无缝共鸣）",
+          "effect": "破坏者徽记杰出品质技能增强 自身血量越低造成伤害越高，伤害上限+20%",
           "isKeyNode": true
         }
       ],
       "acquisition": "第8期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 108
+    "sort": 801,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-epic-ep8-%E4%BE%BF%E6%8D%B7%E5%BC%8F%E6%9C%BA%E7%AE%B1",
-    "name": "便捷式机箱",
+    "slug": "collectible-leg-ep8-%E6%97%B6%E9%97%B4%E5%9B%9E%E6%BA%AF%E9%BD%BF%E8%BD%AE",
+    "name": "时间回溯齿轮",
     "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
+    "subcategory": "传奇收藏品",
     "edition": "第8期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第8期/便捷式机箱.png",
-    "summary": "第8期史诗金收藏，专属强化【双生守卫者 / 守卫者】。升至红3星解锁「暴击伤害 +5%」。",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第8期/时间回溯齿轮.png",
+    "summary": "转动后可使时间回溯，但需消耗极大能量。",
     "tags": [
       "第8期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "双生守卫者 / 守卫者"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
-      "slot": "第8期 · 史诗收藏品",
-      "synergy": "专属强化：双生守卫者 / 守卫者",
-      "baseStats": [
-        "专属强化：双生守卫者 / 守卫者"
-      ],
+      "slot": "第8期 · 传奇收藏品",
+      "synergy": "典藏套装：总有一次能带上去",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生守卫者 / 守卫者】被动效果 +15% +6%",
+          "stage": "黄1星",
+          "effect": "分裂之石攻击+3%",
           "isKeyNode": false
-        }
-      ],
-      "acquisition": "第8期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 491
-  },
-  {
-    "slug": "collectible-epic-ep8-%E6%98%9F%E8%BD%A8%E4%B9%98%E5%AE%A2%E5%8D%A1",
-    "name": "星轨乘客卡",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第8期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第8期/星轨乘客卡.png",
-    "summary": "第8期史诗金收藏，专属强化【双生激光 / 激光器】。升至红3星解锁「暴击伤害 +5%」。",
-    "tags": [
-      "第8期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "双生激光 / 激光器"
-    ],
-    "attributes": {
-      "slot": "第8期 · 史诗收藏品",
-      "synergy": "专属强化：双生激光 / 激光器",
-      "baseStats": [
-        "专属强化：双生激光 / 激光器"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生激光 / 激光器】被动效果 +15% +6%",
+          "stage": "黄2星",
+          "effect": "分裂之石攻击+3%",
           "isKeyNode": false
-        }
-      ],
-      "acquisition": "第8期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 492
-  },
-  {
-    "slug": "collectible-epic-ep8-%E8%84%91%E6%9C%BA%E8%8A%AF%E7%89%87",
-    "name": "脑机芯片",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第8期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第8期/脑机芯片.png",
-    "summary": "第8期史诗金收藏，专属强化【双生无人机 / 毁灭者】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第8期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "双生无人机 / 毁灭者"
-    ],
-    "attributes": {
-      "slot": "第8期 · 史诗收藏品",
-      "synergy": "专属强化：双生无人机 / 毁灭者",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生无人机 / 毁灭者"
-      ],
-      "milestones": [
+        },
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄3星",
+          "effect": "分裂之石传奇品质技能增强 恢复生命时同时恢复1.5倍护盾值",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生无人机 / 毁灭者】被动效果 +15% +6%，最终攻击 +2000",
+          "stage": "黄4星",
+          "effect": "分裂之石攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "分裂之石传奇品质技能增强 恢复生命时同时恢复1.5倍护盾值",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "分裂之石攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "分裂之石攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "分裂之石攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "分裂之石杰出品质技能增强 每产生1次分身，技能伤害+5%，最高50%",
           "isKeyNode": true
         }
       ],
-      "acquisition": "第8期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第8期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 802,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep8-%E7%A9%BA%E9%97%B4%E5%9B%9E%E6%BA%AF%E9%BD%BF%E8%BD%AE",
+    "name": "空间回溯齿轮",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第8期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第8期/空间回溯齿轮.png",
+    "summary": "转动后可使空间回溯，消耗能量比时间回溯齿轮略低。",
+    "tags": [
+      "第8期",
+      "传奇",
+      "暴击率+10%"
     ],
-    "sort": 493
+    "attributes": {
+      "slot": "第8期 · 传奇收藏品",
+      "synergy": "典藏套装：赛博仙境",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "亡者之甲生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "亡者之甲生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "亡者之甲杰出品质技能增强 幽灵状态上限时间+5秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "亡者之甲生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "亡者之甲杰出品质技能增强 幽灵状态上限时间+5秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "亡者之甲生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "亡者之甲生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "亡者之甲生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "亡者之甲杰出品质技能增强 超灵：幽灵状态增加20%的攻击",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第8期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 803,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep8-%E6%A2%A6%E5%A2%83%E6%98%BE%E5%BD%B1%E6%B6%B2",
+    "name": "梦境显影液",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第8期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第6期/梦境显影液.png",
+    "summary": "将梦境中的一切具象化的稀有药液。",
+    "tags": [
+      "第8期",
+      "传奇",
+      "暴击率+10%"
+    ],
+    "attributes": {
+      "slot": "第8期 · 传奇收藏品",
+      "synergy": "典藏套装：梦想成真",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "扭曲腰带技能增强 能量波动上限额外提高15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "扭曲腰带技能增强 能量波动上限额外提高15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "扭曲腰带生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "扭曲腰带生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "扭曲腰带技能增强 能量波动上限额外提高30%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第8期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 804,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep7-%E5%85%BD%E7%81%AB%E4%B9%8B%E7%82%89",
+    "name": "兽火之炉",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第7期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第7期/兽火之炉.png",
+    "summary": "炉中的火焰永恒不灭，充满了兽性的躁动",
+    "tags": [
+      "第7期",
+      "史诗",
+      "暴击伤害+5%"
+    ],
+    "attributes": {
+      "slot": "第7期 · 史诗收藏品",
+      "synergy": "典藏套装：多元宇宙视角",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "反物质生成器攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "反物质生成器攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "钻头弹、哨箭技能增强 钻头弹和哨箭的伤害+6%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "反物质生成器攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "钻头弹、哨箭技能增强 钻头弹和哨箭的伤害+6%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "反物质生成器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "反物质生成器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "反物质生成器攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "钻头弹、哨箭技能增强 钻头弹和哨箭的伤害+12%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第7期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 825,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep7-%E6%97%A0%E9%99%90%E9%9F%B3%E7%AC%A6",
+    "name": "无限音符",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第7期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第7期/无限音符.png",
+    "summary": "持续发出悦耳节奏的音符",
+    "tags": [
+      "第7期",
+      "史诗",
+      "暴击伤害+5%"
+    ],
+    "attributes": {
+      "slot": "第7期 · 史诗收藏品",
+      "synergy": "典藏套装：摹仿秀",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "混乱之剑攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "混乱之剑攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "混乱之剑优秀品质技能增强 所有技能伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "混乱之剑攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "混乱之剑杰出品质技能增强 禁锢：禁锢灵魂增加的技能伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "混乱之剑攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "混乱之剑攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "混乱之剑攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "混乱之剑传奇品质技能增强 灵爆：灵魂溃散时全屏高额伤害+30%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第7期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 826,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep7-%E5%AE%87%E5%AE%99%E7%BD%97%E7%9B%98",
+    "name": "宇宙罗盘",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第7期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第7期/宇宙罗盘.png",
+    "summary": "在浩瀚的宇宙中，方向不可迷失",
+    "tags": [
+      "第7期",
+      "史诗",
+      "暴击率+5%"
+    ],
+    "attributes": {
+      "slot": "第7期 · 史诗收藏品",
+      "synergy": "典藏套装：摹仿秀",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "能量收集器生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "能量收集器生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "力场发生器技能增强 溶解力场和压制力场伤害+7%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "能量收集器生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "力场发生器技能增强 溶解力场和压制力场伤害+7%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "能量收集器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "能量收集器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "能量收集器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "力场发生器技能增强 溶解力场和压制力场伤害+15%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第7期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 827,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep7-%E8%99%AB%E6%B4%9E%E6%8E%A2%E6%B5%8B%E5%99%A8",
+    "name": "虫洞探测器",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第7期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第7期/虫洞探测器.png",
+    "summary": "虫洞的存在往往极其隐秘，需要高级的探测手段",
+    "tags": [
+      "第7期",
+      "史诗",
+      "暴击率+5%"
+    ],
+    "attributes": {
+      "slot": "第7期 · 史诗收藏品",
+      "synergy": "典藏套装：多元宇宙视角",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "永恒腰带生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒腰带生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒腰带杰出品质技能增强 无敌效果触发间隔-10秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "永恒腰带生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒腰带杰出品质技能增强 无敌效果触发间隔-10秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "永恒腰带传奇品质技能增强 无敌状态攻击力+10%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第7期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 828,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep8-%E9%A3%9E%E8%A1%8C%E5%99%A8%E8%83%B6%E5%9B%8A",
@@ -4448,82 +8046,294 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第8期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第8期/飞行器胶囊.png",
-    "summary": "第8期史诗金收藏，专属强化【双生榴莲 / 铁蒺藜】。升至红3星解锁「暴击伤害 +5%」。",
+    "summary": "扔出空间压缩胶囊后，即可获得正常大小的飞行器。",
     "tags": [
       "第8期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "双生榴莲 / 铁蒺藜"
+      "史诗",
+      "暴击伤害+5%"
     ],
     "attributes": {
       "slot": "第8期 · 史诗收藏品",
-      "synergy": "专属强化：双生榴莲 / 铁蒺藜",
-      "baseStats": [
-        "专属强化：双生榴莲 / 铁蒺藜"
-      ],
+      "synergy": "典藏套装：金手指",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "传导辅助器生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "传导辅助器生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "回旋镖技能增强 回旋镖和磁力镖伤害+8%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生榴莲 / 铁蒺藜】被动效果 +15% +6%",
+          "stage": "黄4星",
+          "effect": "传导辅助器生命+2%",
           "isKeyNode": false
-        }
-      ],
-      "acquisition": "第8期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 494
-  },
-  {
-    "slug": "collectible-leg-ep9-%E5%8E%9F%E5%AD%90%E6%9C%BA%E5%99%A8%E4%BA%BA",
-    "name": "原子机器人",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第9期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第9期/原子机器人.png",
-    "summary": "第9期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
-    "tags": [
-      "第9期",
-      "传奇红藏",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第9期 · 传奇收藏品",
-      "synergy": "第9期典藏馆共鸣组合",
-      "milestones": [
+        },
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄5星",
+          "effect": "回旋镖技能增强 回旋镖和磁力镖伤害+8%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "传导辅助器生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "传导辅助器生命+3%",
+          "isKeyNode": false
         },
         {
           "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "effect": "暴击伤害+5%",
           "isKeyNode": true
         },
         {
+          "stage": "红4星",
+          "effect": "传导辅助器生命+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "回旋镖技能增强 回旋镖和磁力镖伤害+15%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第9期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第8期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 855,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep8-%E8%84%91%E6%9C%BA%E8%8A%AF%E7%89%87",
+    "name": "脑机芯片",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第8期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第8期/脑机芯片.png",
+    "summary": "只要容量够，理论上可以存储全宇宙的知识。",
+    "tags": [
+      "第8期",
+      "史诗",
+      "暴击伤害+5%"
     ],
-    "sort": 295
+    "attributes": {
+      "slot": "第8期 · 史诗收藏品",
+      "synergy": "典藏套装：金手指",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "永恒战靴生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒战靴生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒战靴传奇品质技能增强 火焰伤害额外+8%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "永恒战靴生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒战靴传奇品质技能增强 火焰伤害额外+8%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "永恒战靴传奇品质技能增强 深度烧伤：被火焰灼烧的敌人受到额外+10%伤害",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第8期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 856,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep8-%E6%98%9F%E8%BD%A8%E4%B9%98%E5%AE%A2%E5%8D%A1",
+    "name": "星轨乘客卡",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第8期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第8期/星轨乘客卡.png",
+    "summary": "拥有者有资格搭乘星际轨道列车。",
+    "tags": [
+      "第8期",
+      "史诗",
+      "暴击率+5%"
+    ],
+    "attributes": {
+      "slot": "第8期 · 史诗收藏品",
+      "synergy": "典藏套装：改写星系的记忆",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "永恒项链攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒项链攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒项链杰出品质技能增强 对满血敌人额外造成100%+40%伤害",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "永恒项链攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒项链杰出品质技能增强 对满血敌人额外造成100%+40%伤害",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒项链攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒项链攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒项链攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "永恒项链优秀品质技能增强 目标血量越高造成伤害越高，最高伤害额外+20%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第8期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 857,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep8-%E4%BE%BF%E6%90%BA%E5%BC%8F%E6%9C%BA%E7%94%B2%E7%AE%B1",
+    "name": "便携式机甲箱",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第8期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第8期/便捷式机箱.png",
+    "summary": "纳米机甲，平时以手提箱的形式伪装。",
+    "tags": [
+      "第8期",
+      "史诗",
+      "暴击率+5%"
+    ],
+    "attributes": {
+      "slot": "第8期 · 史诗收藏品",
+      "synergy": "典藏套装：赛博仙境",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "破坏者手甲攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者手甲攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者手甲优秀品质技能增强 破坏本性：直接秒杀的非Boss敌人的血量提高8%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "破坏者手甲攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者手甲优秀品质技能增强 破坏本性：直接秒杀的非Boss敌人的血量提高8%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者手甲攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者手甲攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏者手甲攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏者手甲传奇品质技能增强 腥红光环：自身一定范围内的敌人会逐渐凋零（每0.1秒流失1%+0.4%生命，对BOSS不生效）",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第8期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 858,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep9-%E6%9A%97%E7%89%A9%E8%B4%A8%E5%82%80%E5%84%A1",
@@ -4532,299 +8342,590 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第9期",
     "rarity": "LEGENDARY",
-    "tier": "T0 必做",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第9期/暗物质傀儡.png",
-    "summary": "第9期核心传奇收藏品，大幅增幅SS星辰束腰与护盾增伤体系，必做6大传奇单品之一。",
+    "summary": "由充斥在宇宙间的暗物质打造的傀儡，对宇宙环境适应性极强",
     "tags": [
       "第9期",
-      "传奇红藏",
-      "暴击率",
-      "T0 必做",
-      "6大必做红藏",
-      "暴击率",
-      "星辰束腰强化"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第9期 · 传奇收藏品",
-      "synergy": "第9期典藏馆共鸣组合",
+      "synergy": "典藏套装：梦境还是现实？",
       "milestones": [
         {
+          "stage": "黄1星",
+          "effect": "精确制导系统攻击+3%，能量制导系统（无人机态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "精确制导系统攻击+3%，能量制导系统（无人机态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "黄3星",
-          "effect": "解锁星辰束腰能量上限与护盾伤害加成"
+          "effect": "无人机、双生无人机技能增强 无人机导弹单发伤害+5%；双生无人机导弹单发伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "精确制导系统攻击+3%，能量制导系统（无人机态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "无人机、双生无人机技能增强 无人机导弹单发伤害+10%；双生无人机导弹单发伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "精确制导系统攻击+3%，能量制导系统（无人机态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "精确制导系统攻击+4%，能量制导系统（无人机态）攻击+4%，生命+4%",
+          "isKeyNode": false
         },
         {
           "stage": "红3星",
-          "effect": "暴击率 +10%，核心词条大幅跃升",
+          "effect": "暴击伤害+10%",
           "isKeyNode": true
-        }
-      ],
-      "acquisition": "第9期收藏品宝箱 / 传奇收藏品自选宝箱"
-    },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 109
-  },
-  {
-    "slug": "collectible-leg-ep9-%E9%BE%99%E7%89%99",
-    "name": "龙牙",
-    "category": "COLLECTIBLE",
-    "subcategory": "传奇收藏品",
-    "edition": "第9期",
-    "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第9期/龙牙.png",
-    "summary": "第9期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
-    "tags": [
-      "第9期",
-      "传奇红藏",
-      "暴击率"
-    ],
-    "attributes": {
-      "slot": "第9期 · 传奇收藏品",
-      "synergy": "第9期典藏馆共鸣组合",
-      "milestones": [
-        {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
-          "isKeyNode": true
+          "stage": "红4星",
+          "effect": "精确制导系统攻击+4%，能量制导系统（无人机态）攻击+4%，生命+4%",
+          "isKeyNode": false
         },
         {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "无人机、双生无人机技能增强 无人机导弹单发伤害+15%；双生无人机导弹单发伤害+15%",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第9期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 296
+    "sort": 931,
+    "relatedArticleSlugs": []
   },
   {
-    "slug": "collectible-epic-ep9-%E5%9C%B0%E4%B9%8B%E5%85%83%E7%B4%A0%E4%B9%8B%E7%8F%A0",
-    "name": "地之元素之珠",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第9期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第9期/地之元素之珠.png",
-    "summary": "第9期史诗金收藏，专属强化【双生立场 / 土元素】。升至红3星解锁「暴击伤害 +5%」。",
-    "tags": [
-      "第9期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "双生立场 / 土元素"
-    ],
-    "attributes": {
-      "slot": "第9期 · 史诗收藏品",
-      "synergy": "专属强化：双生立场 / 土元素",
-      "baseStats": [
-        "专属强化：双生立场 / 土元素"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生立场 / 土元素】被动效果 +15% +6%",
-          "isKeyNode": false
-        }
-      ],
-      "acquisition": "第9期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 497
-  },
-  {
-    "slug": "collectible-epic-ep9-%E6%B0%B4%E4%B9%8B%E5%85%83%E7%B4%A0%E4%B9%8B%E7%8F%A0",
-    "name": "水之元素之珠",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第9期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第9期/水之元素之珠.png",
-    "summary": "第9期史诗金收藏，专属强化【双生雷电 / 水元素】。升至红3星解锁「暴击伤害 +5%」。",
-    "tags": [
-      "第9期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "双生雷电 / 水元素"
-    ],
-    "attributes": {
-      "slot": "第9期 · 史诗收藏品",
-      "synergy": "专属强化：双生雷电 / 水元素",
-      "baseStats": [
-        "专属强化：双生雷电 / 水元素"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生雷电 / 水元素】被动效果 +15% +6%",
-          "isKeyNode": false
-        }
-      ],
-      "acquisition": "第9期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 498
-  },
-  {
-    "slug": "collectible-epic-ep9-%E7%81%AB%E4%B9%8B%E5%85%83%E7%B4%A0%E4%B9%8B%E7%8F%A0",
-    "name": "火之元素之珠",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第9期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第9期/火之元素之珠.png",
-    "summary": "第9期史诗金收藏，专属强化【双生燃烧瓶 / 火元素】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第9期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "双生燃烧瓶 / 火元素"
-    ],
-    "attributes": {
-      "slot": "第9期 · 史诗收藏品",
-      "synergy": "专属强化：双生燃烧瓶 / 火元素",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生燃烧瓶 / 火元素"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生燃烧瓶 / 火元素】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第9期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 499
-  },
-  {
-    "slug": "collectible-epic-ep9-%E9%A3%8E%E4%B9%8B%E5%85%83%E7%B4%A0%E4%B9%8B%E7%8F%A0",
-    "name": "风之元素之珠",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第9期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第9期/风之元素之珠.png",
-    "summary": "第9期史诗金收藏，专属强化【双生足球 / 风元素】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第9期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "双生足球 / 风元素"
-    ],
-    "attributes": {
-      "slot": "第9期 · 史诗收藏品",
-      "synergy": "专属强化：双生足球 / 风元素",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：双生足球 / 风元素"
-      ],
-      "milestones": [
-        {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
-          "isKeyNode": true
-        },
-        {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【双生足球 / 风元素】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第9期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 500
-  },
-  {
-    "slug": "collectible-leg-ep10-%E5%8F%8C%E9%B1%BC%E5%BA%A7%E6%98%9F%E8%BE%89",
-    "name": "双鱼座星辉",
+    "slug": "collectible-leg-ep9-%E6%97%B6%E9%97%B4%E7%BA%BF%E9%AD%94%E6%96%B9",
+    "name": "时间线魔方",
     "category": "COLLECTIBLE",
     "subcategory": "传奇收藏品",
-    "edition": "第10期",
+    "edition": "第9期",
     "rarity": "LEGENDARY",
-    "tier": "T0 必做",
-    "icon": "/wiki-assets/收藏品/传奇收藏品/第10期/双鱼座星辉.png",
-    "summary": "第10期「宇宙群星闪耀时」SS武器套核心，专项强化双生雷电输出上限。",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第7期/时间线魔方.png",
+    "summary": "扭转魔方能重组时间线，修改现实走向",
     "tags": [
-      "第10期",
-      "传奇红藏",
-      "暴击率",
-      "T0 必做",
-      "6大必做红藏",
-      "SS武器套",
-      "双生雷电强化",
-      "暴击率"
+      "第9期",
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
-      "slot": "第10期 · 传奇收藏品",
-      "synergy": "宇宙群星闪耀时（水瓶座星辉 + 双鱼座星辉 + 白羊座星辉 + 金牛座星辉）",
+      "slot": "第9期 · 传奇收藏品",
+      "synergy": "典藏套装：尝试所有可能性",
       "milestones": [
         {
+          "stage": "黄1星",
+          "effect": "混沌手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "混沌手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "黄3星",
-          "effect": "激活宇宙群星闪耀时套装护盾增伤 +30%",
+          "effect": "混沌手套传奇品质技能增强 赦免：恢复生命时，额外恢复2倍生命值的能量护盾",
           "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "混沌手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "混沌手套传奇品质技能增强 赦免：恢复生命时，额外恢复2倍生命值的能量护盾",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "混沌手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "混沌手套攻击+4%",
+          "isKeyNode": false
         },
         {
           "stage": "红3星",
-          "effect": "暴击率 +10%，双生雷电高频落雷增伤",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "混沌手套攻击+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "混沌手套传奇品质技能增强 赦免：恢复生命时，额外恢复4倍生命值的能量护盾",
           "isKeyNode": true
         }
       ],
-      "acquisition": "第10期收藏品宝箱 / 传奇收藏品自选宝箱"
+      "acquisition": "第9期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 932,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep9-%E7%99%BE%E5%8F%98%E5%85%B1%E7%94%9F%E4%BD%93",
+    "name": "百变共生体",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第9期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第6期/百变共生体.png",
+    "summary": "可以变幻为不同生命形态的罕见外星共生体",
+    "tags": [
+      "第9期",
+      "传奇",
+      "暴击率+10%"
     ],
-    "sort": 110
+    "attributes": {
+      "slot": "第9期 · 传奇收藏品",
+      "synergy": "典藏套装：酿酒偏方",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒战衣精良品质技能增强 复活额外恢复30%能量护盾",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒战衣精良品质技能增强 复活额外恢复30%能量护盾",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒战衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒战衣生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒战衣生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "永恒战衣传奇品质技能增强 技能伤害+20%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第9期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 933,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep9-%E9%A2%84%E8%A8%80%E5%A1%94%E7%BD%97%E7%89%8C",
+    "name": "预言塔罗牌",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第9期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第5期/预言塔罗牌.png",
+    "summary": "不论事件大小，预言的结果一定会发生",
+    "tags": [
+      "第9期",
+      "传奇",
+      "暴击率+10%"
+    ],
+    "attributes": {
+      "slot": "第9期 · 传奇收藏品",
+      "synergy": "典藏套装：风之图腾",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "迷惘之靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "迷惘之靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "迷惘之靴传奇品质技能增强 绝地反击的反向增伤+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "迷惘之靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "迷惘之靴传奇品质技能增强 绝地反击的反向增伤+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "迷惘之靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "迷惘之靴生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "迷惘之靴生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "迷惘之靴传奇品质技能增强 绝地反击的反向增伤+20%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第9期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 934,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep9-%E5%9C%B0%E5%85%83%E7%B4%A0%E4%B9%8B%E7%8F%A0",
+    "name": "地元素之珠",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第9期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第9期/地之元素之珠.png",
+    "summary": "浓郁的地元素凝聚的宝珠，具有宇宙本源之力",
+    "tags": [
+      "第9期",
+      "史诗",
+      "暴击伤害+5%"
+    ],
+    "attributes": {
+      "slot": "第9期 · 史诗收藏品",
+      "synergy": "典藏套装：尝试所有可能性",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "追光者攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "追光者攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "追光者优秀品质技能增强 回旋斩伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "追光者攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "追光者杰出品质技能增强 剑阵伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "追光者攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "追光者攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "追光者攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "追光者传奇品质技能增强 回旋斩和剑阵伤害+20%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第9期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 985,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep9-%E6%B0%B4%E5%85%83%E7%B4%A0%E4%B9%8B%E7%8F%A0",
+    "name": "水元素之珠",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第9期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第9期/水之元素之珠.png",
+    "summary": "浓郁的水元素凝聚的宝珠，具有宇宙本源之力",
+    "tags": [
+      "第9期",
+      "史诗",
+      "暴击伤害+5%"
+    ],
+    "attributes": {
+      "slot": "第9期 · 史诗收藏品",
+      "synergy": "典藏套装：酿酒偏方",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "永恒手套攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "永恒手套攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒手套神铸技能增强 暴虐恢复生命+0.5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "永恒手套攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒手套神铸技能增强 暴虐恢复生命+0.5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒手套攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "永恒手套传奇品质技能增强 暴击伤害额外增加20%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第9期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 986,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep9-%E7%81%AB%E5%85%83%E7%B4%A0%E4%B9%8B%E7%8F%A0",
+    "name": "火元素之珠",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第9期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第9期/火之元素之珠.png",
+    "summary": "浓郁的火元素凝聚的宝珠，具有宇宙本源之力",
+    "tags": [
+      "第9期",
+      "史诗",
+      "暴击率+5%"
+    ],
+    "attributes": {
+      "slot": "第9期 · 史诗收藏品",
+      "synergy": "典藏套装：透过现象看本质",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "纳米机器人生命+2%，量子机器人（榴莲态）攻击+2%，生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "纳米机器人生命+2%，量子机器人（榴莲态）攻击+2%，生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "榴莲、双生榴莲技能增强 榴莲和铁蒺藜伤害+10%，双生榴莲和双生铁蒺藜伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "纳米机器人生命+2%，量子机器人（榴莲态）攻击+2%，生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "榴莲、双生榴莲技能增强 榴莲和铁蒺藜伤害+13%，双生榴莲和双生铁蒺藜伤害+13%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "纳米机器人生命+3%，量子机器人（榴莲态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "纳米机器人生命+3%，量子机器人（榴莲态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "纳米机器人生命+3%，量子机器人（榴莲态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "榴莲、双生榴莲技能增强 榴莲和铁蒺藜伤害+20%，双生榴莲和双生铁蒺藜伤害+20%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第9期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 987,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep9-%E9%A3%8E%E5%85%83%E7%B4%A0%E4%B9%8B%E7%8F%A0",
+    "name": "风元素之珠",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第9期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第9期/风之元素之珠.png",
+    "summary": "浓郁的风元素凝聚的宝珠，具有宇宙本源之力",
+    "tags": [
+      "第9期",
+      "史诗",
+      "暴击率+5%"
+    ],
+    "attributes": {
+      "slot": "第9期 · 史诗收藏品",
+      "synergy": "典藏套装：风之图腾",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "破坏者风衣生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏者风衣生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏者风衣技能增强 疯狂状态持续时间+2秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "破坏者风衣生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "破坏者风衣技能增强 疯狂状态持续时间+2秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "破坏者风衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏者风衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏者风衣生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏者风衣传奇品质技能增强 疯狂状态下吸血超过血量上限的部分可以转化为能量护盾，护盾转化率+40%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第9期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 988,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep10-%E6%B0%B4%E7%93%B6%E5%BA%A7%E6%98%9F%E8%BE%89",
@@ -4833,41 +8934,146 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第10期",
     "rarity": "LEGENDARY",
-    "tier": "T0 必做",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第10期/水瓶座星辉.png",
-    "summary": "第10期「宇宙群星闪耀时」SS武器套核心，专项强化双生钻头伤害与混沌之风护盾增伤。",
+    "summary": "飞船观测时较近，显得星辉格外强烈的星座",
     "tags": [
       "第10期",
-      "传奇红藏",
-      "暴击率",
-      "T0 必做",
-      "6大必做红藏",
-      "SS武器套",
-      "双生钻头强化",
-      "暴击率"
+      "传奇",
+      "暴击伤害+10%"
     ],
     "attributes": {
       "slot": "第10期 · 传奇收藏品",
-      "synergy": "宇宙群星闪耀时（水瓶座星辉 + 双鱼座星辉 + 白羊座星辉 + 金牛座星辉）",
+      "synergy": "典藏套装：宇宙的一隅Ⅰ",
       "milestones": [
         {
+          "stage": "黄1星",
+          "effect": "反物质生成器、反物质维持装置（钻头态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "反物质生成器、反物质维持装置（钻头态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "黄3星",
-          "effect": "全套各3黄星：护盾状态下混沌之风额外 +13%伤害，护盾增伤 +30%",
+          "effect": "钻头弹、哨箭、双生钻头弹、双生冰火哨箭技能增强 钻头弹、哨箭、双生钻头弹、双生冰火哨箭的伤害+2%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "反物质生成器、反物质维持装置（钻头态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "钻头弹、哨箭、双生钻头弹、双生冰火哨箭技能增强 钻头弹、哨箭、双生钻头弹、双生冰火哨箭的伤害+2%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "反物质生成器、反物质维持装置（钻头态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "反物质生成器、反物质维持装置（钻头态）攻击+4%，生命+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红3星",
-          "effect": "暴击率 +10%，双生钻头穿透与暴伤大幅提升",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "反物质生成器、反物质维持装置（钻头态）攻击+4%，生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "钻头弹、哨箭、双生钻头弹、双生冰火哨箭技能增强 钻头弹、哨箭、双生钻头弹、双生冰火哨箭的伤害+4%",
           "isKeyNode": true
         }
       ],
       "acquisition": "第10期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 1061,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-leg-ep10-%E5%8F%8C%E9%B1%BC%E5%BA%A7%E6%98%9F%E8%BE%89",
+    "name": "双鱼座星辉",
+    "category": "COLLECTIBLE",
+    "subcategory": "传奇收藏品",
+    "edition": "第10期",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/收藏品/传奇收藏品/第10期/双鱼座星辉.png",
+    "summary": "飞船观测时较近，显得星辉格外强烈的星座",
+    "tags": [
+      "第10期",
+      "传奇",
+      "暴击伤害+10%"
     ],
-    "sort": 110
+    "attributes": {
+      "slot": "第10期 · 传奇收藏品",
+      "synergy": "典藏套装：宇宙的一隅Ⅱ",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "相位转换器、相位辅助器（雷电态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "相位转换器、相位辅助器（雷电态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "雷电发射器、狂雷电池、双生雷电发射器、双生涡旋狂雷伤害技能增强 雷电发射器、狂雷电池、双生雷电发射器、双生涡旋狂雷的伤害+2%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "相位转换器、相位辅助器（雷电态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "雷电发射器、狂雷电池、双生雷电发射器、双生涡旋狂雷伤害技能增强 雷电发射器、狂雷电池、双生雷电发射器、双生涡旋狂雷的伤害+2%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "相位转换器、相位辅助器（雷电态）攻击+3%，生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "相位转换器、相位辅助器（雷电态）攻击+4%，生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "相位转换器、相位辅助器（雷电态）攻击+4%，生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "雷电发射器、狂雷电池、双生雷电发射器、双生涡旋狂雷伤害技能增强 雷电发射器、狂雷电池、双生雷电发射器、双生涡旋狂雷的伤害+3%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第10期收藏品宝箱 / 传奇收藏品自选宝箱"
+    },
+    "sort": 1062,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep10-%E7%99%BD%E7%BE%8A%E5%BA%A7%E6%98%9F%E8%BE%89",
@@ -4876,39 +9082,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第10期",
     "rarity": "LEGENDARY",
-    "tier": "传奇红藏",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第10期/白羊座星辉.png",
-    "summary": "第10期传奇品质（红色）收藏品，升至红3星可解锁 +10% 暴击率词条，并参与高层级典藏套装共鸣。",
+    "summary": "飞船观测时较近，显得星辉格外强烈的星座",
     "tags": [
       "第10期",
-      "传奇红藏",
-      "暴击率"
+      "传奇",
+      "暴击率+10%"
     ],
     "attributes": {
       "slot": "第10期 · 传奇收藏品",
-      "synergy": "第10期典藏馆共鸣组合",
+      "synergy": "典藏套装：宇宙的一隅Ⅲ",
       "milestones": [
         {
-          "stage": "黄3星",
-          "effect": "激活对应典藏套装第一阶共鸣属性"
+          "stage": "黄1星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
         },
         {
-          "stage": "红3星",
-          "effect": "解锁传奇核心词条：暴击率 +10%",
+          "stage": "黄2星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "永恒战靴传奇品质技能增强 火焰伤害额外+15%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "永恒战靴传奇品质技能增强 火焰伤害额外+15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "永恒战靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "永恒战靴生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "永恒战靴生命+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红5星",
-          "effect": "专属技能增幅与最终攻击/生命面板拉满"
+          "effect": "永恒战靴传奇品质技能增强 深度烧伤：被火焰灼烧的敌人受到额外+20%伤害",
+          "isKeyNode": true
         }
       ],
       "acquisition": "第10期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 301
+    "sort": 1063,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-leg-ep10-%E9%87%91%E7%89%9B%E5%BA%A7%E6%98%9F%E8%BE%89",
@@ -4917,41 +9156,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "传奇收藏品",
     "edition": "第10期",
     "rarity": "LEGENDARY",
-    "tier": "T0 必做",
     "icon": "/wiki-assets/收藏品/传奇收藏品/第10期/金牛座星辉.png",
-    "summary": "第10期首选传奇藏品，强化版本最强S腰带「扭曲腰带」波动上限，建议在SS武器套中第一个做出黄3星。",
+    "summary": "飞船观测时较近，显得星辉格外强烈的星座",
     "tags": [
       "第10期",
-      "传奇红藏",
-      "暴击率",
-      "T0 必做",
-      "6大必做红藏",
-      "SS武器套首选",
-      "扭曲腰带强化",
-      "暴击率"
+      "传奇",
+      "暴击率+10%"
     ],
     "attributes": {
       "slot": "第10期 · 传奇收藏品",
-      "synergy": "宇宙群星闪耀时（水瓶座星辉 + 双鱼座星辉 + 白羊座星辉 + 金牛座星辉）",
+      "synergy": "典藏套装：宇宙的一隅Ⅳ",
       "milestones": [
         {
+          "stage": "黄1星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
           "stage": "黄3星",
-          "effect": "推荐第1顺位做出黄3星，直接拉高扭曲腰带能量波动倍率",
+          "effect": "扭曲腰带技能增强 能量波动上限额外提高15%",
           "isKeyNode": true
         },
         {
+          "stage": "黄4星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "扭曲腰带技能增强 能量波动上限额外提高15%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "扭曲腰带生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "扭曲腰带生命+4%",
+          "isKeyNode": false
+        },
+        {
           "stage": "红3星",
-          "effect": "暴击率 +10%，终极腰带乘区加成",
+          "effect": "暴击率+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "扭曲腰带生命+4%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "扭曲腰带技能增强 能量波动上限额外提高30%",
           "isKeyNode": true
         }
       ],
       "acquisition": "第10期收藏品宝箱 / 传奇收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 110
+    "sort": 1064,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep10-%E5%8F%8C%E5%AD%90%E5%BA%A7%E6%98%9F%E8%BE%89",
@@ -4960,88 +9230,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第10期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第10期/双子座星辉.png",
-    "summary": "第10期史诗金收藏，专属强化【SS武器 双绝枪】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
+    "summary": "飞船观测距离适中，星辉温和的星座",
     "tags": [
       "第10期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "SS武器 双绝枪"
+      "史诗",
+      "暴击伤害+5%"
     ],
     "attributes": {
       "slot": "第10期 · 史诗收藏品",
-      "synergy": "专属强化：SS武器 双绝枪",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：SS武器 双绝枪"
-      ],
+      "synergy": "典藏套装：流星雨的预报",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "破坏之力攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "破坏之力攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "破坏之力杰出品质技能增强 归零：释放的黑洞消失后会触发爆炸，爆炸伤害+20%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【SS武器 双绝枪】被动效果 +15% +6%，最终攻击 +2000",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "第10期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
-    },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 502
-  },
-  {
-    "slug": "collectible-epic-ep10-%E5%A4%84%E5%A5%B3%E5%BA%A7%E6%98%9F%E8%BE%89",
-    "name": "处女座星辉",
-    "category": "COLLECTIBLE",
-    "subcategory": "史诗收藏品",
-    "edition": "第10期",
-    "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
-    "icon": "/wiki-assets/收藏品/史诗收藏品/第10期/处女座星辉.png",
-    "summary": "第10期史诗金收藏，专属强化【SS手套 月殇护手】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
-    "tags": [
-      "第10期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "SS手套 月殇护手"
-    ],
-    "attributes": {
-      "slot": "第10期 · 史诗收藏品",
-      "synergy": "专属强化：SS手套 月殇护手",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：SS手套 月殇护手"
-      ],
-      "milestones": [
+          "stage": "黄4星",
+          "effect": "破坏之力攻击+2%",
+          "isKeyNode": false
+        },
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄5星",
+          "effect": "破坏之力传奇品质技能增强 新生：产生的能量罩破裂后会触发强力爆炸，爆炸伤害+20%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【SS手套 月殇护手】被动效果 +15% +6%，最终攻击 +2000",
+          "stage": "红1星",
+          "effect": "破坏之力攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "破坏之力攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "破坏之力攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "破坏之力传奇品质技能增强 归零：黑洞爆炸伤害+20% 新生：能量罩爆炸伤害+20%",
           "isKeyNode": true
         }
       ],
-      "acquisition": "第10期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第10期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 503
+    "sort": 1115,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep10-%E5%B7%A8%E8%9F%B9%E5%BA%A7%E6%98%9F%E8%BE%89",
@@ -5050,41 +9304,72 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第10期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+5%",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第10期/巨蟹座星辉.png",
-    "summary": "第10期史诗金收藏，专属强化【SS衣服 天启战衣】。升至红3星解锁「暴击伤害 +5%」。",
+    "summary": "飞船观测距离适中，星辉温和的星座",
     "tags": [
       "第10期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "SS衣服 天启战衣"
+      "史诗",
+      "暴击伤害+5%"
     ],
     "attributes": {
       "slot": "第10期 · 史诗收藏品",
-      "synergy": "专属强化：SS衣服 天启战衣",
-      "baseStats": [
-        "专属强化：SS衣服 天启战衣"
-      ],
+      "synergy": "典藏套装：寻找陨石的技巧",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "混乱之剑攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "混乱之剑攻击+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "混乱之剑优秀品质技能增强 所有技能伤害+5%",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【SS衣服 天启战衣】被动效果 +15% +6%",
+          "stage": "黄4星",
+          "effect": "混乱之剑攻击+2%",
           "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "混乱之剑杰出品质技能增强 禁锢：禁锢灵魂增加的技能伤害+10%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "混乱之剑攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "混乱之剑攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击伤害+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "混乱之剑攻击+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "混乱之剑传奇品质技能增强 灵爆：灵魂溃散时全屏高额伤害+30%",
+          "isKeyNode": true
         }
       ],
-      "acquisition": "第10期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第10期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
-    ],
-    "sort": 504
+    "sort": 1116,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "collectible-epic-ep10-%E7%8B%AE%E5%AD%90%E5%BA%A7%E6%98%9F%E8%BE%89",
@@ -5093,43 +9378,146 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "subcategory": "史诗收藏品",
     "edition": "第10期",
     "rarity": "EPIC",
-    "tier": "红3暴伤+攻击",
     "icon": "/wiki-assets/收藏品/史诗收藏品/第10期/狮子座星辉.png",
-    "summary": "第10期史诗金收藏，专属强化【SS项链 神罚项链】。升至红3星解锁「暴击伤害 +5%」，升满额外提供 +2000 最终攻击力面板！",
+    "summary": "飞船观测距离适中，星辉温和的星座",
     "tags": [
       "第10期",
-      "史诗金藏",
-      "暴击伤害",
-      "暴击伤害 +5%",
-      "满星+2000攻击",
-      "SS项链 神罚项链"
+      "史诗",
+      "暴击率+5%"
     ],
     "attributes": {
       "slot": "第10期 · 史诗收藏品",
-      "synergy": "专属强化：SS项链 神罚项链",
-      "baseStats": [
-        "满星最终攻击 +2000",
-        "专属强化：SS项链 神罚项链"
-      ],
+      "synergy": "典藏套装：流星雨的预报",
       "milestones": [
         {
-          "stage": "红3星（核心节点）",
-          "effect": "解锁极品词条：暴击伤害 +5%",
+          "stage": "黄1星",
+          "effect": "亡者之甲生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "亡者之甲生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "亡者之甲杰出品质技能增强 幽灵状态上限时间+3秒",
           "isKeyNode": true
         },
         {
-          "stage": "红5星（圆满毕业）",
-          "effect": "战斗中【SS项链 神罚项链】被动效果 +15% +6%，最终攻击 +2000",
+          "stage": "黄4星",
+          "effect": "亡者之甲生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "亡者之甲杰出品质技能增强 幽灵状态上限时间+3秒",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "亡者之甲生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "亡者之甲生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "亡者之甲生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "亡者之甲杰出品质技能增强 超灵：幽灵状态增加10%的攻击",
           "isKeyNode": true
         }
       ],
-      "acquisition": "第10期收藏品宝箱 / 史诗收藏品自选宝箱 / 高级收藏之心升星"
+      "acquisition": "第10期收藏品宝箱 / 史诗收藏品自选宝箱"
     },
-    "relatedArticleSlugs": [
-      "resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f",
-      "resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87"
+    "sort": 1117,
+    "relatedArticleSlugs": []
+  },
+  {
+    "slug": "collectible-epic-ep10-%E5%A4%84%E5%A5%B3%E5%BA%A7%E6%98%9F%E8%BE%89",
+    "name": "处女座星辉",
+    "category": "COLLECTIBLE",
+    "subcategory": "史诗收藏品",
+    "edition": "第10期",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/收藏品/史诗收藏品/第10期/处女座星辉.png",
+    "summary": "飞船观测距离适中，星辉温和的星座",
+    "tags": [
+      "第10期",
+      "史诗",
+      "暴击率+5%"
     ],
-    "sort": 505
+    "attributes": {
+      "slot": "第10期 · 史诗收藏品",
+      "synergy": "典藏套装：寻找陨石的技巧",
+      "milestones": [
+        {
+          "stage": "黄1星",
+          "effect": "迷惘之靴生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄2星",
+          "effect": "迷惘之靴生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄3星",
+          "effect": "迷惘之靴杰出品质技能增强 绝地反击的反向增伤+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "黄4星",
+          "effect": "迷惘之靴生命+2%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "黄5星",
+          "effect": "迷惘之靴杰出品质技能增强 绝地反击的反向增伤+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红1星",
+          "effect": "迷惘之靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红2星",
+          "effect": "迷惘之靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红3星",
+          "effect": "暴击率+5%",
+          "isKeyNode": true
+        },
+        {
+          "stage": "红4星",
+          "effect": "迷惘之靴生命+3%",
+          "isKeyNode": false
+        },
+        {
+          "stage": "红5星",
+          "effect": "迷惘之靴传奇品质技能增强 绝地反击的反向增伤+10%",
+          "isKeyNode": true
+        }
+      ],
+      "acquisition": "第10期收藏品宝箱 / 史诗收藏品自选宝箱"
+    },
+    "sort": 1118,
+    "relatedArticleSlugs": []
   },
   {
     "slug": "pet-%E5%B9%BD%E6%9A%97%E4%B9%8B%E7%81%B5",
@@ -5137,12 +9525,10 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "PET",
     "subcategory": "S级宠物",
     "rarity": "S",
-    "tier": "T0 版本第一S宠",
     "icon": "/wiki-assets/宠物/幽暗之灵.png",
     "summary": "当前版本综合评价第一S宠物！核心技能「永夜王冠」释放追踪魔法光束自动锁头首领，出战与助战放同名幽暗之灵可共享红星觉醒进度。",
     "tags": [
-      "S宠物",
-      "T0首选",
+      "S级",
       "永夜王冠锁头",
       "觉醒共享"
     ],
@@ -5160,7 +9546,199 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁"
+      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "幽暗律法",
+            "description": "幽暗之灵发射暗夜法球攻击敌人，可随学习技能次数进阶",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_AnYeJingLingSkill.png"
+          },
+          {
+            "name": "永夜冠冕",
+            "description": "幽暗之灵释放追踪的魔法光束，优先攻击Boss",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPetBtn_AnYeJingLingSkill.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "幽暗律法：暗夜法球伤害+35%",
+              "永夜冠冕：永夜冠冕攻击频率+65%"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "永夜冠冕：永夜冠冕伤害+50%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "幽暗律法：每发射4发暗夜法球，释放一次裂星攻击，向目标发射8发裂星法球",
+              "永夜冠冕：永夜冠冕伤害+40%"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "永夜冠冕：永夜冠冕附带60%易伤效果，持续20秒；永夜冠冕伤害+50%",
+              "巨人杀手：进入战斗后，主角对Boss和精英怪伤害+10%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "幽暗律法：裂星伤害+100%",
+              "永夜冠冕：永夜冠冕伤害+20%"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "永夜冠冕：永夜冠冕伤害+50%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "幽暗律法：暗夜法球伤害+100%，裂星伤害+80%",
+              "永夜冠冕：永夜冠冕伤害+10%"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "永夜冠冕：永夜冠冕伤害+50%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "幽暗律法：暗夜法球伤害+100%，裂星伤害+80%",
+              "永夜冠冕：永夜冠冕伤害+10%"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "永夜冠冕：永夜冠冕额外附带60%易伤效果，持续20秒；永夜冠冕伤害+60%",
+              "巨人杀手：进入战斗后，主角对Boss和精英怪伤害额外+10%",
+              "助战技能上限提升"
+            ]
+          }
+        ],
+        "passives": [
+          {
+            "name": "守护",
+            "description": "护盾增伤提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hudunzengshang.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "寒霜",
+            "description": "冰缓增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Binghuan.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "毒素灌溉",
+            "description": "中毒增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Zhongduzengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "乘虚而入",
+            "description": "衰弱增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Xuruozengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "精进技艺",
+            "description": "技能伤害提高 +6% ~ +60%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Jinengqiangdu.png",
+            "type": "passive",
+            "tierRange": "+6% ~ +60%"
+          },
+          {
+            "name": "攻击力",
+            "description": "攻击力百分比提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Atkpercent.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "最终攻击",
+            "description": "最终攻击提高 +2000 ~ +20000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalAP.png",
+            "type": "passive",
+            "tierRange": "+2000 ~ +20000"
+          },
+          {
+            "name": "生命",
+            "description": "生命百分比提高 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hppercent.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "最终生命",
+            "description": "最终生命提高 +8000 ~ +80000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalHP.png",
+            "type": "passive",
+            "tierRange": "+8000 ~ +80000"
+          },
+          {
+            "name": "共鸣·增幅",
+            "description": "异宠共鸣触发概率增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Chufagailv.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·伤害",
+            "description": "异宠共鸣增伤效果增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Damageup.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·减伤",
+            "description": "异宠共鸣减伤效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Apreduce.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "共鸣·加速",
+            "description": "异宠共鸣加速效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Speedup.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          }
+        ],
+        "supportSkills": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87",
@@ -5174,11 +9752,10 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "PET",
     "subcategory": "S级宠物",
     "rarity": "S",
-    "tier": "T1 甜品光环S宠",
     "icon": "/wiki-assets/宠物/加肥喵.png",
     "summary": "S宠物强度榜第二梯队，主动技能释放持续10秒的甜品光环对范围内敌群造成高频伤害。",
     "tags": [
-      "S宠物",
+      "S级",
       "甜品光环",
       "范围持续伤害"
     ],
@@ -5191,7 +9768,199 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁"
+      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "餐前甜点",
+            "description": "加肥喵每过一段时间自身周围出现环绕的甜甜圈，持续5秒，可随学习技能次数进阶",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_CatSkill.png"
+          },
+          {
+            "name": "最爱饭团",
+            "description": "加肥喵释放甜品光环，并附带饭团环绕自身，持续10秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPetBtn_CatSkill.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "餐前甜点：额外增加两瓶环绕可乐",
+              "最爱饭团：饭团伤害+67%"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "最爱饭团：甜品光环伤害+100%，饭团伤害+50%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "餐前甜点：甜甜圈伤害+50%，可乐伤害+50%",
+              "最爱饭团：饭团伤害+66%"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "最爱饭团：甜品光环伤害+100%，饭团伤害+50%；释放最爱饭团之后，主角获得10%护盾，主角护盾增伤+50%，持续20秒",
+              "巨人杀手：进入战斗后，主角对Boss和精英怪伤害+7%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "餐前甜点：可乐伤害+100%",
+              "最爱饭团：饭团伤害+67%"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "最爱饭团：甜品光环伤害+100%，饭团伤害+50%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "餐前甜点：甜甜圈伤害+100%",
+              "最爱饭团：甜品光环伤害+200%"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "最爱饭团：饭团伤害增加+83%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "餐前甜点：甜甜圈伤害+100%，可乐伤害+100%",
+              "最爱饭团：饭团伤害+50%"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "最爱饭团：甜品光环伤害+100%，饭团伤害+67%；释放最爱饭团之后，主角额外获得10%护盾，主角护盾增伤额外+50%，持续20秒",
+              "巨人杀手：进入战斗后，主角对Boss和精英怪伤害额外+8%",
+              "助战技能上限提升"
+            ]
+          }
+        ],
+        "passives": [
+          {
+            "name": "守护",
+            "description": "护盾增伤提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hudunzengshang.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "寒霜",
+            "description": "冰缓增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Binghuan.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "毒素灌溉",
+            "description": "中毒增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Zhongduzengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "乘虚而入",
+            "description": "衰弱增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Xuruozengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "精进技艺",
+            "description": "技能伤害提高 +6% ~ +60%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Jinengqiangdu.png",
+            "type": "passive",
+            "tierRange": "+6% ~ +60%"
+          },
+          {
+            "name": "攻击力",
+            "description": "攻击力百分比提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Atkpercent.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "最终攻击",
+            "description": "最终攻击提高 +2000 ~ +20000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalAP.png",
+            "type": "passive",
+            "tierRange": "+2000 ~ +20000"
+          },
+          {
+            "name": "生命",
+            "description": "生命百分比提高 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hppercent.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "最终生命",
+            "description": "最终生命提高 +8000 ~ +80000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalHP.png",
+            "type": "passive",
+            "tierRange": "+8000 ~ +80000"
+          },
+          {
+            "name": "共鸣·增幅",
+            "description": "异宠共鸣触发概率增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Chufagailv.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·伤害",
+            "description": "异宠共鸣增伤效果增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Damageup.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·减伤",
+            "description": "异宠共鸣减伤效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Apreduce.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "共鸣·加速",
+            "description": "异宠共鸣加速效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Speedup.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          }
+        ],
+        "supportSkills": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87",
@@ -5205,11 +9974,10 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "PET",
     "subcategory": "S级宠物",
     "rarity": "S",
-    "tier": "T1 坚果爆破S宠",
     "icon": "/wiki-assets/宠物/松鼠.png",
     "summary": "S宠物强力输出手，主动技能发射爆炸性火焰坚果持续10秒（仅出战状态生效）。",
     "tags": [
-      "S宠物",
+      "S级",
       "坚果爆炸",
       "火焰爆发"
     ],
@@ -5221,7 +9989,194 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "火焰坚果频率与共鸣伤害上限提升"
         }
       ],
-      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁"
+      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "双色果",
+            "description": "坚果探员向敌人发射棕色坚果，可随学习技能次数进阶",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_SongshuSkill.png"
+          },
+          {
+            "name": "坚果炸炸炸",
+            "description": "坚果探员向敌人发射大量命中后爆炸的火焰坚果，持续10秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPetBtn_SongshuSkill.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "双色果：每三次发射一个变质坚果，命中附带衰弱效果，持续20秒"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "坚果炸炸炸：火焰坚果数量+85",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "双色果：棕色坚果伤害+350%"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "坚果炸炸炸：释放坚果炸炸炸之后，主角对衰弱目标伤害+75%，持续20秒",
+              "巨人杀手：进入战斗后，主角对Boss和精英怪伤害+4%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "双色果：变质坚果伤害+90%"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "坚果炸炸炸：火焰坚果爆炸伤害+75%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "双色果：棕色坚果伤害+435%"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "坚果炸炸炸：火焰坚果爆炸伤害+75%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "双色果：变质坚果伤害+110%"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "坚果炸炸炸：释放坚果炸炸炸之后，主角对衰弱目标伤害额外+75%",
+              "巨人杀手：进入战斗后，主角对Boss和精英怪伤害额外+6%",
+              "助战技能上限提升"
+            ]
+          }
+        ],
+        "passives": [
+          {
+            "name": "守护",
+            "description": "护盾增伤提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hudunzengshang.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "寒霜",
+            "description": "冰缓增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Binghuan.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "毒素灌溉",
+            "description": "中毒增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Zhongduzengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "乘虚而入",
+            "description": "衰弱增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Xuruozengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "精进技艺",
+            "description": "技能伤害提高 +6% ~ +60%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Jinengqiangdu.png",
+            "type": "passive",
+            "tierRange": "+6% ~ +60%"
+          },
+          {
+            "name": "攻击力",
+            "description": "攻击力百分比提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Atkpercent.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "最终攻击",
+            "description": "最终攻击提高 +2000 ~ +20000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalAP.png",
+            "type": "passive",
+            "tierRange": "+2000 ~ +20000"
+          },
+          {
+            "name": "生命",
+            "description": "生命百分比提高 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hppercent.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "最终生命",
+            "description": "最终生命提高 +8000 ~ +80000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalHP.png",
+            "type": "passive",
+            "tierRange": "+8000 ~ +80000"
+          },
+          {
+            "name": "共鸣·增幅",
+            "description": "异宠共鸣触发概率增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Chufagailv.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·伤害",
+            "description": "异宠共鸣增伤效果增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Damageup.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·减伤",
+            "description": "异宠共鸣减伤效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Apreduce.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "共鸣·加速",
+            "description": "异宠共鸣加速效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Speedup.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          }
+        ],
+        "supportSkills": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87",
@@ -5235,11 +10190,10 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "PET",
     "subcategory": "S级宠物",
     "rarity": "S",
-    "tier": "T1 冰雾控场S宠",
     "icon": "/wiki-assets/宠物/企鹅.png",
     "summary": "召唤持续10秒的紧急冰冻雪雾，配合冰霜战靴与寒霜助战技能提供稳定冰缓覆盖。",
     "tags": [
-      "S宠物",
+      "S级",
       "紧急冰冻",
       "冰缓联动"
     ],
@@ -5251,7 +10205,194 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "雪雾范围与冰缓覆盖率提升"
         }
       ],
-      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁"
+      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "雪球高手",
+            "description": "雪炮冰王向敌人发射雪球并对命中的目标附带5秒冰缓效果，可随学习技能次数进阶",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_PenguinSkill.png"
+          },
+          {
+            "name": "紧急冰冻",
+            "description": "雪炮冰王向敌人喷射寒冷雪雾，持续10秒，并对命中的目标附带5秒冰缓效果",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPetBtn_PenguinSkill.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "雪球高手：雪球命中时额外分裂成两个小雪球"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "紧急冰冻：紧急冰冻的伤害频率提升100%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "雪球高手：雪球伤害提升100%"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "紧急冰冻：紧急冰冻伤害提升100%；释放紧急冰冻之后，提升主角70%对冰缓增伤，持续20秒",
+              "巨人杀手：进入战斗后，主角对Boss和精英怪伤害+2%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "雪球高手：雪球分裂时发生小型冰霜爆炸，并对命中目标附带5秒冰缓效果"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "紧急冰冻：紧急冰冻伤害额外提升150%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "雪球高手：雪球伤害额外提升260%"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "紧急冰冻：紧急冰冻伤害额外提升40%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "雪球高手：冰霜爆炸伤害提升120%"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "紧急冰冻：紧急冰冻伤害额外提升45%；释放紧急冰冻之后，额外提升主角70%对冰缓增伤，持续20秒",
+              "巨人杀手：进入战斗后，主角对Boss和精英怪伤害额外+3%",
+              "助战技能上限提升"
+            ]
+          }
+        ],
+        "passives": [
+          {
+            "name": "守护",
+            "description": "护盾增伤提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hudunzengshang.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "寒霜",
+            "description": "冰缓增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Binghuan.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "毒素灌溉",
+            "description": "中毒增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Zhongduzengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "乘虚而入",
+            "description": "衰弱增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Xuruozengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "精进技艺",
+            "description": "技能伤害提高 +6% ~ +60%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Jinengqiangdu.png",
+            "type": "passive",
+            "tierRange": "+6% ~ +60%"
+          },
+          {
+            "name": "攻击力",
+            "description": "攻击力百分比提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Atkpercent.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "最终攻击",
+            "description": "最终攻击提高 +2000 ~ +20000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalAP.png",
+            "type": "passive",
+            "tierRange": "+2000 ~ +20000"
+          },
+          {
+            "name": "生命",
+            "description": "生命百分比提高 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hppercent.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "最终生命",
+            "description": "最终生命提高 +8000 ~ +80000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalHP.png",
+            "type": "passive",
+            "tierRange": "+8000 ~ +80000"
+          },
+          {
+            "name": "共鸣·增幅",
+            "description": "异宠共鸣触发概率增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Chufagailv.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·伤害",
+            "description": "异宠共鸣增伤效果增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Damageup.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·减伤",
+            "description": "异宠共鸣减伤效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Apreduce.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "共鸣·加速",
+            "description": "异宠共鸣加速效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Speedup.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          }
+        ],
+        "supportSkills": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87",
@@ -5265,11 +10406,10 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "PET",
     "subcategory": "S级宠物",
     "rarity": "S",
-    "tier": "T1 魔剑解放S宠",
     "icon": "/wiki-assets/宠物/卡皮.png",
     "summary": "变身10秒释放魔剑坠落与魔化剑气，兼具帅气外观与范围爆发。",
     "tags": [
-      "S宠物",
+      "S级",
       "魔化解放",
       "剑气爆发"
     ],
@@ -5281,7 +10421,192 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "魔化解放持续输出大幅强化"
         }
       ],
-      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁"
+      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "流浪长剑",
+            "description": "向敌人发射木剑气，可随学习技能次数进阶",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_CapySkill.png"
+          },
+          {
+            "name": "魔化解放",
+            "description": "变身并强化手中的长剑化为裂空剑，变身持续10秒且期间攻击方式改为发射超级魔剑气。变身的同时会对最近目标释放一次魔剑坠落，在目标位置依次生成6把剑，依次下落砸下（优先Boss）",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPetBtn_CapySkill.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "流浪长剑：木剑气伤害+100%"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "魔化解放：超级魔剑气冷却时间缩短0.5秒，伤害提升160%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "流浪长剑：流浪长剑伤害+15%，发射木剑气+1"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "魔化解放：魔化解放释放后为主角提升40%技能伤害，持续20秒，超级魔剑气伤害额外提升50%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "流浪长剑：流浪长剑伤害+90%，每第三次木剑气变为超级木剑气"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "魔化解放：超级魔剑气对Boss伤害提升300%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "流浪长剑：流浪长剑伤害+35%，发射木剑气+1"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "魔化解放：魔剑坠落伤害提升150%，变身期间魔剑坠落每次命中额外提升10%超级魔剑气伤害",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "流浪长剑：超级木剑气伤害+100%"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "魔化解放：魔化解放释放后为主角额外提升40%技能伤害，持续20秒",
+              "助战技能上限提升"
+            ]
+          }
+        ],
+        "passives": [
+          {
+            "name": "守护",
+            "description": "护盾增伤提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hudunzengshang.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "寒霜",
+            "description": "冰缓增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Binghuan.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "毒素灌溉",
+            "description": "中毒增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Zhongduzengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "乘虚而入",
+            "description": "衰弱增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Xuruozengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "精进技艺",
+            "description": "技能伤害提高 +6% ~ +60%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Jinengqiangdu.png",
+            "type": "passive",
+            "tierRange": "+6% ~ +60%"
+          },
+          {
+            "name": "攻击力",
+            "description": "攻击力百分比提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Atkpercent.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "最终攻击",
+            "description": "最终攻击提高 +2000 ~ +20000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalAP.png",
+            "type": "passive",
+            "tierRange": "+2000 ~ +20000"
+          },
+          {
+            "name": "生命",
+            "description": "生命百分比提高 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hppercent.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "最终生命",
+            "description": "最终生命提高 +8000 ~ +80000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalHP.png",
+            "type": "passive",
+            "tierRange": "+8000 ~ +80000"
+          },
+          {
+            "name": "共鸣·增幅",
+            "description": "异宠共鸣触发概率增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Chufagailv.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·伤害",
+            "description": "异宠共鸣增伤效果增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Damageup.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·减伤",
+            "description": "异宠共鸣减伤效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Apreduce.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "共鸣·加速",
+            "description": "异宠共鸣加速效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Speedup.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          }
+        ],
+        "supportSkills": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87",
@@ -5295,11 +10620,10 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "PET",
     "subcategory": "S级宠物",
     "rarity": "S",
-    "tier": "T0 伊狑844挂毒宠",
     "icon": "/wiki-assets/宠物/河豚.png",
     "summary": "释放神经毒素光环附带中毒与衰弱效果！在伊狑844顶配阵容中，将觉醒红5河豚放在第1助战位即可随伊狑一同上场，完美解决回响挂毒问题。",
     "tags": [
-      "S宠物",
+      "S级",
       "伊狑844必配",
       "第1助战位挂毒",
       "中毒衰弱"
@@ -5313,7 +10637,192 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁"
+      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "神经毒素",
+            "description": "每过5秒释放神经毒素光环，持续5秒，对范围内怪物造成伤害并附带5秒毒效果和衰弱效果，可随学习技能次数进阶",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_PufferSkill.png"
+          },
+          {
+            "name": "气豚圆鼓鼓",
+            "description": "河豚生气圆鼓鼓，释放超级毒素光环，持续10秒，对范围内敌人持续造成伤害，并附带毒和衰弱效果，持续5秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPetBtn_PufferSkill.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "神经毒素：神经毒素光环伤害频率增加100%，宠物对目标施加的毒和衰弱效果持续时间提升至30秒"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "气豚圆鼓鼓：超级毒素光环光环伤害频率增加100%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "神经毒素：神经毒素光环伤害提升100%"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "气豚圆鼓鼓：气豚圆鼓鼓释放后为主角提升70%对中毒增伤，持续20秒",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "神经毒素：神经毒素光环对中毒和衰弱目标造成伤害提升125%"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "气豚圆鼓鼓：超级毒素光环对Boss伤害额外提升140%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "神经毒素：神经毒素光环伤害额外提升55%"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "气豚圆鼓鼓：超级毒素光环对Boss伤害额外提升280%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "神经毒素：神经毒素光环对中毒和衰弱目标造成伤害额外提升45%"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "气豚圆鼓鼓：气豚圆鼓鼓释放后为主角提升70%对衰弱增伤，持续20秒",
+              "助战技能上限提升"
+            ]
+          }
+        ],
+        "passives": [
+          {
+            "name": "守护",
+            "description": "护盾增伤提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hudunzengshang.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "寒霜",
+            "description": "冰缓增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Binghuan.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "毒素灌溉",
+            "description": "中毒增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Zhongduzengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "乘虚而入",
+            "description": "衰弱增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Xuruozengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "精进技艺",
+            "description": "技能伤害提高 +6% ~ +60%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Jinengqiangdu.png",
+            "type": "passive",
+            "tierRange": "+6% ~ +60%"
+          },
+          {
+            "name": "攻击力",
+            "description": "攻击力百分比提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Atkpercent.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "最终攻击",
+            "description": "最终攻击提高 +2000 ~ +20000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalAP.png",
+            "type": "passive",
+            "tierRange": "+2000 ~ +20000"
+          },
+          {
+            "name": "生命",
+            "description": "生命百分比提高 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hppercent.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "最终生命",
+            "description": "最终生命提高 +8000 ~ +80000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalHP.png",
+            "type": "passive",
+            "tierRange": "+8000 ~ +80000"
+          },
+          {
+            "name": "共鸣·增幅",
+            "description": "异宠共鸣触发概率增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Chufagailv.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·伤害",
+            "description": "异宠共鸣增伤效果增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Damageup.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·减伤",
+            "description": "异宠共鸣减伤效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Apreduce.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "共鸣·加速",
+            "description": "异宠共鸣加速效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Speedup.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          }
+        ],
+        "supportSkills": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87",
@@ -5327,11 +10836,10 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "PET",
     "subcategory": "S级宠物",
     "rarity": "S",
-    "tier": "T2 怒火骤雨S宠",
     "icon": "/wiki-assets/宠物/咕咕鸡.png",
     "summary": "进入狂怒状态向范围内敌人发射持续10秒的火焰羽毛。",
     "tags": [
-      "S宠物",
+      "S级",
       "怒火骤雨",
       "远程弹幕"
     ],
@@ -5343,7 +10851,192 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "提供稳定的助战共鸣倍率"
         }
       ],
-      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁"
+      "acquisition": "异世宠物自选宝箱 / 4只5黄星普通宠解锁",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "羽毛连击",
+            "description": "咕咕鸡向敌人发射羽毛，可随学习技能次数进阶",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_ChickenSkill.png"
+          },
+          {
+            "name": "怒火骤雨",
+            "description": "咕咕鸡进入狂暴姿态，持续发射大量火羽（一定范围内攻击可锁定攻击敌人），持续10秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPetBtn_ChickenSkill.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "羽毛连击：羽毛子弹速度提升，冷却时间额外减少1秒"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "怒火骤雨：怒火骤雨释放后宠物攻击力额外提升100%，持续10秒",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "羽毛连击：羽毛子弹伤害提升100%"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "怒火骤雨：怒火骤雨伤害提升100%，怒火骤雨释放后为主角提升15%暴击率和40%暴击伤害，持续20秒",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "羽毛连击：羽毛每次命中敌人提升25%宠物攻击力，持续2秒，最多5层"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "怒火骤雨：怒火骤雨伤害额外提升10%，子弹数量+45",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "羽毛连击：羽毛子弹伤害提升100%"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "怒火骤雨：怒火骤雨伤害额外提升130%",
+              "助战技能上限提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "羽毛连击：羽毛每次命中敌人额外提升20%宠物攻击力，持续2秒，最多5层"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "怒火骤雨：怒火骤雨释放后为主角额外提升15%暴击率和40%暴击伤害，持续20秒",
+              "助战技能上限提升"
+            ]
+          }
+        ],
+        "passives": [
+          {
+            "name": "守护",
+            "description": "护盾增伤提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hudunzengshang.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "寒霜",
+            "description": "冰缓增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Binghuan.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "毒素灌溉",
+            "description": "中毒增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Zhongduzengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "乘虚而入",
+            "description": "衰弱增伤提高 +5% ~ +50%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Xuruozengshang.png",
+            "type": "passive",
+            "tierRange": "+5% ~ +50%"
+          },
+          {
+            "name": "精进技艺",
+            "description": "技能伤害提高 +6% ~ +60%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Jinengqiangdu.png",
+            "type": "passive",
+            "tierRange": "+6% ~ +60%"
+          },
+          {
+            "name": "攻击力",
+            "description": "攻击力百分比提高 +4% ~ +40%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Atkpercent.png",
+            "type": "passive",
+            "tierRange": "+4% ~ +40%"
+          },
+          {
+            "name": "最终攻击",
+            "description": "最终攻击提高 +2000 ~ +20000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalAP.png",
+            "type": "passive",
+            "tierRange": "+2000 ~ +20000"
+          },
+          {
+            "name": "生命",
+            "description": "生命百分比提高 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Hppercent.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "最终生命",
+            "description": "最终生命提高 +8000 ~ +80000",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_FinalHP.png",
+            "type": "passive",
+            "tierRange": "+8000 ~ +80000"
+          },
+          {
+            "name": "共鸣·增幅",
+            "description": "异宠共鸣触发概率增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Chufagailv.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·伤害",
+            "description": "异宠共鸣增伤效果增加 +3% ~ +30%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Damageup.png",
+            "type": "passive",
+            "tierRange": "+3% ~ +30%"
+          },
+          {
+            "name": "共鸣·减伤",
+            "description": "异宠共鸣减伤效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Apreduce.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          },
+          {
+            "name": "共鸣·加速",
+            "description": "异宠共鸣加速效果增加 +2% ~ +20%",
+            "icon": "/wiki-assets/技能图标/宠物技能/SPet_Passive_Speedup.png",
+            "type": "passive",
+            "tierRange": "+2% ~ +20%"
+          }
+        ],
+        "supportSkills": []
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87",
@@ -5356,11 +11049,11 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "name": "老鹰",
     "category": "PET",
     "subcategory": "普通宠物",
-    "rarity": "EPIC",
-    "tier": "T0 萌新开荒神宠",
+    "rarity": "COMMON",
     "icon": "/wiki-assets/宠物/老鹰.png",
     "summary": "未解锁S宠物前（约25万战力阶段）性价比最高的普通过渡宠物！觉醒后锁头攻击效率极高，也是凑4只5黄星解锁S宠的常备主力。",
     "tags": [
+      "普通",
       "普通宠物首选",
       "25万战力过渡",
       "5黄星解锁S宠垫子"
@@ -5374,7 +11067,168 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "isKeyNode": true
         }
       ],
-      "acquisition": "宠物乐园抽取 / 史诗宠物宝箱"
+      "acquisition": "宠物乐园抽取 / 史诗宠物宝箱",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "小旋风",
+            "description": "扇动翅膀吹出旋风，对敌人造成350%攻击的伤害，旋风穿透所有敌人，主人升级时提升50%伤害，冷却1秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/pet_weapon_6_0.png"
+          },
+          {
+            "name": "羽毛连射",
+            "description": "专属觉醒特技，随觉醒星级不断进阶强化",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetWakeSkill_6.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "解锁觉醒技能：羽毛连射",
+              "羽毛4连射，羽毛命中同一目标技能冷却降低2%，冷却最多降低20%"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“羽毛连射”升级",
+              "羽毛4连射，羽毛命中同一目标技能冷却降低2%，冷却最多降低35%"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“羽毛连射”升级",
+              "羽毛4连射，羽毛命中同一目标技能冷却降低2%伤害提升2.5%，冷却最多降低35%，伤害最高提升40%"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“羽毛连射”升级",
+              "羽毛4连射，羽毛命中同一目标技能冷却降低4%伤害提升5%，冷却最多降低35%，伤害最高提升40%"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“羽毛连射”升级",
+              "羽毛4连射，羽毛命中同一目标技能冷却降低6%伤害提升10%，冷却最多降低50%，伤害最高提升90%"
+            ]
+          }
+        ],
+        "supportSkills": [
+          {
+            "name": "强壮",
+            "description": "战斗中主人每升5级增加宠物20%生命上限，主人生命上限+5%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_1.png",
+            "type": "support"
+          },
+          {
+            "name": "强力",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_2.png",
+            "type": "support"
+          },
+          {
+            "name": "增幅",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能范围",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_3.png",
+            "type": "support"
+          },
+          {
+            "name": "耐久",
+            "description": "战斗中主人每升5级增加宠物子弹持续时间15%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_4.png",
+            "type": "support"
+          },
+          {
+            "name": "穿透",
+            "description": "战斗中主人每升5级增加宠物攻击穿透单位数量1",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_5.png",
+            "type": "support"
+          }
+        ],
+        "passives": [
+          {
+            "name": "巨大化",
+            "description": "体型变大，增加宠物15%攻击和技能范围",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_13.png",
+            "type": "passive"
+          },
+          {
+            "name": "锋利爪牙",
+            "description": "增加宠物15%技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_8.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级战斗渴望",
+            "description": "减少宠物20%攻击和技能冷却",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_10.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级追风",
+            "description": "增加宠物75%移动速度",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_12.png",
+            "type": "passive"
+          },
+          {
+            "name": "碾压",
+            "description": "对血量低于50%的敌人，攻击有5%概率造成10倍伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_20.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级鞭策",
+            "description": "增加主人5%技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_2.png",
+            "type": "passive"
+          }
+        ]
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87",
@@ -5387,12 +11241,11 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "name": "呱呱蛙",
     "category": "PET",
     "subcategory": "普通宠物",
-    "rarity": "EPIC",
-    "tier": "T2 经典暴击蛙",
+    "rarity": "COMMON",
     "icon": "/wiki-assets/宠物/呱呱蛙.png",
     "summary": "早期版本经典宠物，提供经验、暴击率与技能范围光环，后期可用于凑5黄星解锁S宠物。",
     "tags": [
-      "普通宠物",
+      "普通",
       "暴击光环",
       "S宠解锁材料"
     ],
@@ -5404,7 +11257,168 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
           "effect": "作为4只5黄星普通宠之一解锁S宠物槽位"
         }
       ],
-      "acquisition": "宠物乐园抽取 / 史诗宠物宝箱"
+      "acquisition": "宠物乐园抽取 / 史诗宠物宝箱",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "口水攻击",
+            "description": "向敌人吐出有腐蚀性的口水，每秒内造成200%攻击的伤害，持续4秒，主人升级时提升50%伤害，冷却1秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/pet_weapon_7_0.png"
+          },
+          {
+            "name": "腐蚀领域",
+            "description": "专属觉醒特技，随觉醒星级不断进阶强化",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetWakeSkill_7.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "解锁觉醒技能：腐蚀领域",
+              "生成小范围腐蚀光环，怪物被腐蚀后受到伤害增加12%，光环持续6秒"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“腐蚀领域”升级",
+              "生成小范围腐蚀光环，怪物被腐蚀后受到伤害增加12%，光环持续6秒，宠物移动会留下持续3秒的伤害粘液"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“腐蚀领域”升级",
+              "生成大范围腐蚀光环，怪物被腐蚀后受到伤害增加12%，光环持续6秒，宠物移动会留下持续3秒的伤害粘液"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“腐蚀领域”升级",
+              "生成大范围腐蚀光环，怪物被腐蚀后受到伤害增加12%，光环持续8秒，宠物移动会留下持续5秒的伤害粘液"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“腐蚀领域”升级",
+              "生成大范围腐蚀光环，怪物被腐蚀后受到伤害增加20%，光环持续8秒，宠物移动会留下持续5秒的伤害粘液"
+            ]
+          }
+        ],
+        "supportSkills": [
+          {
+            "name": "强壮",
+            "description": "战斗中主人每升5级增加宠物20%生命上限，主人生命上限+5%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_1.png",
+            "type": "support"
+          },
+          {
+            "name": "强力",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_2.png",
+            "type": "support"
+          },
+          {
+            "name": "增幅",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能范围",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_3.png",
+            "type": "support"
+          },
+          {
+            "name": "耐久",
+            "description": "战斗中主人每升5级增加宠物子弹持续时间15%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_4.png",
+            "type": "support"
+          },
+          {
+            "name": "穿透",
+            "description": "战斗中主人每升5级增加宠物攻击穿透单位数量1",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_5.png",
+            "type": "support"
+          }
+        ],
+        "passives": [
+          {
+            "name": "鞭策",
+            "description": "增加主人3%技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_2.png",
+            "type": "passive"
+          },
+          {
+            "name": "同心协力",
+            "description": "增加宠物10%血量继承",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_7.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级精进",
+            "description": "增加主人7.5%战斗经验获取",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_3.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级激励",
+            "description": "增加主人4%暴击率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_0.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级鼓舞",
+            "description": "增加主人10%暴击伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_1.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级痛击",
+            "description": "增加宠物攻击和技能60%暴击伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_21.png",
+            "type": "passive"
+          }
+        ]
+      }
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87",
@@ -5413,237 +11427,423 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 114
   },
   {
-    "slug": "pet-skill-%E5%85%B1%E9%B8%A3%E4%BC%A4%E5%AE%B3",
-    "name": "宠物技能 · 共鸣伤害",
-    "category": "PET",
-    "subcategory": "宠物助战技能",
-    "rarity": "SS",
-    "tier": "T0 必带助战技",
-    "icon": "/wiki-assets/技能图标/宠物技能/共鸣伤害.png",
-    "summary": "直接提升助战位宠物共鸣伤害倍率，不被常规增伤稀释的独立乘区，前3槽绝对必带！",
-    "tags": [
-      "宠物助战技能",
-      "T0 必带助战技",
-      "异宠核心"
-    ],
-    "attributes": {
-      "slot": "助战技能槽（共6槽：0/0/21/50/90/150核解锁）",
-      "milestones": [
-        {
-          "stage": "前3槽首选组合",
-          "effect": "共鸣伤害 + 共鸣增幅 + 守护 + 百分比攻击/异伤",
-          "isKeyNode": true
-        }
-      ]
-    },
-    "relatedArticleSlugs": [
-      "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87"
-    ],
-    "sort": 115
-  },
-  {
-    "slug": "pet-skill-%E5%85%B1%E9%B8%A3%E5%A2%9E%E5%B9%85",
-    "name": "宠物技能 · 共鸣增幅",
-    "category": "PET",
-    "subcategory": "宠物助战技能",
-    "rarity": "SS",
-    "tier": "T0 必带助战技",
-    "icon": "/wiki-assets/技能图标/宠物技能/共鸣增幅.png",
-    "summary": "提升助战位共鸣触发概率，3只5红星S宠物搭配共鸣增幅即可达到100%共鸣概率上限！",
-    "tags": [
-      "宠物助战技能",
-      "T0 必带助战技",
-      "异宠核心"
-    ],
-    "attributes": {
-      "slot": "助战技能槽（共6槽：0/0/21/50/90/150核解锁）",
-      "milestones": [
-        {
-          "stage": "前3槽首选组合",
-          "effect": "共鸣伤害 + 共鸣增幅 + 守护 + 百分比攻击/异伤",
-          "isKeyNode": true
-        }
-      ]
-    },
-    "relatedArticleSlugs": [
-      "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87"
-    ],
-    "sort": 116
-  },
-  {
-    "slug": "pet-skill-%E5%AE%88%E6%8A%A4",
-    "name": "宠物技能 · 守护",
-    "category": "PET",
-    "subcategory": "宠物助战技能",
-    "rarity": "S",
-    "tier": "T1 核心助战技",
-    "icon": "/wiki-assets/技能图标/宠物技能/守护.png",
-    "summary": "自身存在护盾时对敌人造成额外百分比伤害，完美契合SS天启战衣与护盾体系。",
-    "tags": [
-      "宠物助战技能",
-      "T1 核心助战技",
-      "异宠核心"
-    ],
-    "attributes": {
-      "slot": "助战技能槽（共6槽：0/0/21/50/90/150核解锁）",
-      "milestones": [
-        {
-          "stage": "前3槽首选组合",
-          "effect": "共鸣伤害 + 共鸣增幅 + 守护 + 百分比攻击/异伤",
-          "isKeyNode": true
-        }
-      ]
-    },
-    "relatedArticleSlugs": [
-      "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87"
-    ],
-    "sort": 117
-  },
-  {
-    "slug": "pet-skill-%E6%94%BB%E5%87%BB%E5%8A%9B%E7%99%BE%E5%88%86%E6%AF%94",
-    "name": "宠物技能 · 攻击力百分比",
-    "category": "PET",
-    "subcategory": "宠物助战技能",
-    "rarity": "S",
-    "tier": "T2 优质助战技",
-    "icon": "/wiki-assets/技能图标/宠物技能/攻击力百分比.png",
-    "summary": "直接提升特工百分比攻击力面板，前4槽标准配置之一。",
-    "tags": [
-      "宠物助战技能",
-      "T2 优质助战技",
-      "异宠核心"
-    ],
-    "attributes": {
-      "slot": "助战技能槽（共6槽：0/0/21/50/90/150核解锁）",
-      "milestones": [
-        {
-          "stage": "前3槽首选组合",
-          "effect": "共鸣伤害 + 共鸣增幅 + 守护 + 百分比攻击/异伤",
-          "isKeyNode": true
-        }
-      ]
-    },
-    "relatedArticleSlugs": [
-      "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87"
-    ],
-    "sort": 118
-  },
-  {
-    "slug": "pet-skill-%E6%AF%92%E7%B4%A0%E7%81%8C%E6%BA%89",
-    "name": "宠物技能 · 毒素灌溉",
-    "category": "PET",
-    "subcategory": "宠物助战技能",
-    "rarity": "S",
-    "tier": "T3 异伤助战技",
-    "icon": "/wiki-assets/技能图标/宠物技能/毒素灌溉.png",
-    "summary": "对中毒目标造成额外伤害，配合左位凛音或红5河豚稳定吃满。",
-    "tags": [
-      "宠物助战技能",
-      "T3 异伤助战技",
-      "异宠核心"
-    ],
-    "attributes": {
-      "slot": "助战技能槽（共6槽：0/0/21/50/90/150核解锁）",
-      "milestones": [
-        {
-          "stage": "前3槽首选组合",
-          "effect": "共鸣伤害 + 共鸣增幅 + 守护 + 百分比攻击/异伤",
-          "isKeyNode": true
-        }
-      ]
-    },
-    "relatedArticleSlugs": [
-      "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87"
-    ],
-    "sort": 119
-  },
-  {
-    "slug": "pet-skill-%E4%B9%98%E8%99%9A%E8%80%8C%E5%85%A5",
-    "name": "宠物技能 · 乘虚而入",
-    "category": "PET",
-    "subcategory": "宠物助战技能",
-    "rarity": "S",
-    "tier": "T3 异伤助战技",
-    "icon": "/wiki-assets/技能图标/宠物技能/乘虚而入.png",
-    "summary": "对衰弱目标造成额外伤害，第4~6助战槽补充技能优选。",
-    "tags": [
-      "宠物助战技能",
-      "T3 异伤助战技",
-      "异宠核心"
-    ],
-    "attributes": {
-      "slot": "助战技能槽（共6槽：0/0/21/50/90/150核解锁）",
-      "milestones": [
-        {
-          "stage": "前3槽首选组合",
-          "effect": "共鸣伤害 + 共鸣增幅 + 守护 + 百分比攻击/异伤",
-          "isKeyNode": true
-        }
-      ]
-    },
-    "relatedArticleSlugs": [
-      "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87"
-    ],
-    "sort": 120
-  },
-  {
-    "slug": "pet-skill-%E5%AF%92%E9%9C%9C",
-    "name": "宠物技能 · 寒霜",
-    "category": "PET",
-    "subcategory": "宠物助战技能",
-    "rarity": "S",
-    "tier": "T3 异伤助战技",
-    "icon": "/wiki-assets/技能图标/宠物技能/寒霜.png",
-    "summary": "对冰缓目标造成额外伤害，联动SS冰霜战靴。",
-    "tags": [
-      "宠物助战技能",
-      "T3 异伤助战技",
-      "异宠核心"
-    ],
-    "attributes": {
-      "slot": "助战技能槽（共6槽：0/0/21/50/90/150核解锁）",
-      "milestones": [
-        {
-          "stage": "前3槽首选组合",
-          "effect": "共鸣伤害 + 共鸣增幅 + 守护 + 百分比攻击/异伤",
-          "isKeyNode": true
-        }
-      ]
-    },
-    "relatedArticleSlugs": [
-      "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e5%ae%a0%e7%89%a9%e7%af%87"
-    ],
-    "sort": 121
-  },
-  {
     "slug": "tech-%E5%8F%8C%E7%94%9F%E6%97%A0%E4%BA%BA%E6%9C%BA",
     "name": "双生无人机",
     "category": "TECH_PART",
     "subcategory": "双生/谐振配件",
     "rarity": "SS",
-    "tier": "T0 绝对核心配件",
     "icon": "/wiki-assets/配件/双生无人机.png",
-    "summary": "全游第一顺位双生合体配件！毁灭者导弹自动追踪锁头，配合「跨越星际的触手」收藏品套装与谐振芯片提供海量单体爆发。",
+    "summary": "全游第一顺位双生合体配件！毁灭者导弹自动追踪锁头，配合谐振芯片提供海量单体爆发。",
     "tags": [
-      "双生配件",
-      "No.1必做",
-      "谐振核心",
-      "毁灭者"
+      "衰弱",
+      "易伤",
+      "裂伤"
     ],
     "attributes": {
-      "slot": "科技配件（攻击槽 / 防御槽）",
-      "milestones": [
-        {
-          "stage": "红色传奇品质",
-          "effect": "解锁双生合体槽位，可嵌入3个红色配件作为谐振插件",
-          "isKeyNode": true
+      "slot": "科技配件（攻击槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
         },
-        {
-          "stage": "谐振芯片 & 过载",
-          "effect": "投放谐振芯片提升总谐振倍率（1.2x ~ 3.0x+），激活过载独立增伤",
-          "isKeyNode": true
-        }
-      ],
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "局内无人机技能变为双生无人机，可进化至双生毁灭者\\n双生无人机：自动制导（导弹会自动跟踪射程范围内的敌人，但是会降低发射频率）\\n力场发生器：能量压缩（范围缩小25%，伤害翻倍）"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生毁灭者专属：新型挂载弹头（恢复发射频率，并且导弹爆炸范围翻倍）；双生毁灭者附带一个毁灭力场，增加10%额外经验；技能伤害+75%\\n压制力场专属：敌人在力场范围内死亡，增加额外经验"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生无人机：初始3级\\n双生毁灭者：追踪范围增加，导弹数量增加；对衰弱伤害+50%\\n力场发生器：恢复力场范围，每隔几秒钟发射一次大范围脉冲\\n压制力场：每隔几秒钟发射一次强压制脉冲，受到脉冲影响的怪物会被定身（Boss除外）"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "技能伤害+20%；毁灭力场增加10%额外经验"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "毁灭力场每秒会对范围内目标附加15%易伤效果，持续1秒"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "毁灭力场每秒会对范围内目标附加衰弱效果，持续1秒；对衰弱伤害+20%"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "双生毁灭者每发射6发子弹，额外发射2发激荡子弹；对衰弱伤害+10%"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "双生无人机导弹数量+10%；技能伤害提高25%；对衰弱伤害+20%"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "双生无人机单发伤害+30%；毁灭力场每秒会对范围内目标额外附加15%易伤效果"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "对衰弱伤害+15%"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "双生无人机导弹数量+10%；技能伤害+15%"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "毁灭力场附加的易伤效果持续时间变为5s，易伤效果增加15%"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "毁灭力场附加的衰弱效果持续时间变为5s；对衰弱伤害+15%"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "双生无人机单发伤害+30%；技能伤害+15%"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "双生无人机导弹数量+5%"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "双生无人机单发伤害+30%；毁灭力场附加的易伤效果增加15%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "对衰弱伤害+20%"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "双生无人机单发伤害+30%；技能伤害+30%"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "毁灭力场附加的易伤效果增加20%；增加25%对衰弱伤害"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "双生无人机单发伤害+30%；技能伤害+30%"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "双生无人机导弹数量+5%；毁灭力场附加的易伤效果增加20%；增加25%对衰弱伤害"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "双生无人机导弹数量+5%，单发伤害+30%；激荡子弹伤害+100%；技能伤害+30%"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "双生无人机单发伤害增加10%；对衰弱伤害+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "毁灭力场每秒会对范围内目标额外附加5%易伤效果；技能伤害+25%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "激荡子弹伤害增加100%；对衰弱伤害+15%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "双生无人机单发伤害增加20%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "毁灭力场每秒会对范围内目标额外附加10%易伤效果；技能伤害+30%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "双生无人机每发射6发子弹，额外再发射1发激荡子弹；对衰弱伤害+20%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "双生无人机单发伤害增加30%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "技能伤害+35%；对裂伤目标伤害+5%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "激荡子弹伤害增加200%；对衰弱伤害+30%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "双生无人机单发伤害增加40%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "毁灭力场每秒会对范围内目标额外附加20%易伤效果；对衰弱伤害+35%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "双生无人机过载，全部子弹额外增伤5%；激荡子弹伤害增加100%；对裂伤目标伤害+5%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "双生无人机单发伤害增加50%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "技能伤害+40%；对裂伤目标伤害+10%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "双生无人机过载，全部子弹额外增伤5%；双生无人机每发射6发子弹，额外再发射1发激荡子弹；对衰弱伤害+40%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "双生无人机单发伤害增加60%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "毁灭力场每秒会对范围内目标额外附加30%易伤效果；对裂伤目标伤害+15%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "双生无人机过载，全部子弹额外增伤10%；激荡子弹伤害增加100%；技能伤害+50%"
+          }
+        ]
+      },
       "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
     },
     "relatedArticleSlugs": [
@@ -5657,29 +11857,418 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "TECH_PART",
     "subcategory": "双生/谐振配件",
     "rarity": "SS",
-    "tier": "T0 穿透爆发核心",
     "icon": "/wiki-assets/配件/双生钻头.png",
-    "summary": "第二顺位双生合体配件！永恒钻头高频穿透Boss，受第10期红藏「水瓶座星辉」与第7期金藏「兽火之炉」专项增幅。",
+    "summary": "核心单体与穿透输出双生配件，高频钻头与火箭协同爆发，提供极强的压制与护盾增伤。",
     "tags": [
-      "双生配件",
-      "No.2必做",
-      "水瓶座星辉强化",
-      "穿透爆发"
+      "冰缓",
+      "裂伤",
+      "护盾增伤"
     ],
     "attributes": {
-      "slot": "科技配件（攻击槽 / 防御槽）",
-      "milestones": [
-        {
-          "stage": "红色传奇品质",
-          "effect": "解锁双生合体槽位，可嵌入3个红色配件作为谐振插件",
-          "isKeyNode": true
+      "slot": "科技配件（攻击槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
         },
-        {
-          "stage": "谐振芯片 & 过载",
-          "effect": "投放谐振芯片提升总谐振倍率（1.2x ~ 3.0x+），激活过载独立增伤",
-          "isKeyNode": true
-        }
-      ],
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "钻头弹技能变为双生钻头弹，可进化至双生冰火哨箭（火焰哨箭、冰霜哨箭）\\n双生钻头弹：钻头飞行速度+30%\\n火箭发射器：发射冷却时间-0.5秒"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生冰火哨箭：火焰哨箭命中后，对目标安装火焰炸弹\\n鲨嘴炮专属：双发（每次发射两枚鲨嘴炮）\\n暴击伤害+50%"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生钻头弹：被双生钻头弹攻击到的目标会额外受到5%伤害\\n双生冰火哨箭：火焰哨箭伤害翻倍，被火焰哨箭攻击的目标在1.5秒内，冰霜哨箭会造成900%额外伤害；额外发射火焰导弹，攻击被火焰炸弹爆炸影响目标\\n火箭发射器：爆炸增加牵引效果\\n鲨嘴炮：鲨嘴炮每次碰到敌人都会触发一次小型爆炸\\n护盾增伤+75%"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "火焰哨箭伤害+18%；护盾增伤+15%"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "冰霜专注：冰霜哨箭累计命中敌人10次后，叠加1层冰霜专注，每层冰霜专注对冰缓目标伤害+30%，上限1层"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "冰霜哨箭伤害+18%；对冰缓目标伤害+10%"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "冰霜专注需要命中次数-5，上限层数+1；暴击伤害+20%"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "火焰炸弹伤害+40%"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "冰霜专注上限层数+1；对裂伤目标伤害额外+30%"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "火焰哨箭命中10次后，火焰哨箭伤害+18%"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "暴击伤害+20%"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "冰霜哨箭命中目标后，火焰哨箭对目标伤害+15%"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "对冰缓目标伤害+20%"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "火焰哨箭命中目标后，冰霜哨箭对目标伤害+60%"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "护盾增伤+20%"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "火焰炸弹伤害+30%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "对裂伤目标伤害额外+30%"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "冰霜专注上限层数+1"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "暴击伤害+30%，护盾增伤+30%"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "冰霜哨箭伤害+18%；对冰缓目标伤害+10%"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "冰霜专注需要命中次数-3，上限层数+1；对裂伤目标伤害额外+20%"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "冰霜哨箭命中目标后，火焰哨箭对目标伤害+45%；对冰缓目标伤害+10%"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "火焰哨箭伤害增加40%Ⓑⓗ对冰缓目标增伤+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "暴击伤害+15%，护盾增伤+10%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "冰霜哨箭伤害增加40%，对冰缓目标增伤+15%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "双生哨箭整体伤害提升10%，暴击伤害+15%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "暴击伤害+15%，护盾增伤+15%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "火焰哨箭伤害增加90%，对冰缓目标增伤+15%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "冰霜哨箭伤害提升90%，暴击伤害+15%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "暴击伤害+30%，护盾增伤+20%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "双生哨箭整体伤害提升20%，对裂伤目标伤害+5%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "火焰哨箭伤害提升130%，对冰缓目标增伤+20%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "暴击伤害+30%，护盾增伤+25%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "冰霜哨箭伤害提升130%，对裂伤目标伤害+10%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "双生哨箭整体伤害提升30%，对冰缓目标增伤+25%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "暴击伤害+30%，护盾增伤+35%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "火焰哨箭伤害提升180%，对裂伤目标伤害+10%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "冰霜哨箭伤害提升180%，对冰缓目标增伤+30%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "暴击伤害+30%，护盾增伤+45%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "双生哨箭整体伤害提升40%，对冰缓目标增伤+35%，对裂伤目标伤害+15%"
+          }
+        ]
+      },
       "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
     },
     "relatedArticleSlugs": [
@@ -5693,28 +12282,419 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "TECH_PART",
     "subcategory": "双生/谐振配件",
     "rarity": "SS",
-    "tier": "T0 量子弹射核心",
     "icon": "/wiki-assets/配件/双生足球.png",
-    "summary": "高性价比双生输出配件，可进化为量子机器人（足球态/榴莲态），受微型人造太阳与风之元素之珠强力增幅。",
+    "summary": "高移速与弹射清怪核心双生配件，兼具冰缓与流血减益，机动战首选。",
     "tags": [
-      "双生配件",
-      "量子机器人",
-      "高频弹射"
+      "冰缓",
+      "裂伤",
+      "流血",
+      "护盾增伤"
     ],
     "attributes": {
-      "slot": "科技配件（攻击槽 / 防御槽）",
-      "milestones": [
-        {
-          "stage": "红色传奇品质",
-          "effect": "解锁双生合体槽位，可嵌入3个红色配件作为谐振插件",
-          "isKeyNode": true
+      "slot": "科技配件（防御槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
         },
-        {
-          "stage": "谐振芯片 & 过载",
-          "effect": "投放谐振芯片提升总谐振倍率（1.2x ~ 3.0x+），激活过载独立增伤",
-          "isKeyNode": true
-        }
-      ],
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "局内足球技能变为双生足球，可进化至双生量子球\\n双生足球：双生足球伤害+30%\\n榴莲：飞行控制（榴莲不会飞离你太远）"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生量子球：量子球变为尖刺量子球，命中目标附加流血效果，持续20秒，尖刺量子球持续时间+1秒；暴击伤害+80%\\n铁蒺藜专属：铁与血（铁蒺藜的尖刺击中会造成流血效果）"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生足球：多踢出1个足球\\n双生量子球：多发射1个尖刺量子球，最后分裂出的尖刺量子球之间会产生量子纠缠；对冰缓伤害+30%；护盾增伤加20%\\n榴莲：飞行中留下气味，碰到Boss后会跟随Boss移动\\n铁蒺藜：飞行中留下火焰，每间隔1秒留下一个火焰爆弹，3秒后爆炸"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "泰山压顶：双生哑铃首次命中目标后，召唤一个巨型哑铃（每轮发射最多触发三次）"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "每个双生哑铃首次命中目标时，为主角增加1%能量护盾（单局最多+30%能量护盾）；护盾增伤+20%"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "天火：巨型哑铃命中目标后可将其引燃，每秒造成伤害，持续5秒"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "双生哑铃升级不再需要被动；暴击伤害+40%；对精英、Boss伤害+7.5%"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "巨型哑铃伤害+100%；护盾增伤+30%"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "引燃伤害+100%；对衰弱目标伤害+30%；对精英、Boss伤害+7.5%"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "巨型哑铃坠地后分裂4个碎片"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "巨型哑铃伤害+35%；暴击伤害+15%"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "引燃伤害+50%；对衰弱目标伤害+10%；对精英、Boss伤害+7.5%"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "碎片伤害+50%；护盾增伤+10%"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "引燃伤害+50%；暴击伤害+15%；对精英、Boss伤害+7.5%"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "护盾增伤+15%；对衰弱目标伤害+10%"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "巨型哑铃伤害+65%；对衰弱目标伤害+10%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "护盾增伤+15%；对衰弱目标伤害+10%"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "碎片伤害+100%；护盾增伤+10%"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "双生哑铃伤害+70%；对衰弱目标伤害+20%；对精英、Boss伤害+7.5%"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "暴击伤害+15%；护盾增伤+25%"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "巨型哑铃伤害+335%；对衰弱目标伤害+20%；对精英、Boss伤害+7.5%"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "暴击伤害+15%；护盾增伤+25%"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "震裂伤害+40%；对衰弱目标伤害+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "技能伤害+10%；护盾增伤+10%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "双生哑铃伤害+40%；暴击伤害+10%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "高能重力扩散器整体伤害+10%；巨型哑铃伤害+50%；碎片伤害+50%；对衰弱目标伤害+10%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "技能伤害+20%；护盾增伤+10%；对精英、Boss伤害+5%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "高能重力扩散器整体伤害+10%；震裂伤害+60%；暴击伤害+20%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "高能重力扩散器整体伤害+10%；双生哑铃伤害+60%；对衰弱目标伤害+20%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "技能伤害+40%；对精英、Boss伤害+5%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "高能重力扩散器整体伤害+10%；巨型哑铃伤害+50%；引燃伤害+50%；暴击伤害+30%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "高能重力扩散器整体伤害+10%；震裂伤害+60%；对衰弱目标伤害+30%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "护盾增伤+20%；对精英、Boss伤害+10%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "高能重力扩散器整体伤害+10%；碎片伤害+50%；引燃伤害+50%；暴击伤害+35%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "高能重力扩散器整体伤害+10%；双生哑铃伤害+60%；对衰弱目标伤害+40%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "技能伤害+60%；对精英、Boss伤害+10%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "高能重力扩散器整体伤害+10%；巨型哑铃伤害+50%；碎片伤害+50%；引燃伤害+50%；暴击伤害+40%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "高能重力扩散器整体伤害+10%；震裂伤害+80%；对衰弱目标伤害+50%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "护盾增伤+30%；对精英、Boss伤害+15%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "高能重力扩散器整体伤害+10%；双生哑铃伤害+80%；暴击伤害+45%"
+          }
+        ]
+      },
       "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
     },
     "relatedArticleSlugs": [
@@ -5727,29 +12707,419 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "name": "双生雷电",
     "category": "TECH_PART",
     "subcategory": "双生/谐振配件",
-    "rarity": "S",
-    "tier": "T1 锁头落雷配件",
+    "rarity": "SS",
     "icon": "/wiki-assets/配件/双生雷电.png",
-    "summary": "双生合体落雷配件，受第10期红藏「双鱼座星辉」与第6期金藏「迷你戴森球」专项增幅，Boss战表现优异。",
+    "summary": "超大范围落雷与感电增伤，暴击伤害极高，清理群怪与首领增伤表现优异。",
     "tags": [
-      "双生配件",
-      "双鱼座星辉强化",
-      "单体落雷"
+      "易伤",
+      "暴击伤害",
+      "技能伤害"
     ],
     "attributes": {
-      "slot": "科技配件（攻击槽 / 防御槽）",
-      "milestones": [
-        {
-          "stage": "红色传奇品质",
-          "effect": "解锁双生合体槽位，可嵌入3个红色配件作为谐振插件",
-          "isKeyNode": true
+      "slot": "科技配件（攻击槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
         },
-        {
-          "stage": "谐振芯片 & 过载",
-          "effect": "投放谐振芯片提升总谐振倍率（1.2x ~ 3.0x+），激活过载独立增伤",
-          "isKeyNode": true
-        }
-      ],
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "雷电发射器技能变为双生雷电发射器，可进化至双生涡旋狂雷\\n双生雷电发射器：全等级雷电发射数量+2\\n回旋镖：你可以接住回旋镖并重置它的冷却时间"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生涡旋狂雷：落雷落地生成旋转雷暴场，后续落雷命中此场额外触发雷爆\\n磁力镖专属：电磁感应（磁力镖之间会产生电弧）\\n暴击伤害+80%"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生涡旋狂雷：最后一道落雷，获得强化威力更强\\n回旋镖：每次命中追加一次额外伤害\\n磁力镖：磁力镖每秒对附近的敌人发射一个闪电链Ⓑⓗ可跳跃3个目标\\n技能伤害+80%"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "双生涡旋狂雷伤害+10%"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "暴击伤害+40%"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "被旋转雷暴场伤害过的敌人，落雷对其伤害+14%"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "技能伤害+40%"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "8道落雷过后，之后的4道落雷伤害+36%"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "被旋转雷暴场伤害过的敌人，对其附加50%易伤效果"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "双生涡旋狂雷伤害+6%"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "技能伤害+30%"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "被旋转雷暴场伤害过的敌人，落雷对其伤害+10%"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "暴击伤害+30%"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "双生涡旋狂雷伤害+5%"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "被旋转雷暴场伤害过的敌人，对其附加30%易伤效果"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "8道落雷过后，之后的4道落雷伤害+25%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "被旋转雷暴场伤害过的敌人，对其附加20%易伤效果；暴击伤害+20%"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "技能伤害+30%，暴击伤害+10%"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "双生涡旋狂雷伤害+20%；暴击伤害+20%"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "被旋转雷暴场伤害过的敌人，对其附加75%易伤效果"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "被旋转雷暴场伤害过的敌人，落雷对其伤害+30%；技能伤害+20%"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "技能伤害+40%，暴击伤害+40%"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "被旋转雷暴场伤害过的敌人，落雷对其伤害+20%，暴击伤害+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "被旋转雷暴场伤害过的敌人，对其附加10%易伤效果；技能伤害+10%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "双生涡旋狂雷伤害+20%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "雷爆伤害+50%，暴击伤害+20%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "被旋转雷暴场伤害过的敌人，对其附加10%易伤效果；技能伤害+20%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "被旋转雷暴场伤害过的敌人，落雷对其伤害+60%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "双生涡旋狂雷伤害+40%，暴击伤害+25%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "被旋转雷暴场伤害过的敌人，对其附加15%易伤效果；技能伤害+25%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "雷爆伤害+100%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "被旋转雷暴场伤害过的敌人，落雷对其伤害+100%，暴击伤害+30%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "被旋转雷暴场伤害过的敌人，对其附加20%易伤效果；技能伤害+30%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "双生涡旋狂雷伤害+60%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "雷爆伤害+150%，暴击伤害+45%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "被旋转雷暴场伤害过的敌人，对其附加20%易伤效果；技能伤害+45%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "双生涡旋狂雷伤害+80%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "被旋转雷暴场伤害过的敌人，落雷对其伤害+150%，暴击伤害+50%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "被旋转雷暴场伤害过的敌人，对其附加25%易伤效果；技能伤害+50%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "双生涡旋狂雷伤害+100%，被旋转雷暴场伤害过的敌人，对其附加30%易伤效果"
+          }
+        ]
+      },
       "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
     },
     "relatedArticleSlugs": [
@@ -5758,33 +13128,423 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 125
   },
   {
-    "slug": "tech-%E5%8F%8C%E7%94%9F%E5%AE%88%E5%8D%AB%E8%80%85%EF%BC%88%E9%AA%A8%E9%AA%BC%E6%B9%AE%E7%81%AD%E8%A3%85%E7%BD%AE%EF%BC%89",
-    "name": "双生守卫者（骨骼湮灭装置）",
+    "slug": "tech-%E5%8F%8C%E7%94%9F%E5%AE%88%E5%8D%AB%E8%80%85",
+    "name": "双生守卫者",
     "category": "TECH_PART",
     "subcategory": "双生/谐振配件",
-    "rarity": "S",
-    "tier": "T1 谐振过载核心",
+    "rarity": "SS",
     "icon": "/wiki-assets/配件/双生守卫者.png",
-    "summary": "开启骨骼湮灭装置（守卫者态）谐振过载功能后，兼具击退控场与高额过载能量增幅。",
+    "summary": "近身防御与护盾击退双生核心，骨骼湮灭系统配合冰缓减速提供极致生存空间。",
     "tags": [
-      "双生配件",
-      "骨骼湮灭装置",
-      "谐振过载"
+      "冰缓",
+      "裂伤",
+      "护盾增伤"
     ],
     "attributes": {
-      "slot": "科技配件（攻击槽 / 防御槽）",
-      "milestones": [
-        {
-          "stage": "红色传奇品质",
-          "effect": "解锁双生合体槽位，可嵌入3个红色配件作为谐振插件",
-          "isKeyNode": true
+      "slot": "科技配件（防御槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
         },
-        {
-          "stage": "谐振芯片 & 过载",
-          "effect": "投放谐振芯片提升总谐振倍率（1.2x ~ 3.0x+），激活过载独立增伤",
-          "isKeyNode": true
-        }
-      ],
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "局内守卫者技能变为双生守卫者，可进化至双生捍卫者\\n双生守卫者：击退距离翻倍\\n激光发射器：激光击中敌人使其减速"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生守卫者：守卫者变为双生守卫者，伤害+200%\\n双生捍卫者专属：双生捍卫者伤害+200%，命中目标附带5秒冰缓效果；对冰缓目标伤害+70%\\n湮灭射线专属：锁定敌人（优先Boss和精英）"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生守卫者：受到守卫者攻击的敌人造成的伤害降低10%；双生守卫者伤害额外+300%\\n双生捍卫者专属：双生捍卫者伤害额外+300%；双生捍卫者命中目标额外附带5秒裂伤效果；技能伤害+100%\\n激光发射器：激光路径上延迟爆炸\\n湮灭射线：射线聚集后产生一次小范围爆炸"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "双生捍卫者每间隔5秒向外发射2条冰冻射线，持续5秒，射线命中目标附带5秒冰缓"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "双生捍卫者每间隔5秒释放冰霜冲击波，对命中目标附带5秒冰缓效果"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "双生捍卫者每命中1000次，为主角添加5%护盾；护盾增伤+50%"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "双生捍卫者升级不再需要被动技能；冰冻射线数量+2；对冰缓目标伤害+30%"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "冰霜冲击波伤害+50%；技能伤害+20%"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "双生捍卫者伤害+6%；对裂伤目标伤害+20%"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "冰冻射线数量+2；对冰缓目标伤害+15%"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "冰霜冲击波伤害+100%；技能伤害+10%"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "双生捍卫者添加护盾所需命中次数-200；护盾增伤+15%"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "冰冻射线伤害+16%；对冰缓目标伤害+15%"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "冰冻射线伤害+16%；技能伤害+10%"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "双生捍卫者添加护盾所需命中次数-300；护盾增伤+15%"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "双生捍卫者伤害+6%；对裂伤目标伤害+10%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "护盾增伤+20%；对冰缓目标伤害+10%"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "双生捍卫者伤害+6%；对裂伤目标伤害+10%"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "冰冻射线伤害+80%；对冰缓目标伤害+20%"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "双生捍卫者伤害+62.5%；护盾增伤+25%"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "护盾增伤+25%；对冰缓目标伤害+20%"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "对裂伤目标伤害+20%；技能伤害+20%"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "冰霜冲击波伤害+50%；技能伤害+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "对裂伤目标伤害+10%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "冰冻射线伤害+50%；对冰缓目标伤害+10%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "双生捍卫者伤害+50%；技能伤害+20%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "护盾增伤+10%；对裂伤目标伤害+10%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "骨骼湮灭装置整体伤害+10%；对冰缓目标伤害+15%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "冰冻射线伤害+60%；冰霜冲击波伤害+50%；技能伤害+25%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "护盾增伤+20%；对裂伤目标伤害+15%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "双生捍卫者伤害+60%；冰霜冲击波伤害+50%；对冰缓目标伤害+20%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "骨骼湮灭装置整体伤害+15%；技能伤害+35%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "护盾增伤+30%；对裂伤目标伤害+20%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "骨骼湮灭装置整体伤害+10%；冰冻射线伤害+80%；对冰缓目标伤害+25%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "骨骼湮灭装置整体伤害+10%；双生捍卫者伤害+80%；技能伤害+40%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "护盾增伤+40%；对裂伤目标伤害+25%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "骨骼湮灭装置整体伤害+20%；对冰缓目标伤害+35%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "冰冻射线伤害+80%；双生捍卫者伤害+80%；技能伤害+50%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "护盾增伤+50%；对裂伤目标伤害+35%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "骨骼湮灭装置整体伤害+25%；冰霜冲击波伤害+50%；对冰缓目标伤害+45%"
+          }
+        ]
+      },
       "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
     },
     "relatedArticleSlugs": [
@@ -5797,29 +13557,420 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "name": "双生燃烧瓶",
     "category": "TECH_PART",
     "subcategory": "双生/谐振配件",
-    "rarity": "S",
-    "tier": "T1 超武挂毒核心",
+    "rarity": "SS",
     "icon": "/wiki-assets/配件/双生燃烧瓶.png",
-    "summary": "升至超武后具备关键的「挂毒」与范围灼烧易伤能力，是伊狑844阵容在回响之战中补挂毒的重要手段！",
+    "summary": "持续地面高能火焰与重伤灼烧，范围清怪与压制首领持续血量的首选。",
     "tags": [
-      "双生配件",
-      "超武挂毒",
-      "火之元素之珠强化"
+      "毒伤",
+      "裂伤",
+      "重伤",
+      "护盾增伤"
     ],
     "attributes": {
-      "slot": "科技配件（攻击槽 / 防御槽）",
-      "milestones": [
-        {
-          "stage": "红色传奇品质",
-          "effect": "解锁双生合体槽位，可嵌入3个红色配件作为谐振插件",
-          "isKeyNode": true
+      "slot": "科技配件（攻击槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
         },
-        {
-          "stage": "谐振芯片 & 过载",
-          "effect": "投放谐振芯片提升总谐振倍率（1.2x ~ 3.0x+），激活过载独立增伤",
-          "isKeyNode": true
-        }
-      ],
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "局内燃烧瓶技能变为双生燃烧瓶，可进化至双生燃料罐\\n双生燃烧瓶：火焰会发生蔓延\\n板砖：重于泰山（板砖形态即可穿透所有敌人）"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生燃料罐：向前方喷射火焰并附带10秒重伤效果（额外承受10%伤害），结束时扔出燃料罐，命中目标后爆炸。喷射火焰和燃料罐命中Boss和精英可将其引燃，持续10秒；技能伤害+50%\\n铁哑铃专属：轻于鸿毛（铁哑铃会旋转着飞出）"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生燃烧瓶：伤害频率增加\\n双生燃料罐：燃料罐命中目标后为主角增加2.5%护盾；护盾增伤+50%；技能伤害+30%\\n板砖：全等级板砖数量+2\\n铁哑铃：数量+2，命中时震裂空间，造成小范围伤害"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "全面升级Ⅰ：喷射火焰和燃料罐命中附带中毒效果，持续10秒；对中毒目标伤害+20%"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "燃料罐爆炸命中目标附带裂伤效果，持续10秒；对裂伤目标伤害+10%"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "喷射火焰伤害+14%；对中毒目标伤害+30%；喷火附加的重伤效果+10%"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "双生燃烧瓶升级不再需要被动；技能伤害+20%；对裂伤目标伤害+15%"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "技能伤害+20%；护盾增伤+30%"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "喷射火焰伤害+14%；对中毒目标伤害+30%；喷火附加的重伤效果+10%"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "全面升级Ⅱ：扔出的燃料罐数量+1"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "技能伤害+10%；护盾增伤+10%"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "对中毒目标伤害+15%；喷火附加的重伤效果+10%"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "喷射火焰伤害+9%；对裂伤目标伤害+10%"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "技能伤害+10%；护盾增伤+10%"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "燃料罐爆炸伤害+20%；对裂伤目标伤害+15%"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "对中毒目标伤害+15%；喷火附加的重伤效果+10%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "技能伤害+10%；护盾增伤+15%"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "对中毒目标伤害+20%；喷火附加的重伤效果+10%"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "喷射火焰伤害+28.5%；对裂伤目标伤害+25%；护盾增伤+15%"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "对中毒目标伤害+25%；喷火附加的重伤效果+20%"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "喷射火焰伤害+28.5%；技能伤害+30%；护盾增伤+20%"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "高能重力扩散器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "对中毒目标伤害+25%；喷火附加的重伤效果+20%"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "燃料罐爆炸伤害+50%；对中毒目标伤害+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "喷火附加的重伤效果+10%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "引燃伤害+50%；技能伤害+10%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "喷射火焰伤害+50%；护盾增伤+10%；对中毒目标伤害+10%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "喷火附加的重伤效果+10%；对裂伤目标伤害+5%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "高能重力扩散器整体伤害+10%；技能伤害+20%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "燃料罐爆炸伤害+50%；引燃伤害+50%；对中毒目标伤害+20%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "喷火附加的重伤效果+10%；对裂伤目标伤害+10%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "喷射火焰伤害+50%；护盾增伤+10%；技能伤害+20%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "高能重力扩散器整体伤害+10%；燃料罐爆炸伤害+50%；对中毒目标伤害+30%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "喷火附加的重伤效果+15%；对裂伤目标伤害+15%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "高能重力扩散器整体伤害+10%；引燃伤害+50%；技能伤害+30%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "高能重力扩散器整体伤害+10%；喷射火焰伤害+50%；对中毒目标伤害+40%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "喷火附加的重伤效果+15%；对裂伤目标伤害+20%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "高能重力扩散器整体伤害+10%；燃料罐爆炸伤害+50%；技能伤害+30%；护盾增伤+10%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "高能重力扩散器整体伤害+10%；引燃伤害+50%；对中毒目标伤害+50%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "喷火附加的重伤效果+15%；对裂伤目标伤害+25%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "高能重力扩散器整体伤害+15%；喷射火焰伤害+50%；技能伤害+40%；护盾增伤+10%"
+          }
+        ]
+      },
       "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
     },
     "relatedArticleSlugs": [
@@ -5832,28 +13983,420 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "name": "双生榴莲",
     "category": "TECH_PART",
     "subcategory": "双生/谐振配件",
-    "rarity": "S",
-    "tier": "T2 铁蒺藜近身增伤",
+    "rarity": "SS",
     "icon": "/wiki-assets/配件/双生榴莲.png",
-    "summary": "双生榴莲与铁蒺藜合体，受第6期反粒子葫芦与第8期飞行器胶囊强化。",
+    "summary": "大范围毒爆与重型突刺，提供毒伤和流血效果，清屏与破甲能力极佳。",
     "tags": [
-      "双生配件",
-      "铁蒺藜"
+      "毒伤",
+      "裂伤",
+      "流血",
+      "护盾增伤"
     ],
     "attributes": {
-      "slot": "科技配件（攻击槽 / 防御槽）",
-      "milestones": [
-        {
-          "stage": "红色传奇品质",
-          "effect": "解锁双生合体槽位，可嵌入3个红色配件作为谐振插件",
-          "isKeyNode": true
+      "slot": "科技配件（攻击槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
         },
-        {
-          "stage": "谐振芯片 & 过载",
-          "effect": "投放谐振芯片提升总谐振倍率（1.2x ~ 3.0x+），激活过载独立增伤",
-          "isKeyNode": true
-        }
-      ],
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "局内榴莲技能变为双生榴莲，可进化至双生铁蒺藜\\n双生榴莲：飞行控制（榴莲不会飞离你太远）\\n足球：足球伤害+30%"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生铁蒺藜：铁与血（尖刺击中会造成流血效果）；增加一个转基因铁蒺藜；技能伤害+75%\\n量子球：量子球持续时间+1秒"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生榴莲：飞行中留下气味，碰到Boss后会跟随Boss移动\\n双生铁蒺藜：双生铁蒺藜飞行中留下火焰，每间隔1秒留下一个火焰爆弹，3秒后爆炸；转基因铁蒺藜+20%伤害；暴击伤害+75%\\n足球：多踢出1个足球\\n量子球：多发射1个量子球，最后分裂出的量子球之间会产生量子纠缠"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "转基因铁蒺藜每2秒发生电磁爆炸"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "每2次电磁爆炸之后，第3次爆炸变为过载电磁爆炸，伤害+50%"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "过载电磁爆炸同时向四周发射5发电球，对命中的目标添加毒效果，持续20s"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "转基因铁蒺藜伤害+35%；护盾增伤加20%；双生铁蒺藜升级不再需要被动技能"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "转基因铁蒺藜伤害+40%；转基因铁蒺藜命中目标20次，会触发突变效果，永久增加45%技能伤害，不可叠加"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "转基因铁蒺藜伤害+45%；电球命中目标10次，会触发增幅效果，永久增加50%对中毒伤害，不可叠加"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "电磁爆炸伤害+50%；护盾增伤额外加10%"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "转基因铁蒺藜伤害+10%；电球触发增幅效果所需要的命中次数-5"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "护盾增伤额外加10%"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "转基因铁蒺藜触发突变效果所需要命中次数-15，突变效果额外永久增加25%技能伤害"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "转基因铁蒺藜伤害+10%；电球伤害+30%，增幅效果额外永久增加15%对中毒伤害"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "突变效果额外永久增加30%技能伤害"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "电磁爆炸伤害+45%；过载电磁爆炸伤害+45%；护盾增伤额外加10%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "电球伤害+50%；增幅效果额外永久增加15%对中毒伤害"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "电球伤害+50%；增幅效果额外永久增加20%对中毒伤害"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "电球伤害+50%；增幅效果额外永久增加20%对中毒伤害"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "电磁爆炸伤害+75%；护盾增伤额外加10%"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "转基因铁蒺藜伤害+25%；突变效果额外永久增加65%技能伤害"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "过载电磁爆炸伤害+75%；增幅效果额外永久增加30%对中毒伤害"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "电磁爆炸伤害+60%；过载电磁爆炸伤害+60%；对中毒目标伤害+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "技能伤害+10%；对裂伤目标伤害+5%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "电球伤害+50%；转基因铁蒺藜伤害+40%；对中毒目标伤害+10%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "量子机器人整体伤害增加15%；护盾增伤+10%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "技能伤害+20%；对裂伤目标伤害+5%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "电磁爆炸伤害+100%；过载电磁爆炸伤害+100%；对中毒目标伤害+15%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "电球伤害+100%；转基因铁蒺藜伤害+80%；护盾增伤+20%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "技能伤害+30%；对裂伤目标伤害+10%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "量子机器人整体伤害增加20%；对中毒目标伤害+20%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "量子机器人整体伤害增加10%；电磁爆炸伤害+150%；护盾增伤+30%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "技能伤害+35%；对裂伤目标伤害+10%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "量子机器人整体伤害增加10%；过载电磁爆炸伤害+150%；对中毒目标伤害+30%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "量子机器人整体伤害增加15%；电球伤害+150%；护盾增伤+40%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "技能伤害+40%；对裂伤目标伤害+10%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "量子机器人整体伤害增加15%；转基因铁蒺藜伤害+100%；对中毒目标伤害+40%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "量子机器人整体伤害增加15%；电磁爆炸伤害+100%；过载电磁爆炸伤害+100%；护盾增伤+50%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "技能伤害+45%；对裂伤目标伤害+10%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "量子机器人整体伤害增加20%；电球伤害+100%；转基因铁蒺藜伤害+100%；对中毒目标伤害+50%"
+          }
+        ]
+      },
       "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
     },
     "relatedArticleSlugs": [
@@ -5866,28 +14409,419 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "name": "双生立场",
     "category": "TECH_PART",
     "subcategory": "双生/谐振配件",
-    "rarity": "S",
-    "tier": "T2 减速增伤光环",
+    "rarity": "SS",
     "icon": "/wiki-assets/配件/双生立场.png",
-    "summary": "双生立场发生器，受等离子剑、通讯海螺与地之元素之珠多重收藏品增幅。",
+    "summary": "绝对防御力场发生器，大范围减速控场并对圈内目标施加易伤与护盾增伤。",
     "tags": [
-      "双生配件",
-      "范围光环"
+      "易伤",
+      "减速",
+      "护盾增伤"
     ],
     "attributes": {
-      "slot": "科技配件（攻击槽 / 防御槽）",
-      "milestones": [
-        {
-          "stage": "红色传奇品质",
-          "effect": "解锁双生合体槽位，可嵌入3个红色配件作为谐振插件",
-          "isKeyNode": true
+      "slot": "科技配件（防御槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
         },
-        {
-          "stage": "谐振芯片 & 过载",
-          "effect": "投放谐振芯片提升总谐振倍率（1.2x ~ 3.0x+），激活过载独立增伤",
-          "isKeyNode": true
-        }
-      ],
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "局内力场发生器技能变为双生力场发生器，可进化至双生压制力场\\n双生力场发生器：能量压缩（范围缩小25%，伤害翻倍）\\n无人机：自动制导（导弹会自动跟踪射程范围内的敌人，但是会降低发射频率）"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生压制力场专属：敌人在双生压制力场范围内死亡，增加额外经验；技能伤害+120%\\n毁灭者专属：新型挂载弹头（恢复发射频率，并且导弹爆炸范围翻倍）"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生力场发生器：恢复双生力场范围，每隔几秒发射一次大范围脉冲；暴击伤害+160%；暴击率增加20%\\n双生压制力场：每间隔几秒发射一次强压制脉冲，受到脉冲影响的怪物会被定身（boss除外）\\n无人机：初始2级\\n毁灭者：追踪范围增加，导弹数量增加"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "智能锁定：每过5秒对双生压制力场范围内5个怪物造成一次额外伤害，优先精英和boss；暴击率增加5%"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "离子风暴：双生压制力场每隔3秒会对力场内的怪物减速30%，持续1秒（小怪和精英）；技能伤害+20%"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "双生压制力场获得聚能裂变效果，增加5%暴击率、15%暴击伤害和20%易伤效果"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "双生压制力场升级不需要被动，智能锁定伤害+100%；暴击率增加5%"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "离子风暴对怪物减速持续时间增加1秒；技能伤害+20%"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "聚能裂变效果增加5%暴击率、15%暴击伤害和20%易伤效果"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "反物质聚焦：场上怪物少于等于5个，双生压制力场对范围内怪物的伤害提升5%（不可叠加）；技能伤害+10%"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "智能锁定伤害+50%；暴击率增加5%"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "聚能裂变效果增加5%暴击率、10%暴击伤害和25%易伤效果"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "离子风暴对怪物减速持续时间增加1秒；技能伤害+10%"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "聚能裂变效果增加5%暴击率、10%暴击伤害和25%易伤效果"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "反物质聚焦伤害+5%；技能伤害+10%"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "智能锁定伤害+50%；暴击率增加5%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "离子风暴对怪物减速增加30%；暴击伤害+20%"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "反物质聚焦伤害+10%；技能伤害+10%"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "智能锁定伤害+150%；暴击率增加15%"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "离子风暴对怪物减速增加20%；暴击伤害+35%"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "反物质聚焦伤害+30%；技能伤害+40%"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "能量制导系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "聚能裂变效果增加5%暴击率、5%暴击伤害和45%易伤效果"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "双生压制立场整体伤害增加10%；技能伤害+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "聚能裂变效果增加10%易伤，15%暴击伤害"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "双生压制立场整体伤害增加10%；聚能裂变效果15%暴击伤害；技能伤害+20%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "双生压制立场整体伤害增加20%；护盾增伤+10%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "聚能裂变效果增加15%易伤，10%暴击率"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "双生压制立场整体伤害增加20%；聚能裂变效果20%暴击伤害；技能伤害+25%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "双生压制立场整体伤害增加30%；护盾增伤+15%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "聚能裂变效果增加15%易伤，10%暴击率"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "双生压制立场整体伤害增加30%；聚能裂变效果30%暴击伤害；技能伤害+35%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "双生压制立场整体伤害增加40%；护盾增伤+20%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "聚能裂变效果增加20%易伤，10%暴击率"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "双生压制立场整体伤害增加50%；聚能裂变效果45%暴击伤害；技能伤害+40%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "双生压制立场整体伤害增加60%；护盾增伤+25%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "聚能裂变效果增加20%易伤，10%暴击率"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "双生压制立场整体伤害增加70%；聚能裂变效果55%暴击伤害；技能伤害+50%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "双生压制立场整体伤害增加80%；护盾增伤+30%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "聚能裂变效果增加20%易伤，10%暴击率"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "双生压制立场整体伤害增加80%；聚能裂变效果60%暴击伤害；技能伤害+60%"
+          }
+        ]
+      },
       "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
     },
     "relatedArticleSlugs": [
@@ -5900,28 +14834,420 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "name": "双生导弹",
     "category": "TECH_PART",
     "subcategory": "双生/谐振配件",
-    "rarity": "S",
-    "tier": "T2 超武火箭挂毒",
+    "rarity": "SS",
     "icon": "/wiki-assets/配件/双生导弹.png",
-    "summary": "超武火箭发射器形态，同样可在回响之战中为伊狑844阵容提供挂毒覆盖。",
+    "summary": "重型反物质飞弹，多段冰火裂伤爆发，中远距离强力压制。",
     "tags": [
-      "双生配件",
-      "超武火箭挂毒"
+      "毒伤",
+      "冰缓",
+      "裂伤",
+      "护盾增伤"
     ],
     "attributes": {
-      "slot": "科技配件（攻击槽 / 防御槽）",
-      "milestones": [
-        {
-          "stage": "红色传奇品质",
-          "effect": "解锁双生合体槽位，可嵌入3个红色配件作为谐振插件",
-          "isKeyNode": true
+      "slot": "科技配件（防御槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
         },
-        {
-          "stage": "谐振芯片 & 过载",
-          "effect": "投放谐振芯片提升总谐振倍率（1.2x ~ 3.0x+），激活过载独立增伤",
-          "isKeyNode": true
-        }
-      ],
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "火箭发射器技能变为双生火箭发射器，可进化至双生爆裂鲨嘴炮\\n双生火箭发射器：发射冷却时间-0.5秒\\n钻头弹：钻头飞行速度+30%"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生爆裂鲨嘴炮：爆裂鲨嘴炮爆炸后，发射集束分裂箭，集束分裂箭命中目标附加中毒效果\\n哨箭专属：光影同行（你将同时拥有一对哨箭）\\n护盾增伤+50%"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生爆裂鲨嘴炮：爆裂鲨嘴炮和双生火箭弹爆炸增加牵引效果。集束分裂箭可分裂一次\\n钻头弹：被钻头弹攻击到的目标会额外受到5%伤害\\n哨箭：主哨箭伤害翻倍，被主哨箭攻击的目标在1.5秒内，子哨箭会造成900%额外伤害\\n技能伤害+75%"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "爆裂鲨嘴炮伤害+50%"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "爆裂鲨嘴炮命中后，对敌人施加冰缓效果；技能伤害+25%"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "集束分裂箭命中后，自身获得1层疯狂毒液效果。每层效果对中毒目标伤害+10%，上限5层"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "集束分裂箭数量+2，集束分裂箭伤害+10%"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "疯狂毒液上限层数+5"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "爆裂鲨嘴炮发射5次后，回复30%护盾；护盾增伤+30%，对裂伤目标伤害+25%"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "爆裂鲨嘴炮飞行速度加快，爆炸范围增大"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "技能伤害+20%"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "集束分裂箭数量+2"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "疯狂毒液上限层数+2"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "护盾增伤+20%"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "护盾增伤+15%，技能伤害+15%"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "爆裂鲨嘴炮伤害+60%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "疯狂毒液上限层数+3"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "对裂伤目标伤害+25%"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "护盾增伤+35%"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "技能伤害+40%"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "疯狂毒液上限层数+5"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "反物质维持装置攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "爆裂鲨嘴炮伤害+60%，集束分裂箭伤害+25%；对裂伤目标伤害+25%"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "爆裂鲨嘴炮伤害增加50%Ⓑⓗ对中毒目标增伤+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "技能伤害+15%，护盾增伤+15%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "集束分裂箭伤害增加50%，对中毒目标增伤+15%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "反物质维持装置（火箭态）整体伤害增加30%，技能伤害+20%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "技能伤害+20%，护盾增伤+20%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "爆裂鲨嘴炮伤害增加100%，对中毒目标增伤+15%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "集束分裂箭伤害增加100%，对裂伤目标增伤+5%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "技能伤害+25%，护盾增伤+25%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "反物质维持装置（火箭态）整体伤害增加50%，对裂伤目标增伤+5%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "爆裂鲨嘴炮伤害增加150%，对中毒目标增伤+20%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "技能伤害+35%，护盾增伤+30%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "集束分裂箭伤害增加150%，对裂伤目标增伤+10%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "反物质维持装置（火箭态）整体伤害增加70%，对中毒目标增伤+25%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "技能伤害+40%，护盾增伤+40%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "爆裂鲨嘴炮伤害增加200%，对裂伤目标增伤+10%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "集束分裂箭伤害增加200%，对中毒目标增伤+30%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "技能伤害+45%，护盾增伤+50%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "反物质维持装置（火箭态）整体伤害增加90%，对中毒目标增伤+35%，对裂伤目标增伤+15%"
+          }
+        ]
+      },
       "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
     },
     "relatedArticleSlugs": [
@@ -5930,39 +15256,1331 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 130
   },
   {
-    "slug": "mount-%E5%B9%BD%E7%84%B0%E9%80%90%E5%BD%B1%EF%BC%88%E5%B9%BD%E7%81%B5%E7%8B%BC%EF%BC%89",
-    "name": "幽焰逐影（幽灵狼）",
+    "slug": "tech-%E5%8F%8C%E7%94%9F%E5%9b%9e%E6%97%8b%E9%95%96",
+    "name": "双生回旋镖",
+    "category": "TECH_PART",
+    "subcategory": "双生/谐振配件",
+    "rarity": "SS",
+    "icon": "/wiki-assets/配件/双生回旋镖.png",
+    "summary": "高频轨迹回旋削弱，大范围衰弱敌方输出并提升全队技能伤害收益。",
+    "tags": [
+      "易伤",
+      "衰弱",
+      "技能伤害"
+    ],
+    "attributes": {
+      "slot": "科技配件（防御槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
+        },
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "回旋镖技能变为双生回旋镖，可进化至双生领域磁力镖\\n双生回旋镖：你可以接住回旋镖并重置它的冷却时间\\n雷电发射器：全等级雷电发射数量+2"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生领域磁力镖：领域磁力镖之间生成雷电领域，对其领域内的敌人发动落雷攻击\\n狂雷电池专属：产生的电波扩散距离翻倍\\n对衰弱目标伤害+50%"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生领域磁力镖：领域磁力镖命中时，直接发动多道落雷攻击\\n雷电发射器：落雷追加一段雷暴伤害\\n狂雷电池：落雷追加雷暴伤害，电波扩散速度加快并且会折返回来\\n技能伤害+100%"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "雷电领域落雷数量上限+3；双生回旋镖无需被动技能，即可升级"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "雷电领域的落雷命中敌人时，施加1层易伤效果，每层使目标受到的伤害提高5%，上限叠加6层"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "双生领域磁力镖伤害+25%"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "技能伤害+40%"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "对衰弱目标伤害+40%"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "雷电领域落雷的易伤效果上限+4层；技能伤害+10%，对衰弱目标伤害+10%"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "技能伤害+20%"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "双生领域磁力镖伤害+20%"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "对衰弱目标伤害+20%"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "雷电领域落雷的易伤效果上限+4层"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "雷电领域落雷的易伤效果上限+4层"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "双生领域磁力镖伤害+20%"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "技能伤害+20%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "对衰弱目标伤害+20%"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "雷电领域落雷的易伤效果上限+4层；技能伤害+10%，对衰弱目标伤害+10%"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "雷电领域落雷数量上限+3；技能伤害+20%"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "雷电领域落雷的易伤效果上限+8层"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "双生领域磁力镖伤害+50%；对衰弱目标伤害+20%"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "相位辅助器攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "雷电领域落雷的易伤效果上限+5层；技能伤害+30%，对衰弱目标伤害+30%"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "雷电领域落雷伤害+10%，对衰弱目标伤害+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "雷电领域落雷的易伤效果上限+2层，技能伤害+10%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "雷电领域落雷数量上限+3，对衰弱目标伤害+15%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "双生领域磁力镖伤害+20%，技能伤害+15%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "雷电领域落雷的易伤效果上限+3层，对衰弱目标伤害+15%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "雷电领域落雷伤害+20%，技能伤害+15%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "雷电领域落雷数量上限+3，对衰弱目标伤害+20%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "雷电领域落雷的易伤效果上限+5层，技能伤害+20%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "双生领域磁力镖伤害+30%，对衰弱目标伤害+20%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "雷电领域落雷伤害+30%，技能伤害+20%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "雷电领域落雷的易伤效果上限+7层，对衰弱目标伤害+25%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "雷电领域落雷数量上限+3，技能伤害+25%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "双生领域磁力镖伤害+40%，对衰弱目标伤害+25%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "雷电领域落雷的易伤效果上限+9层，技能伤害+25%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "雷电领域落雷伤害+40%，对衰弱目标伤害+30%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "雷电领域落雷数量上限+3，技能伤害+30%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "雷电领域落雷的易伤效果上限+10层，对衰弱目标伤害+40%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "双生领域磁力镖伤害+50%，技能伤害+40%"
+          }
+        ]
+      },
+      "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
+    },
+    "relatedArticleSlugs": [
+      "resources-%e9%85%8d%e4%bb%b6%e8%bf%87%e8%bd%bd%e6%b6%88%e8%80%97"
+    ],
+    "sort": 1301
+  },
+  {
+    "slug": "tech-%E5%8F%8C%E7%94%9F%E6%bf%80%E5%85%89",
+    "name": "双生激光",
+    "category": "TECH_PART",
+    "subcategory": "双生/谐振配件",
+    "rarity": "SS",
+    "icon": "/wiki-assets/配件/双生激光.png",
+    "summary": "湮灭光束贯穿全场，附带强力减速与持续裂伤易伤效果。",
+    "tags": [
+      "裂伤",
+      "易伤",
+      "减速"
+    ],
+    "attributes": {
+      "slot": "科技配件（攻击槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
+        },
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "局内激光发射器技能变为双生激光发射器，可进化至双生湮灭射线\\n双生激光发射器：激光击中敌人使其减速\\n守卫者：击退距离翻倍"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生湮灭射线专属：持续追踪锁定敌人（优先Boss和精英）；暴击率+20%，暴击伤害+40%\\n捍卫者专属：捍卫者会向外扩散并回收"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生激光发射器：激光路径上延迟爆炸\\n双生湮灭射线：射线聚集后产生一次小范围爆炸；双生湮灭射线伤害+10%；技能伤害+80%，暴击伤害+40%\\n守卫者：受到守卫者攻击的敌人造成的伤害降低10%\\n捍卫者：每个捍卫者会环绕几个小的守卫者"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "爆能：双生湮灭射线路径上延迟爆炸"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "聚能散射：双生湮灭射线每次聚集向外额外发射6道强力光束"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "双生湮灭射线命中目标附加10秒裂伤效果；对裂伤目标伤害+10%"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "双生湮灭射线升级不再需要被动技能；双生湮灭射线命中目标附加20%易伤效果，持续10秒"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "暴击伤害+40%；对裂伤目标伤害+15%"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "双生湮灭射线命中目标附加的易伤效果+30%；技能伤害+40%"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "爆能伤害+25%；暴击伤害+20%"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "聚能散射伤害+25%；技能伤害+20%"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "双生湮灭射线伤害+15%；对裂伤目标伤害+10%"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "爆能伤害+25%；暴击伤害+20%"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "双生湮灭射线命中目标附加的易伤效果+25%；对裂伤目标伤害+15%"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "聚能散射伤害+25%；技能伤害+20%"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "暴击率+10%；暴击伤害+20%"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "双生湮灭射线命中目标附加的易伤效果+25%；双生湮灭射线伤害+15%"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "暴击率+10%；技能伤害+20%"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "聚能散射伤害+10%；技能伤害+60%"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "双生湮灭射线命中目标附加的易伤效果+35%；暴击率+20%"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "双生湮灭射线伤害+10%；暴击伤害+60%"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "骨骼湮灭系统攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "双生湮灭射线命中目标附加的易伤效果+40%；对裂伤目标伤害+25%"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "聚能散射伤害+50%；爆能伤害+50%；技能伤害+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "双生湮灭射线命中目标附加的易伤效果+10%；暴击率+10%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "双生湮灭射线伤害+50%；暴击伤害+10%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "骨骼湮灭装置整体伤害+20%；技能伤害+15%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "对裂伤目标伤害+10%；暴击率+10%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "聚能散射伤害+50%；双生湮灭射线伤害+50%；暴击伤害+15%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "爆能伤害+50%；双生湮灭射线伤害+50%；技能伤害+20%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "双生湮灭射线命中目标附加的易伤效果+15%；暴击率+10%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "骨骼湮灭装置整体伤害+25%；暴击伤害+20%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "聚能散射伤害+100%；爆能伤害+100%；技能伤害+25%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "对裂伤目标伤害+15%；暴击率+10%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "双生湮灭射线伤害+100%；暴击伤害+25%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "骨骼湮灭装置整体伤害+15%；聚能散射伤害+100%；技能伤害+35%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "双生湮灭射线命中目标附加的易伤效果+20%；对裂伤目标伤害+20%；暴击率+10%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "骨骼湮灭装置整体伤害+15%；爆能伤害+100%；暴击伤害+35%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "骨骼湮灭装置整体伤害+15%；双生湮灭射线伤害+80%；技能伤害+45%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "双生湮灭射线命中目标附加的易伤效果+30%；对裂伤目标伤害+30%；暴击率+10%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "骨骼湮灭装置整体伤害+30%；暴击伤害+45%"
+          }
+        ]
+      },
+      "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
+    },
+    "relatedArticleSlugs": [
+      "resources-%e9%85%8d%e4%bb%b6%e8%bf%87%e8%bd%bd%e6%b6%88%e8%80%97"
+    ],
+    "sort": 1302
+  },
+  {
+    "slug": "tech-%E5%8F%8C%E7%94%9F%E6%9d%BF%E7%a0%96",
+    "name": "双生板砖",
+    "category": "TECH_PART",
+    "subcategory": "双生/谐振配件",
+    "rarity": "SS",
+    "icon": "/wiki-assets/配件/双生板砖.png",
+    "summary": "重度击晕与砸地冲击波，引燃重伤双重施加，防御槽高额增伤重器。",
+    "tags": [
+      "衰弱",
+      "重伤",
+      "引燃",
+      "护盾增伤"
+    ],
+    "attributes": {
+      "slot": "科技配件（防御槽）",
+      "techTabs": {
+        "baseStats": {
+          "atk": 6500,
+          "hp": 26000,
+          "partType": "双生"
+        },
+        "qualitySkills": [
+          {
+            "quality": 3,
+            "label": "精良",
+            "color": "blue",
+            "effect": "攻击+100，生命+400"
+          },
+          {
+            "quality": 4,
+            "label": "优秀",
+            "color": "purple",
+            "effect": "局内板砖技能变为双生板砖，可进化至双生哑铃\\n双生板砖：重于泰山（穿透敌人）\\n燃烧瓶：火焰会发生蔓延"
+          },
+          {
+            "quality": 7,
+            "label": "史诗",
+            "color": "yellow",
+            "effect": "攻击+400，生命+1600"
+          },
+          {
+            "quality": 11,
+            "label": "传奇",
+            "color": "red",
+            "effect": "双生哑铃：双生哑铃命中时震裂空间，造成小范围伤害；震裂伤害+150%；暴击伤害+80%\\n燃油桶专属：燃烧敌人附带重伤效果（额外承受10%伤害）"
+          },
+          {
+            "quality": 16,
+            "label": "永恒",
+            "color": "rainbow",
+            "effect": "双生板砖：全等级数量+2\\n双生哑铃：数量+2，哑铃对命中目标附带衰弱效果，持续10秒；双生哑铃伤害+170%；对衰弱目标伤害+70%\\n燃烧瓶：伤害频率提高\\n燃油桶：火焰会跟着角色移动"
+          }
+        ],
+        "harmony": [
+          {
+            "grade": 1,
+            "reqLevel": 50,
+            "desc": "最终攻击+200，最终生命+800"
+          },
+          {
+            "grade": 2,
+            "reqLevel": 100,
+            "desc": "尖刺量子球首次分裂时，会产生两个冰量子球，对命中的目标附加10秒冰缓；对冰缓伤害+25%"
+          },
+          {
+            "grade": 3,
+            "reqLevel": 150,
+            "desc": "最终攻击+400，最终生命+1600"
+          },
+          {
+            "grade": 4,
+            "reqLevel": 200,
+            "desc": "发射尖刺量子球时获得0.5%护盾（单局最多获得15%）；护盾增伤加10%"
+          },
+          {
+            "grade": 5,
+            "reqLevel": 250,
+            "desc": "最终攻击+600，最终生命+2400"
+          },
+          {
+            "grade": 6,
+            "reqLevel": 300,
+            "desc": "每过5秒，踢出一个超级足球，命中目标后爆炸"
+          },
+          {
+            "grade": 7,
+            "reqLevel": 350,
+            "desc": "最终攻击+800，最终生命+3200"
+          },
+          {
+            "grade": 8,
+            "reqLevel": 400,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 9,
+            "reqLevel": 450,
+            "desc": "暴击伤害+30%；双生量子球升级不再需要被动技能"
+          },
+          {
+            "grade": 10,
+            "reqLevel": 500,
+            "desc": "最终攻击+1000，最终生命+4000"
+          },
+          {
+            "grade": 11,
+            "reqLevel": 550,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 12,
+            "reqLevel": 600,
+            "desc": "护盾增伤加10%；对冰缓伤害+25%"
+          },
+          {
+            "grade": 13,
+            "reqLevel": 700,
+            "desc": "最终攻击+1200，最终生命+4800"
+          },
+          {
+            "grade": 14,
+            "reqLevel": 800,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 15,
+            "reqLevel": 900,
+            "desc": "超级足球爆炸伤害+100%；暴击伤害+30%"
+          },
+          {
+            "grade": 16,
+            "reqLevel": 1000,
+            "desc": "最终攻击+1400，最终生命+5600"
+          },
+          {
+            "grade": 17,
+            "reqLevel": 1100,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 18,
+            "reqLevel": 1200,
+            "desc": "尖刺量子球命中10次，触发高能效果，暴击伤害+10%（该效果不叠加）"
+          },
+          {
+            "grade": 19,
+            "reqLevel": 1350,
+            "desc": "最终攻击+1600，最终生命+6400"
+          },
+          {
+            "grade": 20,
+            "reqLevel": 1500,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 21,
+            "reqLevel": 1650,
+            "desc": "尖刺量子球命中10次，触发庇佑效果，护盾增伤加10%（该效果不叠加）"
+          },
+          {
+            "grade": 22,
+            "reqLevel": 1800,
+            "desc": "最终攻击+1800，最终生命+7200"
+          },
+          {
+            "grade": 23,
+            "reqLevel": 1950,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 24,
+            "reqLevel": 2100,
+            "desc": "冰量子球命中10次，触发冰霜效果，增加10%对冰缓伤害（该效果不叠加）"
+          },
+          {
+            "grade": 25,
+            "reqLevel": 2250,
+            "desc": "最终攻击+2000，最终生命+8000"
+          },
+          {
+            "grade": 26,
+            "reqLevel": 2400,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 27,
+            "reqLevel": 2550,
+            "desc": "高能效果触发所需要命中次数-5，暴击伤害额外增加15%"
+          },
+          {
+            "grade": 28,
+            "reqLevel": 2700,
+            "desc": "最终攻击+2500，最终生命+10000"
+          },
+          {
+            "grade": 29,
+            "reqLevel": 2850,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 30,
+            "reqLevel": 3000,
+            "desc": "庇佑效果所需要命中次数-5，护盾增伤额外加15%"
+          },
+          {
+            "grade": 31,
+            "reqLevel": 3500,
+            "desc": "最终攻击+3000，最终生命+12000"
+          },
+          {
+            "grade": 32,
+            "reqLevel": 4000,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 33,
+            "reqLevel": 4500,
+            "desc": "冰霜效果所需要命中次数-5，额外增加15%对冰缓伤害"
+          },
+          {
+            "grade": 34,
+            "reqLevel": 5000,
+            "desc": "最终攻击+3500，最终生命+14000"
+          },
+          {
+            "grade": 35,
+            "reqLevel": 5500,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 36,
+            "reqLevel": 6000,
+            "desc": "庇佑效果额外增加15%护盾增伤；冰霜效果额外增加15%对冰缓伤害"
+          },
+          {
+            "grade": 37,
+            "reqLevel": 6500,
+            "desc": "最终攻击+4000，最终生命+16000"
+          },
+          {
+            "grade": 38,
+            "reqLevel": 7000,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 39,
+            "reqLevel": 7500,
+            "desc": "超级足球爆炸伤害+100%；高能效果额外增加15%暴击伤害"
+          },
+          {
+            "grade": 40,
+            "reqLevel": 8000,
+            "desc": "最终攻击+6000，最终生命+24000"
+          },
+          {
+            "grade": 41,
+            "reqLevel": 8500,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 42,
+            "reqLevel": 9000,
+            "desc": "冰霜效果额外增加20%对冰缓伤害；高能效果额外增加20%暴击伤害"
+          },
+          {
+            "grade": 43,
+            "reqLevel": 9500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 44,
+            "reqLevel": 10000,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 45,
+            "reqLevel": 10500,
+            "desc": "冰霜效果额外增加35%对冰缓伤害"
+          },
+          {
+            "grade": 46,
+            "reqLevel": 11000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 47,
+            "reqLevel": 11500,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 48,
+            "reqLevel": 12000,
+            "desc": "庇佑效果额外增加20%护盾增伤"
+          },
+          {
+            "grade": 49,
+            "reqLevel": 12500,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 50,
+            "reqLevel": 13000,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 51,
+            "reqLevel": 13500,
+            "desc": "冰霜效果额外增加35%对冰缓伤害；高能效果额外增加30%暴击伤害"
+          },
+          {
+            "grade": 52,
+            "reqLevel": 14000,
+            "desc": "最终攻击+7500，最终生命+30000"
+          },
+          {
+            "grade": 53,
+            "reqLevel": 14500,
+            "desc": "量子机器人攻击+5%，生命+5%"
+          },
+          {
+            "grade": 54,
+            "reqLevel": 15000,
+            "desc": "庇佑效果额外增加20%护盾增伤；高能效果额外增加30%暴击伤害"
+          }
+        ],
+        "overload": [
+          {
+            "level": 1,
+            "reqLevel": 3000,
+            "desc": "超级足球爆炸伤害+50%；对冰缓目标伤害+10%"
+          },
+          {
+            "level": 2,
+            "reqLevel": 3500,
+            "desc": "暴击伤害+10%；对裂伤目标伤害+10%"
+          },
+          {
+            "level": 3,
+            "reqLevel": 4000,
+            "desc": "冰量子球伤害+15%；对冰缓目标伤害+10%"
+          },
+          {
+            "level": 4,
+            "reqLevel": 4500,
+            "desc": "量子机器人整体伤害+10%；护盾增伤+10%"
+          },
+          {
+            "level": 5,
+            "reqLevel": 5000,
+            "desc": "暴击伤害+20%；对裂伤目标伤害+10%"
+          },
+          {
+            "level": 6,
+            "reqLevel": 5500,
+            "desc": "超级足球爆炸伤害+50%；对冰缓目标伤害+15%"
+          },
+          {
+            "level": 7,
+            "reqLevel": 6000,
+            "desc": "冰量子球伤害+20%；护盾增伤+20%"
+          },
+          {
+            "level": 8,
+            "reqLevel": 7000,
+            "desc": "暴击伤害+30%；对裂伤目标伤害+15%"
+          },
+          {
+            "level": 9,
+            "reqLevel": 8000,
+            "desc": "量子机器人整体伤害+10%；对冰缓目标伤害+20%"
+          },
+          {
+            "level": 10,
+            "reqLevel": 9000,
+            "desc": "超级足球爆炸伤害+100%；护盾增伤+30%"
+          },
+          {
+            "level": 11,
+            "reqLevel": 10000,
+            "desc": "暴击伤害+35%；对裂伤目标伤害+20%"
+          },
+          {
+            "level": 12,
+            "reqLevel": 11000,
+            "desc": "冰量子球伤害+25%；对冰缓目标伤害+30%"
+          },
+          {
+            "level": 13,
+            "reqLevel": 12000,
+            "desc": "量子机器人整体伤害+10%；超级足球爆炸伤害+100%；护盾增伤+40%"
+          },
+          {
+            "level": 14,
+            "reqLevel": 13000,
+            "desc": "暴击伤害+40%；对裂伤目标伤害+20%"
+          },
+          {
+            "level": 15,
+            "reqLevel": 14000,
+            "desc": "量子机器人整体伤害+10%；冰量子球伤害+30%；对冰缓目标伤害+40%"
+          },
+          {
+            "level": 16,
+            "reqLevel": 15000,
+            "desc": "量子机器人整体伤害+10%；超级足球爆炸伤害+150%；护盾增伤+50%"
+          },
+          {
+            "level": 17,
+            "reqLevel": 15000,
+            "desc": "暴击伤害+45%；对裂伤目标伤害+25%"
+          },
+          {
+            "level": 18,
+            "reqLevel": 15000,
+            "desc": "量子机器人整体伤害+20%；冰量子球伤害+35%；对冰缓目标伤害+50%"
+          }
+        ]
+      },
+      "acquisition": "配件宝箱 / 传奇配件自选宝箱 / 公会与活动兑换"
+    },
+    "relatedArticleSlugs": [
+      "resources-%e9%85%8d%e4%bb%b6%e8%bf%87%e8%bd%bd%e6%b6%88%e8%80%97"
+    ],
+    "sort": 1303
+  },
+  {
+    "slug": "mount-%E5%B9%BD%E7%84%B0%E9%80%90%E5%BD%B1",
+    "name": "幽焰逐影",
     "category": "MOUNT",
     "subcategory": "战术载具",
     "rarity": "SS",
-    "tier": "T0 顶配主力载具",
     "icon": "/wiki-assets/载具/幽焰逐影.png",
-    "summary": "通关主线80章后解锁的传奇主力载具（幽灵狼），高星级下提供极强的爆发增伤与横线特效，与末世战马并列两大主力候选。",
+    "summary": "灾变降临后诞生的特殊实验体，身披幽焰，影随魂行",
     "tags": [
-      "传奇载具",
-      "幽灵狼",
-      "主力出战",
-      "横线特效"
+      "冰缓",
+      "技能伤害",
+      "首领伤害",
+      "护盾增伤"
     ],
     "attributes": {
       "slot": "载具系统（主线第80章解锁）",
       "milestones": [
         {
-          "stage": "零件摆放铁律",
-          "effect": "先把所有格子铺满金色零件连成完整横线（横线特效仅出战车生效），多余材料再合红",
-          "isKeyNode": true
+          "stage": "填满1条横线之后激活",
+          "effect": "对冰缓目标伤害+30%"
         },
         {
-          "stage": "洗练石规则",
-          "effect": "紫色及以上可洗练（首次30、二次50、后续80洗练石），维托尔优先洗技能伤害>首领伤害，伊狑优先首领伤害",
-          "isKeyNode": true
+          "stage": "填满2条横线之后激活",
+          "effect": "灵魂收割：幽魂领域和幽焰爆炸每杀死一个小怪和精英或者对首领造成1次伤害，都会获得5层幽魂效果，最多叠加100层，每层幽魂效果+1%技能伤害，死亡会丢失全部幽魂效果"
         },
         {
-          "stage": "同步率机制",
-          "effect": "闲置载具装上的零件按同步率百分比（如60%）提供面板属性，但不触发横线技能"
+          "stage": "填满3条横线之后激活",
+          "effect": "对冰缓目标伤害+70%；对精英/首领伤害+10%"
+        },
+        {
+          "stage": "填满4条横线之后激活",
+          "effect": "死亡之后会保留50%的幽魂效果"
+        },
+        {
+          "stage": "填满5条横线之后激活",
+          "effect": "当幽魂效果达到上限时，技能伤害额外+100%"
+        },
+        {
+          "stage": "填满6条横线之后激活",
+          "effect": "对冰缓目标伤害+100%；护盾增伤+60%"
+        },
+        {
+          "stage": "填满7条横线之后激活",
+          "effect": "对首领增伤+30%"
+        },
+        {
+          "stage": "填满8条横线之后激活",
+          "effect": "触发幽焰爆炸时，护盾增伤+120%"
         }
-      ],
-      "acquisition": "载具碎片合成 / 载具核心升星 / 零件宝箱钥匙抽取"
+      ]
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%bd%bd%e5%85%b7%e7%af%87",
@@ -5976,34 +16594,50 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "MOUNT",
     "subcategory": "战术载具",
     "rarity": "SS",
-    "tier": "T0 主力候选载具",
     "icon": "/wiki-assets/载具/末世战马.png",
-    "summary": "强力传奇主力载具（战马），已有培养投入时表现极为扎实；优先铺满零件连成横线激活出战特殊效果。",
+    "summary": "曾经万里挑一的汗血宝马，在感染了E细胞之后却发生了超强的进化",
     "tags": [
-      "传奇载具",
-      "战马",
-      "主力出战",
-      "横线特效"
+      "毒伤",
+      "技能伤害",
+      "裂伤",
+      "首领伤害"
     ],
     "attributes": {
       "slot": "载具系统（主线第80章解锁）",
       "milestones": [
         {
-          "stage": "零件摆放铁律",
-          "effect": "先把所有格子铺满金色零件连成完整横线（横线特效仅出战车生效），多余材料再合红",
-          "isKeyNode": true
+          "stage": "填满1条横线之后激活",
+          "effect": "对中毒目标伤害+20%"
         },
         {
-          "stage": "洗练石规则",
-          "effect": "紫色及以上可洗练（首次30、二次50、后续80洗练石），维托尔优先洗技能伤害>首领伤害，伊狑优先首领伤害",
-          "isKeyNode": true
+          "stage": "填满2条横线之后激活",
+          "effect": "移动速度+2"
         },
         {
-          "stage": "同步率机制",
-          "effect": "闲置载具装上的零件按同步率百分比（如60%）提供面板属性，但不触发横线技能"
+          "stage": "填满3条横线之后激活",
+          "effect": "对中毒目标伤害+40%；技能伤害+50%"
+        },
+        {
+          "stage": "填满4条横线之后激活",
+          "effect": "每次撞击击杀100个小怪或者撞击5次首领，获得一层充能，每层充能增加30%的技能伤害，最多5层"
+        },
+        {
+          "stage": "填满5条横线之后激活",
+          "effect": "每层充能还会提供+1的移动速度上限"
+        },
+        {
+          "stage": "填满6条横线之后激活",
+          "effect": "对中毒目标伤害+60%；对裂伤目标伤害+30%"
+        },
+        {
+          "stage": "填满7条横线之后激活",
+          "effect": "对中毒目标伤害+80%；对首领增伤+5%"
+        },
+        {
+          "stage": "填满8条横线之后激活",
+          "effect": "每有160%的对中毒目标伤害就增加5%的对首领增伤，最多25%"
         }
-      ],
-      "acquisition": "载具碎片合成 / 载具核心升星 / 零件宝箱钥匙抽取"
+      ]
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%bd%bd%e5%85%b7%e7%af%87",
@@ -6017,33 +16651,49 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "MOUNT",
     "subcategory": "战术载具",
     "rarity": "S",
-    "tier": "T1 同步率/过渡载具",
     "icon": "/wiki-assets/载具/科技滑板.png",
-    "summary": "中期过渡载具，退居二线后装满富余零件，通过「同步率」按比例为出战角色提供可观的面板属性继承。",
+    "summary": "最新一代的喷气式防护型滑板，可提供全方位的保护",
     "tags": [
-      "过渡载具",
-      "同步率继承",
-      "零件容器"
+      "冰缓",
+      "技能伤害",
+      "护盾增伤"
     ],
     "attributes": {
       "slot": "载具系统（主线第80章解锁）",
       "milestones": [
         {
-          "stage": "零件摆放铁律",
-          "effect": "先把所有格子铺满金色零件连成完整横线（横线特效仅出战车生效），多余材料再合红",
-          "isKeyNode": true
+          "stage": "填满1条横线之后激活",
+          "effect": "对冰缓目标伤害+15%；技能伤害+10%"
         },
         {
-          "stage": "洗练石规则",
-          "effect": "紫色及以上可洗练（首次30、二次50、后续80洗练石），维托尔优先洗技能伤害>首领伤害，伊狑优先首领伤害",
-          "isKeyNode": true
+          "stage": "填满2条横线之后激活",
+          "effect": "荆棘护盾消耗时有20%的概率不消耗层数"
         },
         {
-          "stage": "同步率机制",
-          "effect": "闲置载具装上的零件按同步率百分比（如60%）提供面板属性，但不触发横线技能"
+          "stage": "填满3条横线之后激活",
+          "effect": "对冰缓目标伤害+25%；技能伤害+15%"
+        },
+        {
+          "stage": "填满4条横线之后激活",
+          "effect": "获得荆棘护盾时，叠加1层护盾共鸣，每层护盾共鸣使护盾增伤+10%，上限4层"
+        },
+        {
+          "stage": "填满5条横线之后激活",
+          "effect": "每触发1次冲击波爆炸，对冰缓目标伤害+6%（最高60%）"
+        },
+        {
+          "stage": "填满6条横线之后激活",
+          "effect": "对冰缓目标伤害+40%；技能伤害+30%"
+        },
+        {
+          "stage": "填满7条横线之后激活",
+          "effect": "对冰缓目标伤害+60%；技能伤害+45%"
+        },
+        {
+          "stage": "填满8条横线之后激活",
+          "effect": "护盾共鸣上限+6层"
         }
-      ],
-      "acquisition": "载具碎片合成 / 载具核心升星 / 零件宝箱钥匙抽取"
+      ]
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%bd%bd%e5%85%b7%e7%af%87",
@@ -6057,33 +16707,49 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "category": "MOUNT",
     "subcategory": "战术载具",
     "rarity": "EPIC",
-    "tier": "T2 入门初始载具",
     "icon": "/wiki-assets/载具/电动平衡车.png",
-    "summary": "通关80章开启载具系统后的第一台入门载具，先利用手头资源把零件格子铺满连成横线，切忌早期盲目合红拆空槽位。",
+    "summary": "经过科技改造过的电动平衡车，让旅途变的更加安全",
     "tags": [
-      "入门载具",
-      "80章解锁",
-      "同步率继承"
+      "衰弱",
+      "暴击伤害",
+      "裂伤"
     ],
     "attributes": {
       "slot": "载具系统（主线第80章解锁）",
       "milestones": [
         {
-          "stage": "零件摆放铁律",
-          "effect": "先把所有格子铺满金色零件连成完整横线（横线特效仅出战车生效），多余材料再合红",
-          "isKeyNode": true
+          "stage": "填满1条横线之后激活",
+          "effect": "对衰弱目标伤害+10%"
         },
         {
-          "stage": "洗练石规则",
-          "effect": "紫色及以上可洗练（首次30、二次50、后续80洗练石），维托尔优先洗技能伤害>首领伤害，伊狑优先首领伤害",
-          "isKeyNode": true
+          "stage": "填满2条横线之后激活",
+          "effect": "触发技能时额外再发射一次电轮刃"
         },
         {
-          "stage": "同步率机制",
-          "effect": "闲置载具装上的零件按同步率百分比（如60%）提供面板属性，但不触发横线技能"
+          "stage": "填满3条横线之后激活",
+          "effect": "对衰弱目标伤害+15%；暴击伤害+20%"
+        },
+        {
+          "stage": "填满4条横线之后激活",
+          "effect": "电轮刃命中后，暴击伤害+1%（最高35%）"
+        },
+        {
+          "stage": "填满5条横线之后激活",
+          "effect": "每触发3次落雷，叠加1层裂伤精通，每层裂伤精通对裂伤目标伤害+2%，上限5层"
+        },
+        {
+          "stage": "填满6条横线之后激活",
+          "effect": "对衰弱目标伤害+20%；暴击伤害+55%"
+        },
+        {
+          "stage": "填满7条横线之后激活",
+          "effect": "对衰弱目标伤害+35%；暴击伤害+90%"
+        },
+        {
+          "stage": "填满8条横线之后激活",
+          "effect": "每层裂伤精通对裂伤目标伤害+4%"
         }
-      ],
-      "acquisition": "载具碎片合成 / 载具核心升星 / 零件宝箱钥匙抽取"
+      ]
     },
     "relatedArticleSlugs": [
       "resources-%e4%bb%8e%e5%85%a5%e9%97%a8%e5%88%b0%e5%85%a5%e5%9c%9f-%e8%bd%bd%e5%85%b7%e7%af%87",
@@ -6092,19 +16758,16 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 134
   },
   {
-    "slug": "mechanic-debuff-%E7%A5%9E%E7%81%AB",
+    "slug": "buff-%E7%A5%9E%E7%81%AB",
     "name": "战斗状态 · 神火",
-    "category": "MECHANIC",
-    "subcategory": "战斗Debuff词条",
+    "category": "BUFF",
+    "subcategory": "战斗Buff",
     "rarity": "S",
-    "tier": "核心独立乘区",
     "icon": "/wiki-assets/技能图标/战斗中debuff/神火.png",
     "summary": "由SP哪吒施加的核心异常状态，是触发伏尔甘神火乘区与洛基「恶意余烬（最高50%增伤）」的绝对前置条件。",
     "tags": [
-      "局内状态",
-      "Debuff乘区",
-      "神火",
-      "核心独立乘区"
+      "战斗Buff",
+      "神火"
     ],
     "attributes": {
       "slot": "战斗异常状态 / 伤害乘区",
@@ -6122,19 +16785,16 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 135
   },
   {
-    "slug": "mechanic-debuff-%E8%A3%82%E4%BC%A4",
+    "slug": "buff-%E8%A3%82%E4%BC%A4",
     "name": "战斗状态 · 裂伤",
-    "category": "MECHANIC",
-    "subcategory": "战斗Debuff词条",
+    "category": "BUFF",
+    "subcategory": "战斗Buff",
     "rarity": "S",
-    "tier": "核心爆发乘区",
     "icon": "/wiki-assets/技能图标/战斗中debuff/裂伤.png",
     "summary": "塔洛西娅、伏尔甘与忍龟体系核心伤害乘区；塔洛西娅需面板裂伤达150%后方可转型维托尔。",
     "tags": [
-      "局内状态",
-      "Debuff乘区",
-      "裂伤",
-      "核心爆发乘区"
+      "战斗Buff",
+      "裂伤"
     ],
     "attributes": {
       "slot": "战斗异常状态 / 伤害乘区",
@@ -6152,19 +16812,16 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 136
   },
   {
-    "slug": "mechanic-debuff-%E5%86%B0%E7%BC%93",
+    "slug": "buff-%E5%86%B0%E7%BC%93",
     "name": "战斗状态 · 冰缓",
-    "category": "MECHANIC",
-    "subcategory": "战斗Debuff词条",
+    "category": "BUFF",
+    "subcategory": "战斗Buff",
     "rarity": "S",
-    "tier": "常驻控场易伤",
     "icon": "/wiki-assets/技能图标/战斗中debuff/冰缓.png",
     "summary": "由SS冰霜战靴、企鹅等施加的减速控制状态，触发冰霜战靴+15%增伤、冰鞋典藏套+50%增伤及宠物寒霜助战技。",
     "tags": [
-      "局内状态",
-      "Debuff乘区",
-      "冰缓",
-      "常驻控场易伤"
+      "战斗Buff",
+      "冰缓"
     ],
     "attributes": {
       "slot": "战斗异常状态 / 伤害乘区",
@@ -6182,19 +16839,16 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 137
   },
   {
-    "slug": "mechanic-debuff-%E4%B8%AD%E6%AF%92",
+    "slug": "buff-%E4%B8%AD%E6%AF%92",
     "name": "战斗状态 · 中毒",
-    "category": "MECHANIC",
-    "subcategory": "战斗Debuff词条",
+    "category": "BUFF",
+    "subcategory": "战斗Buff",
     "rarity": "S",
-    "tier": "必带挂毒乘区",
     "icon": "/wiki-assets/技能图标/战斗中debuff/中毒.png",
     "summary": "由左位凛音（红3协同12星全程挂毒）、超武燃烧瓶/超武火箭或红5河豚施加，触发毒素灌溉等高额中毒易伤。",
     "tags": [
-      "局内状态",
-      "Debuff乘区",
-      "中毒",
-      "必带挂毒乘区"
+      "战斗Buff",
+      "中毒"
     ],
     "attributes": {
       "slot": "战斗异常状态 / 伤害乘区",
@@ -6212,19 +16866,16 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 138
   },
   {
-    "slug": "mechanic-debuff-%E8%A1%B0%E5%BC%B1",
+    "slug": "buff-%E8%A1%B0%E5%BC%B1",
     "name": "战斗状态 · 衰弱",
-    "category": "MECHANIC",
-    "subcategory": "战斗Debuff词条",
+    "category": "BUFF",
+    "subcategory": "战斗Buff",
     "rarity": "S",
-    "tier": "异常增伤乘区",
     "icon": "/wiki-assets/技能图标/战斗中debuff/衰弱.png",
     "summary": "降低目标攻击力并触发宠物助战技「乘虚而入」异常增伤，常与中毒同步覆盖。",
     "tags": [
-      "局内状态",
-      "Debuff乘区",
-      "衰弱",
-      "异常增伤乘区"
+      "战斗Buff",
+      "衰弱"
     ],
     "attributes": {
       "slot": "战斗异常状态 / 伤害乘区",
@@ -6242,19 +16893,16 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 139
   },
   {
-    "slug": "mechanic-debuff-%E6%98%93%E4%BC%A4",
+    "slug": "buff-%E6%98%93%E4%BC%A4",
     "name": "战斗状态 · 易伤",
-    "category": "MECHANIC",
-    "subcategory": "战斗Debuff词条",
+    "category": "BUFF",
+    "subcategory": "战斗Buff",
     "rarity": "S",
-    "tier": "全局增伤状态",
     "icon": "/wiki-assets/技能图标/战斗中debuff/易伤.png",
     "summary": "使目标承受的所有伤害按百分比放大，属于极高价值的全局乘区。",
     "tags": [
-      "局内状态",
-      "Debuff乘区",
-      "易伤",
-      "全局增伤状态"
+      "战斗Buff",
+      "易伤"
     ],
     "attributes": {
       "slot": "战斗异常状态 / 伤害乘区",
@@ -6272,19 +16920,16 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 140
   },
   {
-    "slug": "mechanic-debuff-%E9%98%B4%E9%98%B3",
+    "slug": "buff-%E9%98%B4%E9%98%B3",
     "name": "战斗状态 · 阴阳",
-    "category": "MECHANIC",
-    "subcategory": "战斗Debuff词条",
+    "category": "BUFF",
+    "subcategory": "战斗Buff",
     "rarity": "S",
-    "tier": "特工专属状态",
     "icon": "/wiki-assets/技能图标/战斗中debuff/阴阳.png",
     "summary": "杨大师专属状态切换机制，提供暴击率或高额技能易伤加成。",
     "tags": [
-      "局内状态",
-      "Debuff乘区",
-      "阴阳",
-      "特工专属状态"
+      "战斗Buff",
+      "阴阳"
     ],
     "attributes": {
       "slot": "战斗异常状态 / 伤害乘区",
@@ -6302,19 +16947,16 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 141
   },
   {
-    "slug": "mechanic-debuff-%E6%98%93%E6%8D%9F",
+    "slug": "buff-%E6%98%93%E6%8D%9F",
     "name": "战斗状态 · 易损",
-    "category": "MECHANIC",
-    "subcategory": "战斗Debuff词条",
+    "category": "BUFF",
+    "subcategory": "战斗Buff",
     "rarity": "S",
-    "tier": "破甲增伤状态",
     "icon": "/wiki-assets/技能图标/战斗中debuff/易损.png",
     "summary": "破坏目标护甲防线，使其受到的暴击与技能伤害进一步提升。",
     "tags": [
-      "局内状态",
-      "Debuff乘区",
-      "易损",
-      "破甲增伤状态"
+      "战斗Buff",
+      "易损"
     ],
     "attributes": {
       "slot": "战斗异常状态 / 伤害乘区",
@@ -6332,19 +16974,16 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 142
   },
   {
-    "slug": "mechanic-debuff-%E7%A6%81%E8%B6%B3",
+    "slug": "buff-%E7%A6%81%E8%B6%B3",
     "name": "战斗状态 · 禁足",
-    "category": "MECHANIC",
-    "subcategory": "战斗Debuff词条",
+    "category": "BUFF",
+    "subcategory": "战斗Buff",
     "rarity": "S",
-    "tier": "强控状态",
     "icon": "/wiki-assets/技能图标/战斗中debuff/禁足.png",
     "summary": "完全限制非首领敌人移动，配合范围持续技能高效清场。",
     "tags": [
-      "局内状态",
-      "Debuff乘区",
-      "禁足",
-      "强控状态"
+      "战斗Buff",
+      "禁足"
     ],
     "attributes": {
       "slot": "战斗异常状态 / 伤害乘区",
@@ -6362,19 +17001,16 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     "sort": 143
   },
   {
-    "slug": "mechanic-debuff-%E7%BC%B4%E6%A2%B0",
+    "slug": "buff-%E7%BC%B4%E6%A2%B0",
     "name": "战斗状态 · 缴械",
-    "category": "MECHANIC",
-    "subcategory": "战斗Debuff词条",
+    "category": "BUFF",
+    "subcategory": "战斗Buff",
     "rarity": "S",
-    "tier": "防守控制状态",
     "icon": "/wiki-assets/技能图标/战斗中debuff/缴械.png",
     "summary": "封锁敌人攻击动作，提升高压关卡生存容错。",
     "tags": [
-      "局内状态",
-      "Debuff乘区",
-      "缴械",
-      "防守控制状态"
+      "战斗Buff",
+      "缴械"
     ],
     "attributes": {
       "slot": "战斗异常状态 / 伤害乘区",
@@ -6391,154 +17027,2544 @@ export const LOCAL_WIKI_ENTRIES: WikiEntryItem[] = [
     ],
     "sort": 144
   },
-  {
+    {
     "slug": "mechanic-item-%E7%A5%9E%E5%99%A8%E6%A0%B8%E5%BF%83",
     "name": "神器核心",
     "category": "MECHANIC",
-    "subcategory": "核心养成通货",
+    "subcategory": "核心",
     "rarity": "SS",
-    "tier": "SS神铸核心通货",
     "icon": "/wiki-assets/道具/神器核心.png",
-    "summary": "用于SS神装永恒神铸与破坏神铸的战略级材料；满约80个神器核心后可重点规划衣服、武器、手套的神炼进阶。",
+    "summary": "可用于SS神器神铸的核心材料",
     "tags": [
-      "核心通货",
-      "养成节点",
-      "神器核心"
+      "核心"
     ],
     "attributes": {
-      "slot": "战略级养成资源",
-      "milestones": [
-        {
-          "stage": "最优投放策略",
-          "effect": "用于SS神装永恒神铸与破坏神铸的战略级材料；满约80个神器核心后可重点规划衣服、武器、手套的神炼进阶。",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "限时活动核心自选宝箱 / 公会远征 / 区域行动与常驻商店兑换"
+      "slot": "消耗品 / 核心",
+      "milestones": []
     },
-    "relatedArticleSlugs": [
-      "resources-%e7%a5%9e%e7%82%bc%e9%a1%ba%e5%ba%8f%e6%8e%a8%e8%8d%90"
-    ],
-    "sort": 145
+    "relatedArticleSlugs": [],
+    "sort": 151
   },
   {
     "slug": "mechanic-item-%E7%A5%9E%E7%82%BC%E6%A0%B8%E5%BF%83",
     "name": "神炼核心",
     "category": "MECHANIC",
-    "subcategory": "核心养成通货",
+    "subcategory": "核心",
     "rarity": "SS",
-    "tier": "SS神炼战略通货",
     "icon": "/wiki-assets/道具/神炼核心.png",
-    "summary": "目标装备达永恒4+破坏4后开启神炼，按「衣服→武器→手套」分 6、10、22、30、42 核五个阶段投入。",
+    "summary": "可用于异星神炼升级的珍贵核心",
     "tags": [
-      "核心通货",
-      "养成节点",
-      "神炼核心"
+      "核心"
     ],
     "attributes": {
-      "slot": "战略级养成资源",
-      "milestones": [
-        {
-          "stage": "最优投放策略",
-          "effect": "目标装备达永恒4+破坏4后开启神炼，按「衣服→武器→手套」分 6、10、22、30、42 核五个阶段投入。",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "限时活动核心自选宝箱 / 公会远征 / 区域行动与常驻商店兑换"
+      "slot": "消耗品 / 核心",
+      "milestones": []
     },
-    "relatedArticleSlugs": [
-      "resources-%e7%a5%9e%e7%82%bc%e9%a1%ba%e5%ba%8f%e6%8e%a8%e8%8d%90"
-    ],
-    "sort": 146
+    "relatedArticleSlugs": [],
+    "sort": 152
   },
   {
     "slug": "mechanic-item-%E5%BC%82%E5%AE%A0%E6%A0%B8%E5%BF%83",
     "name": "异宠核心",
     "category": "MECHANIC",
-    "subcategory": "核心养成通货",
+    "subcategory": "核心",
     "rarity": "SS",
-    "tier": "S宠物槽位与觉醒通货",
     "icon": "/wiki-assets/道具/异宠核心.png",
-    "summary": "切忌乱开！累计消耗 21 / 50 / 90 / 150 个异宠核心分别解锁第 3 / 4 / 5 / 6 宠物助战槽位。",
+    "summary": "可用于异世宠物觉醒的珍贵核心",
     "tags": [
-      "核心通货",
-      "养成节点",
-      "异宠核心"
+      "核心"
     ],
     "attributes": {
-      "slot": "战略级养成资源",
-      "milestones": [
-        {
-          "stage": "最优投放策略",
-          "effect": "切忌乱开！累计消耗 21 / 50 / 90 / 150 个异宠核心分别解锁第 3 / 4 / 5 / 6 宠物助战槽位。",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "限时活动核心自选宝箱 / 公会远征 / 区域行动与常驻商店兑换"
+      "slot": "消耗品 / 核心",
+      "milestones": []
     },
-    "relatedArticleSlugs": [
-      "resources-%e7%a5%9e%e7%82%bc%e9%a1%ba%e5%ba%8f%e6%8e%a8%e8%8d%90"
-    ],
-    "sort": 147
+    "relatedArticleSlugs": [],
+    "sort": 153
   },
   {
     "slug": "mechanic-item-%E7%89%B9%E5%B7%A5%E8%A7%89%E9%86%92%E6%A0%B8%E5%BF%83",
     "name": "特工觉醒核心",
     "category": "MECHANIC",
-    "subcategory": "核心养成通货",
+    "subcategory": "核心",
     "rarity": "SS",
-    "tier": "特工红星觉醒通货",
     "icon": "/wiki-assets/道具/特工觉醒核心.png",
-    "summary": "支撑 543（54核）→ 741（112核）→ 840（141核）→ 伊狑844（156核）特工觉醒与连携槽开启的核心资源。",
+    "summary": "可用于特工觉醒的神秘核心",
     "tags": [
-      "核心通货",
-      "养成节点",
-      "特工觉醒核心"
+      "核心"
     ],
     "attributes": {
-      "slot": "战略级养成资源",
-      "milestones": [
-        {
-          "stage": "最优投放策略",
-          "effect": "支撑 543（54核）→ 741（112核）→ 840（141核）→ 伊狑844（156核）特工觉醒与连携槽开启的核心资源。",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "限时活动核心自选宝箱 / 公会远征 / 区域行动与常驻商店兑换"
+      "slot": "消耗品 / 核心",
+      "milestones": []
     },
-    "relatedArticleSlugs": [
-      "resources-%e7%a5%9e%e7%82%bc%e9%a1%ba%e5%ba%8f%e6%8e%a8%e8%8d%90"
-    ],
-    "sort": 148
+    "relatedArticleSlugs": [],
+    "sort": 154
   },
   {
     "slug": "mechanic-item-%E8%B0%90%E6%8C%AF%E8%8A%AF%E7%89%87",
     "name": "谐振芯片",
     "category": "MECHANIC",
-    "subcategory": "核心养成通货",
+    "subcategory": "核心",
     "rarity": "SS",
-    "tier": "双生配件谐振通货",
     "icon": "/wiki-assets/道具/谐振芯片.png",
-    "summary": "投入双生无人机、双生钻头、双生足球等核心配件，直接拉升配件谐振总倍率与过载上限。",
+    "summary": "可用于提升科技配件的谐振倍率的芯片",
     "tags": [
-      "核心通货",
-      "养成节点",
-      "谐振芯片"
+      "核心"
     ],
     "attributes": {
-      "slot": "战略级养成资源",
-      "milestones": [
-        {
-          "stage": "最优投放策略",
-          "effect": "投入双生无人机、双生钻头、双生足球等核心配件，直接拉升配件谐振总倍率与过载上限。",
-          "isKeyNode": true
-        }
-      ],
-      "acquisition": "限时活动核心自选宝箱 / 公会远征 / 区域行动与常驻商店兑换"
+      "slot": "消耗品 / 核心",
+      "milestones": []
     },
-    "relatedArticleSlugs": [
-      "resources-%e7%a5%9e%e7%82%bc%e9%a1%ba%e5%ba%8f%e6%8e%a8%e8%8d%90"
+    "relatedArticleSlugs": [],
+    "sort": 155
+  },
+  {
+    "slug": "mechanic-item-%E8%BD%BD%E5%85%B7%E6%A0%B8%E5%BF%83",
+    "name": "载具核心",
+    "category": "MECHANIC",
+    "subcategory": "核心",
+    "rarity": "S",
+    "icon": "/wiki-assets/道具/载具核心.png",
+    "summary": "用于载具升星的道具",
+    "tags": [
+      "核心"
     ],
-    "sort": 149
+    "attributes": {
+      "slot": "消耗品 / 核心",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 156
+  },
+  {
+    "slug": "mechanic-item-S%E7%BA%A7%E5%86%9B%E5%A4%87%E9%92%A5%E5%8C%99",
+    "name": "S级军备钥匙",
+    "category": "MECHANIC",
+    "subcategory": "钥匙",
+    "rarity": "S",
+    "icon": "/wiki-assets/钥匙/s级军备钥匙.png",
+    "summary": "用来开启S级军备宝箱",
+    "tags": [
+      "钥匙"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 钥匙",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 157
+  },
+  {
+    "slug": "mechanic-item-%E9%AB%98%E7%BA%A7%E9%92%A5%E5%8C%99",
+    "name": "高级钥匙",
+    "category": "MECHANIC",
+    "subcategory": "钥匙",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/钥匙/高级钥匙.png",
+    "summary": "用来开启地球卫队补给箱",
+    "tags": [
+      "钥匙"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 钥匙",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 158
+  },
+  {
+    "slug": "mechanic-item-%E6%99%AE%E9%80%9A%E9%92%A5%E5%8C%99",
+    "name": "普通钥匙",
+    "category": "MECHANIC",
+    "subcategory": "钥匙",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/钥匙/普通钥匙.png",
+    "summary": "用来开启军用物资箱",
+    "tags": [
+      "钥匙"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 钥匙",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 159
+  },
+  {
+    "slug": "mechanic-item-%E6%94%B6%E8%97%8F%E5%93%81%E5%AE%9D%E7%AE%B1%E9%92%A5%E5%8C%99",
+    "name": "收藏品宝箱钥匙",
+    "category": "MECHANIC",
+    "subcategory": "钥匙",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/钥匙/收藏品宝箱钥匙.png",
+    "summary": "用来开启收藏品宝箱",
+    "tags": [
+      "钥匙"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 钥匙",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 160
+  },
+  {
+    "slug": "mechanic-item-%E9%85%8D%E4%BB%B6%E5%AE%9D%E7%AE%B1%E9%92%A5%E5%8C%99",
+    "name": "配件宝箱钥匙",
+    "category": "MECHANIC",
+    "subcategory": "钥匙",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/钥匙/配件宝箱钥匙.png",
+    "summary": "用来开启配件宝箱",
+    "tags": [
+      "钥匙"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 钥匙",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 161
+  },
+  {
+    "slug": "mechanic-item-%E9%9B%B6%E4%BB%B6%E5%AE%9D%E7%AE%B1%E9%92%A5%E5%8C%99",
+    "name": "零件宝箱钥匙",
+    "category": "MECHANIC",
+    "subcategory": "钥匙",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/钥匙/零件宝箱钥匙.png",
+    "summary": "用于开启零件宝箱",
+    "tags": [
+      "钥匙"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 钥匙",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 162
+  },
+  {
+    "slug": "mechanic-item-%E9%AB%98%E7%BA%A7%E5%AE%A0%E7%89%A9%E7%AE%B1%E9%92%A5%E5%8C%99",
+    "name": "高级宠物箱钥匙",
+    "category": "MECHANIC",
+    "subcategory": "钥匙",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/钥匙/高级宠物箱钥匙.png",
+    "summary": "用来开启高级宠物箱",
+    "tags": [
+      "钥匙"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 钥匙",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 163
+  },
+  {
+    "slug": "mechanic-item-%E6%99%AE%E9%80%9A%E5%AE%A0%E7%89%A9%E7%AE%B1%E9%92%A5%E5%8C%99",
+    "name": "普通宠物箱钥匙",
+    "category": "MECHANIC",
+    "subcategory": "钥匙",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/钥匙/普通宠物钥匙.png",
+    "summary": "用来开启普通宠物箱",
+    "tags": [
+      "钥匙"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 钥匙",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 164
+  },
+  {
+    "slug": "mechanic-item-%E6%B0%B8%E6%81%92%E4%B9%8B%E7%9F%B3",
+    "name": "永恒之石",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "S",
+    "icon": "/wiki-assets/道具/永恒之石.png",
+    "summary": "永恒科技的核心，可以通过拆解永恒装备获取，可以给永恒装备进行神铸",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 165
+  },
+  {
+    "slug": "mechanic-item-%E7%A0%B4%E5%9D%8F%E4%B9%8B%E7%9F%B3",
+    "name": "破坏之石",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "S",
+    "icon": "/wiki-assets/道具/破坏之石.png",
+    "summary": "破坏科技的核心，可以通过拆解破坏装备获取，可以给破坏装备进行神铸",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 166
+  },
+  {
+    "slug": "mechanic-item-%E6%B7%B7%E6%B2%8C%E4%B9%8B%E7%9F%B3",
+    "name": "混沌之石",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "S",
+    "icon": "/wiki-assets/道具/混沌之石.png",
+    "summary": "混沌科技的核心，可以通过拆解混沌装备获取，可以给混沌装备进行神铸",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 167
+  },
+  {
+    "slug": "mechanic-item-%E8%A7%89%E9%86%92%E6%B0%B4%E6%99%B6",
+    "name": "觉醒水晶",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "S",
+    "icon": "/wiki-assets/道具/觉醒水晶.png",
+    "summary": "可用于宠物觉醒的稀有水晶",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 168
+  },
+  {
+    "slug": "mechanic-item-%E5%BC%82%E5%AE%A0%E6%99%B6%E7%9F%B3",
+    "name": "异宠晶石",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "S",
+    "icon": "/wiki-assets/道具/异宠晶石.png",
+    "summary": "可用于抽取异世宠物的晶石",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 169
+  },
+  {
+    "slug": "mechanic-item-SP%E7%89%B9%E5%B7%A5%E4%B8%87%E8%83%BD%E7%A2%8E%E7%89%87",
+    "name": "SP特工万能碎片",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "SP",
+    "icon": "/wiki-assets/碎片/sp特工万能碎片.png",
+    "summary": "可用于SP特工的升星",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 170
+  },
+  {
+    "slug": "mechanic-item-S%E7%89%B9%E5%B7%A5%E7%A2%8E%E7%89%87",
+    "name": "S特工碎片",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "S",
+    "icon": "/wiki-assets/碎片/s特工碎片.png",
+    "summary": "可用于S级特工的解锁和升星",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 171
+  },
+  {
+    "slug": "mechanic-item-%E6%A0%B8%E5%BF%83%E8%87%AA%E9%80%89%E5%AE%9D%E7%AE%B1%E7%B2%BE%E5%8D%8E",
+    "name": "核心自选宝箱精华",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/道具/核心自选宝箱精华.png",
+    "summary": "收集10个此精华可以合成1个核心自选宝箱",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 172
+  },
+  {
+    "slug": "mechanic-item-%E8%87%AA%E9%80%89%E7%89%B9%E5%B7%A5%E7%A2%8E%E7%89%87",
+    "name": "自选特工碎片",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "S",
+    "icon": "/wiki-assets/碎片/自选特工碎片.png",
+    "summary": "自选1块特工碎片",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 173
+  },
+  {
+    "slug": "mechanic-item-%E6%9C%AB%E4%B8%96%E6%88%98%E9%A9%AC%E7%A2%8E%E7%89%87",
+    "name": "末世战马碎片",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/碎片/末世战马碎片.png",
+    "summary": "可用于载具“末世战马”的合成或升星",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 174
+  },
+  {
+    "slug": "mechanic-item-%E5%B9%BD%E7%84%B0%E9%80%90%E5%BD%B1%E7%A2%8E%E7%89%87",
+    "name": "幽焰逐影碎片",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/碎片/幽焰逐影碎片.png",
+    "summary": "可用于载具“幽焰逐影”的合成或升星",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 175
+  },
+  {
+    "slug": "mechanic-item-%E7%A7%91%E6%8A%80%E6%BB%91%E6%9D%BF%E7%A2%8E%E7%89%87",
+    "name": "科技滑板碎片",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/碎片/科技滑板碎片.png",
+    "summary": "可用于载具“科技滑板”的合成或升星",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 176
+  },
+  {
+    "slug": "mechanic-item-%E7%94%B5%E5%8A%A8%E5%B9%B3%E8%A1%A1%E8%BD%A6%E7%A2%8E%E7%89%87",
+    "name": "电动平衡车碎片",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/碎片/电动平衡车碎片.png",
+    "summary": "可用于载具“电动平衡车”的合成或升星",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 177
+  },
+  {
+    "slug": "mechanic-item-%E4%BC%A0%E5%A5%87%E8%BD%BD%E5%85%B7%E7%A2%8E%E7%89%87%E8%87%AA%E9%80%89%E5%AE%9D%E7%AE%B1",
+    "name": "传奇载具碎片自选宝箱",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/碎片/传奇载具碎片自选宝箱.png",
+    "summary": "自选一个传奇载具碎片",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 178
+  },
+  {
+    "slug": "mechanic-item-%E4%BC%A0%E5%A5%87%E6%94%B6%E8%97%8F%E5%93%81%E7%A2%8E%E7%89%87%E8%87%AA%E9%80%89",
+    "name": "传奇收藏品碎片自选",
+    "category": "MECHANIC",
+    "subcategory": "碎片",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/碎片/传奇收藏品碎片自选.png",
+    "summary": "自选1块收藏品碎片",
+    "tags": [
+      "碎片"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 碎片",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 179
+  },
+  {
+    "slug": "mechanic-item-%E6%A0%B8%E5%BF%83%E8%87%AA%E9%80%89%E5%AE%9D%E7%AE%B1",
+    "name": "核心自选宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "SS",
+    "icon": "/wiki-assets/宝箱/核心自选宝箱.png",
+    "summary": "自选一件已解锁奖励",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 180
+  },
+  {
+    "slug": "mechanic-item-%E7%A5%9E%E5%99%A8%E6%A0%B8%E5%BF%83%E8%87%AA%E9%80%89%E5%AE%9D%E7%AE%B1",
+    "name": "神器核心自选宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "SS",
+    "icon": "/wiki-assets/宝箱/神器核心自选宝箱.png",
+    "summary": "自选一件已解锁奖励",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 181
+  },
+  {
+    "slug": "mechanic-item-%E8%B0%90%E6%8C%AF%E8%8A%AF%E7%89%87%E8%87%AA%E9%80%89%E5%AE%9D%E7%AE%B1",
+    "name": "谐振芯片自选宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "SS",
+    "icon": "/wiki-assets/宝箱/谐振芯片自选宝箱.png",
+    "summary": "自选一件已解锁奖励",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 182
+  },
+  {
+    "slug": "mechanic-item-%E8%A7%89%E9%86%92%E6%B0%B4%E6%99%B6%E8%87%AA%E9%80%89%E5%AE%9D%E7%AE%B1",
+    "name": "觉醒水晶自选宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "SS",
+    "icon": "/wiki-assets/宝箱/觉醒水晶自选宝箱.png",
+    "summary": "自选一件已解锁奖励",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 183
+  },
+  {
+    "slug": "mechanic-item-%E7%89%B9%E5%B7%A5%E8%A7%89%E9%86%92%E4%B8%8E%E5%BC%82%E4%B8%96%E5%AE%A0%E7%89%A9%E6%A0%B8%E5%BF%83%E8%87%AA%E9%80%89%E5%AE%9D%E7%AE%B1",
+    "name": "特工觉醒与异世宠物核心自选宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "SS",
+    "icon": "/wiki-assets/宝箱/异宠核心自选宝箱.png",
+    "summary": "自选一件已解锁奖励",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 184
+  },
+  {
+    "slug": "mechanic-item-%E8%B0%90%E6%8C%AF%E8%8A%AF%E7%89%87%E4%B8%8E%E4%BC%A0%E5%A5%87%E6%94%B6%E8%97%8F%E5%93%81%E8%87%AA%E9%80%89%E5%AE%9D%E7%AE%B1",
+    "name": "谐振芯片与传奇收藏品自选宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "SS",
+    "icon": "/wiki-assets/宝箱/谐振芯片与传奇收藏品自选宝箱.png",
+    "summary": "自选一件已解锁奖励",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 185
+  },
+  {
+    "slug": "mechanic-item-%E7%A7%91%E6%8A%80%E6%A0%B8%E5%BF%83%E8%87%AA%E9%80%89%E5%AE%9D%E7%AE%B1",
+    "name": "科技核心自选宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/道具/科技核心自选宝箱.png",
+    "summary": "自选一块科技核心",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 186
+  },
+  {
+    "slug": "mechanic-item-S%E7%BA%A7%E6%9D%B0%E5%87%BA%E8%A3%85%E5%A4%87%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "S级杰出装备自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "S",
+    "icon": "/wiki-assets/宝箱/s级杰出装备自选宝箱.png",
+    "summary": "自选一件S级杰出装备",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 187
+  },
+  {
+    "slug": "mechanic-item-S%E7%BA%A7%E6%9D%B0%E5%87%BA%E5%86%9B%E5%A4%87%E5%AE%9D%E7%AE%B1",
+    "name": "S级杰出军备宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "S",
+    "icon": "/wiki-assets/宝箱/s级杰出装备宝箱.png",
+    "summary": "随机获得S级杰出装备",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 188
+  },
+  {
+    "slug": "mechanic-item-%E6%9D%B0%E5%87%BA%E8%A3%85%E5%A4%87%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "杰出装备自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/宝箱/杰出装备自选宝箱.png",
+    "summary": "自选一件杰出装备",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 189
+  },
+  {
+    "slug": "mechanic-item-%E4%BC%A0%E5%A5%87%E9%85%8D%E4%BB%B6%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "传奇配件自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/宝箱/传奇配件自选宝箱.png",
+    "summary": "自选一件传奇配件",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 190
+  },
+  {
+    "slug": "mechanic-item-%E5%8F%B2%E8%AF%97%E9%85%8D%E4%BB%B6%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "史诗配件自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/宝箱/史诗配件自选宝箱.png",
+    "summary": "自选一件史诗配件",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 191
+  },
+  {
+    "slug": "mechanic-item-%E6%9D%B0%E5%87%BA%E9%85%8D%E4%BB%B6%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "杰出配件自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/宝箱/杰出配件自选宝箱.png",
+    "summary": "自选一件杰出配件",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 192
+  },
+  {
+    "slug": "mechanic-item-%E4%BC%A0%E5%A5%87%E6%94%B6%E8%97%8F%E5%93%81%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "传奇收藏品自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/宝箱/史诗收藏品自选宝箱.png",
+    "summary": "自选一件传奇收藏品",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 193
+  },
+  {
+    "slug": "mechanic-item-%E5%8F%B2%E8%AF%97%E6%94%B6%E8%97%8F%E5%93%81%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "史诗收藏品自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/宝箱/史诗收藏品自选宝箱.png",
+    "summary": "自选一件史诗收藏品",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 194
+  },
+  {
+    "slug": "mechanic-item-%E6%9D%B0%E5%87%BA%E6%94%B6%E8%97%8F%E5%93%81%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "杰出收藏品自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/宝箱/杰出收藏品自选宝箱.png",
+    "summary": "自选一件杰出收藏品",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 195
+  },
+  {
+    "slug": "mechanic-item-%E4%BC%A0%E5%A5%87%E6%94%B6%E8%97%8F%E5%93%81%E5%AE%9D%E7%AE%B1",
+    "name": "传奇收藏品宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/宝箱/传奇收藏品宝箱.png",
+    "summary": "随机获得1件传奇收藏品",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 196
+  },
+  {
+    "slug": "mechanic-item-%E5%8F%B2%E8%AF%97%E6%94%B6%E8%97%8F%E5%93%81%E5%AE%9D%E7%AE%B1",
+    "name": "史诗收藏品宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/宝箱/史诗收藏品宝箱.png",
+    "summary": "随机获得1件史诗收藏品",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 197
+  },
+  {
+    "slug": "mechanic-item-%E6%9D%B0%E5%87%BA%E6%94%B6%E8%97%8F%E5%93%81%E5%AE%9D%E7%AE%B1",
+    "name": "杰出收藏品宝箱",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/宝箱/杰出收藏品宝箱.png",
+    "summary": "随机获得1件杰出收藏品",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 198
+  },
+  {
+    "slug": "mechanic-item-%E5%BC%82%E4%B8%96%E5%AE%A0%E7%89%A9%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "异世宠物自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "SS",
+    "icon": "/wiki-assets/宝箱/异世宠物自选宝箱.png",
+    "summary": "自选一只异世宠物",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 199
+  },
+  {
+    "slug": "mechanic-item-%E4%BC%A0%E5%A5%87%E5%AE%A0%E7%89%A9%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "传奇宠物自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/宝箱/史诗宠物自选宝箱.png",
+    "summary": "自选一只传奇宠物",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 200
+  },
+  {
+    "slug": "mechanic-item-%E5%8F%B2%E8%AF%97%E5%AE%A0%E7%89%A9%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "史诗宠物自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/宝箱/史诗宠物自选宝箱.png",
+    "summary": "自选一只史诗宠物",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 201
+  },
+  {
+    "slug": "mechanic-item-%E6%9D%B0%E5%87%BA%E5%AE%A0%E7%89%A9%E8%87%AA%E9%80%89%E7%A4%BC%E5%8C%85",
+    "name": "杰出宠物自选礼包",
+    "category": "MECHANIC",
+    "subcategory": "宝箱",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/宝箱/杰出宠物宝箱.png",
+    "summary": "自选一只杰出宠物",
+    "tags": [
+      "宝箱"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 宝箱",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 202
+  },
+  {
+    "slug": "mechanic-item-%E6%AD%A6%E5%99%A8%E5%9B%BE%E7%BA%B8",
+    "name": "武器图纸",
+    "category": "MECHANIC",
+    "subcategory": "图纸",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/图纸/武器图纸.png",
+    "summary": "用于武器升级的图纸材料",
+    "tags": [
+      "图纸"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 图纸",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 203
+  },
+  {
+    "slug": "mechanic-item-%E6%8A%A4%E7%94%B2%E5%9B%BE%E7%BA%B8",
+    "name": "护甲图纸",
+    "category": "MECHANIC",
+    "subcategory": "图纸",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/图纸/衣服护甲图纸.png",
+    "summary": "用于护甲升级的图纸材料",
+    "tags": [
+      "图纸"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 图纸",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 204
+  },
+  {
+    "slug": "mechanic-item-%E9%A1%B9%E9%93%BE%E5%9B%BE%E7%BA%B8",
+    "name": "项链图纸",
+    "category": "MECHANIC",
+    "subcategory": "图纸",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/图纸/项链图纸.png",
+    "summary": "用于项链升级的图纸材料",
+    "tags": [
+      "图纸"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 图纸",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 205
+  },
+  {
+    "slug": "mechanic-item-%E8%85%B0%E5%B8%A6%E5%9B%BE%E7%BA%B8",
+    "name": "腰带图纸",
+    "category": "MECHANIC",
+    "subcategory": "图纸",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/图纸/腰带图纸.png",
+    "summary": "用于腰带升级的图纸材料",
+    "tags": [
+      "图纸"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 图纸",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 206
+  },
+  {
+    "slug": "mechanic-item-%E6%89%8B%E5%A5%97%E5%9B%BE%E7%BA%B8",
+    "name": "手套图纸",
+    "category": "MECHANIC",
+    "subcategory": "图纸",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/图纸/手套图纸.png",
+    "summary": "用于手套升级的图纸材料",
+    "tags": [
+      "图纸"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 图纸",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 207
+  },
+  {
+    "slug": "mechanic-item-%E9%9D%B4%E5%AD%90%E5%9B%BE%E7%BA%B8",
+    "name": "靴子图纸",
+    "category": "MECHANIC",
+    "subcategory": "图纸",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/图纸/鞋子图纸.png",
+    "summary": "用于靴子升级的图纸材料",
+    "tags": [
+      "图纸"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 图纸",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 208
+  },
+  {
+    "slug": "mechanic-item-%E7%89%B9%E5%88%AB%E8%A1%8C%E5%8A%A8%E5%88%B8",
+    "name": "特别行动券",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/道具/特别行动券.png",
+    "summary": "可以立即完成一次特别行动",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 209
+  },
+  {
+    "slug": "mechanic-item-%E7%9F%BF%E6%B4%9E%E6%8C%91%E6%88%98%E5%88%B8",
+    "name": "矿洞挑战券",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/道具/矿洞挑战券.png",
+    "summary": "可以立即完成一次矿洞挑战",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 210
+  },
+  {
+    "slug": "mechanic-item-%E6%B4%97%E7%BB%83%E7%B2%BE%E5%8D%8E",
+    "name": "洗练精华",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/道具/洗炼精华.png",
+    "summary": "用于洗练载具系统中的零件属性",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 211
+  },
+  {
+    "slug": "mechanic-item-%E5%BC%82%E5%AE%A0%E7%81%B5%E8%8D%AF",
+    "name": "异宠灵药",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "S",
+    "icon": "/wiki-assets/道具/异宠灵药.png",
+    "summary": "可用于修改异世宠物助战技能的灵药(仅满级后可使用)",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 212
+  },
+  {
+    "slug": "mechanic-item-%E7%89%B9%E5%B7%A5%E9%87%8D%E7%BD%AE%E8%8D%AF%E6%B0%B4",
+    "name": "特工重置药水",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "S",
+    "icon": "/wiki-assets/道具/HeroReset.png",
+    "summary": "选择1位特工重置，等级和星级均降为1，返还所有升级材料 （特训进度保留，但不生效）",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 213
+  },
+  {
+    "slug": "mechanic-item-%E7%89%B9%E5%B7%A5%E5%90%8C%E8%B0%83%E9%87%8D%E7%BD%AE",
+    "name": "特工同调重置",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/道具/exchange_btn.png",
+    "summary": "立即重置特工同调等级至0级，重启游戏后生效",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 214
+  },
+  {
+    "slug": "mechanic-item-%E4%BC%A0%E5%A5%87%E6%94%B6%E8%97%8F%E5%93%81%E8%A7%A3%E6%9E%84%E6%9C%BA",
+    "name": "传奇收藏品解构机",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/道具/传奇收藏品解构机.png",
+    "summary": "将传奇收藏品星级降为1金星",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 215
+  },
+  {
+    "slug": "mechanic-item-%E9%AB%98%E7%BA%A7%E6%94%B6%E8%97%8F%E4%B9%8B%E5%BF%83",
+    "name": "高级收藏之心",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "LEGENDARY",
+    "icon": "/wiki-assets/道具/高级收藏之心.png",
+    "summary": "用于进化自定义典藏套装的能量，可以通过传奇收藏品自选礼包获得",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 216
+  },
+  {
+    "slug": "mechanic-item-%E5%9F%BA%E7%A1%80%E7%A7%91%E6%8A%80%E7%B4%A0%E6%9D%90",
+    "name": "基础科技素材",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/道具/神炼基础科技材料.png",
+    "summary": "地球科技的产物，可以通过拆解装备获取，是装备神铸的必要材料",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 217
+  },
+  {
+    "slug": "mechanic-item-%E9%87%91%E8%89%B2DNA",
+    "name": "金色DNA",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "S",
+    "icon": "/wiki-assets/道具/基因改造DNA精华.png",
+    "summary": "可以用来进行关键进化",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 218
+  },
+  {
+    "slug": "mechanic-item-%E8%83%BD%E9%87%8F%E7%B2%BE%E5%8D%8E",
+    "name": "能量精华",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/道具/特工升级精油_经验.png",
+    "summary": "可用于特工升级的神秘液体",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 219
+  },
+  {
+    "slug": "mechanic-item-%E5%AE%A0%E7%89%A9%E9%A5%BC%E5%B9%B2",
+    "name": "宠物饼干",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/道具/宠物饼干.png",
+    "summary": "可以喂食给宠物获得宠物经验",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 220
+  },
+  {
+    "slug": "mechanic-item-%E5%A4%8D%E6%B4%BB%E5%B8%81",
+    "name": "复活币",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/道具/复活币.png",
+    "summary": "可以复活角色的神奇硬币",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 221
+  },
+  {
+    "slug": "mechanic-item-%E9%92%BB%E7%9F%B3",
+    "name": "钻石",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/道具/钻石.png",
+    "summary": "钻石",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 222
+  },
+  {
+    "slug": "mechanic-item-%E9%87%91%E5%B8%81",
+    "name": "金币",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/道具/金币.png",
+    "summary": "金币",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 223
+  },
+  {
+    "slug": "mechanic-item-%E5%85%AC%E4%BC%9A%E5%B8%81",
+    "name": "公会币",
+    "category": "MECHANIC",
+    "subcategory": "材料",
+    "rarity": "EPIC",
+    "icon": "/wiki-assets/道具/公会币.png",
+    "summary": "用来购买公会商店物品及参与潮汐秘境活动",
+    "tags": [
+      "材料"
+    ],
+    "attributes": {
+      "slot": "消耗品 / 材料",
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 224
+  },
+  {
+    "slug": "pet-%E7%9A%AE%E7%9A%AE%E5%BE%B7",
+    "name": "皮皮德",
+    "category": "PET",
+    "subcategory": "普通宠物",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/宠物/狗.png",
+    "summary": "变异前就是人类最忠诚的好伙伴，觉醒特技「激励吼叫」可大幅提升主人与自身的直接攻击力与暴击伤害。",
+    "tags": [
+      "普通",
+      "增伤辅助",
+      "激励吼叫",
+      "全队攻击"
+    ],
+    "attributes": {
+      "slot": "战术宠物",
+      "acquisition": "普通宠物宝箱开启 / 巡逻与章节挂机合成",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "噪音攻击",
+            "description": "向敌人吼叫，对敌人造成250%攻击的伤害，噪音穿透所有敌人，主人升级时提升50%伤害，冷却1秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/pet_weapon_1_0.png"
+          },
+          {
+            "name": "激励吼叫",
+            "description": "专属觉醒特技，随觉醒星级不断进阶强化",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetWakeSkill_1.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "解锁觉醒技能：激励吼叫",
+              "狂吠，提升主人和自身5%攻击，持续3秒"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“激励吼叫”升级",
+              "狂吠，提升主人和自身5%攻击，提升主人5%暴击伤害，持续3秒"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“激励吼叫”升级",
+              "狂吠，提升主人和自身5%攻击，提升主人5%暴击伤害，降低主人5%攻击CD，持续3秒"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“激励吼叫”升级",
+              "狂吠，提升主人和自身5%攻击，提升主人5%暴击伤害，降低主人5%攻击CD，持续5秒"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“激励吼叫”升级",
+              "狂吠，提升主人和自身10%攻击，提升主人10%暴击伤害，降低主人5%攻击CD，持续5秒"
+            ]
+          }
+        ],
+        "supportSkills": [
+          {
+            "name": "强壮",
+            "description": "战斗中主人每升5级增加宠物20%生命上限，主人生命上限+5%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_1.png",
+            "type": "support"
+          },
+          {
+            "name": "强力",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_2.png",
+            "type": "support"
+          },
+          {
+            "name": "增幅",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能范围",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_3.png",
+            "type": "support"
+          },
+          {
+            "name": "耐久",
+            "description": "战斗中主人每升5级增加宠物子弹持续时间15%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_4.png",
+            "type": "support"
+          },
+          {
+            "name": "穿透",
+            "description": "战斗中主人每升5级增加宠物攻击穿透单位数量1",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_5.png",
+            "type": "support"
+          }
+        ],
+        "passives": [
+          {
+            "name": "激励",
+            "description": "增加主人3%暴击率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_0.png",
+            "type": "passive"
+          },
+          {
+            "name": "鼓舞",
+            "description": "增加主人6%暴击伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_1.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级追风",
+            "description": "增加宠物75%移动速度",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_12.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级吸血",
+            "description": "增加宠物2%攻击吸血",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_14.png",
+            "type": "passive"
+          },
+          {
+            "name": "最高忠诚",
+            "description": "代替主人承受30%伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_17.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级同仇敌忾",
+            "description": "增加宠物35%攻击继承",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_6.png",
+            "type": "passive"
+          }
+        ]
+      },
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 101
+  },
+  {
+    "slug": "pet-%E8%93%9D%E7%9B%86%E5%8F%8B",
+    "name": "蓝盆友",
+    "category": "PET",
+    "subcategory": "普通宠物",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/宠物/蓝盆友.png",
+    "summary": "无论是陪伴还是战斗都令人暖心，觉醒特技「旋转毛球」抛出多枚大毛球造成高频减速与贯穿伤害。",
+    "tags": [
+      "普通",
+      "强力减速",
+      "高频贯穿",
+      "旋转毛球"
+    ],
+    "attributes": {
+      "slot": "战术宠物",
+      "acquisition": "普通宠物宝箱开启 / 巡逻与章节挂机合成",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "抓挠",
+            "description": "使用锋利的爪子抓挠敌人造成200%攻击的伤害，穿透所有敌人，主人升级时提升50%伤害，冷却0.5秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/pet_weapon_2_0.png"
+          },
+          {
+            "name": "旋转毛球",
+            "description": "专属觉醒特技，随觉醒星级不断进阶强化",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetWakeSkill_2.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "解锁觉醒技能：旋转毛球",
+              "抛出3个毛球，对路线上的怪物造成一定频率伤害，命中怪物造成减速"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“旋转毛球”升级",
+              "抛出6个毛球，对路线上的怪物造成一定频率伤害，命中怪物造成减速"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“旋转毛球”升级",
+              "抛出6个大毛球，对路线上的怪物造成一定频率伤害，命中怪物造成减速"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“旋转毛球”升级",
+              "抛出9个大毛球，对路线上的怪物造成高频率伤害，命中怪物造成减速"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“旋转毛球”升级",
+              "抛出12个大毛球，对路线上的怪物造成高频率伤害，命中怪物造成减速"
+            ]
+          }
+        ],
+        "supportSkills": [
+          {
+            "name": "强壮",
+            "description": "战斗中主人每升5级增加宠物20%生命上限，主人生命上限+5%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_1.png",
+            "type": "support"
+          },
+          {
+            "name": "强力",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_2.png",
+            "type": "support"
+          },
+          {
+            "name": "增幅",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能范围",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_3.png",
+            "type": "support"
+          },
+          {
+            "name": "耐久",
+            "description": "战斗中主人每升5级增加宠物子弹持续时间15%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_4.png",
+            "type": "support"
+          },
+          {
+            "name": "穿透",
+            "description": "战斗中主人每升5级增加宠物攻击穿透单位数量1",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_5.png",
+            "type": "support"
+          }
+        ],
+        "passives": [
+          {
+            "name": "狂化",
+            "description": "增加宠物攻击和技能15%暴击率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_15.png",
+            "type": "passive"
+          },
+          {
+            "name": "同心协力",
+            "description": "增加宠物10%血量继承",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_7.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级战斗渴望",
+            "description": "减少宠物20%攻击和技能冷却",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_10.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级锋利爪牙",
+            "description": "增加宠物20%技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_8.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级精进",
+            "description": "增加主人10%战斗经验获取",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_3.png",
+            "type": "passive"
+          }
+        ]
+      },
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 102
+  },
+  {
+    "slug": "pet-DD-6",
+    "name": "DD-6",
+    "category": "PET",
+    "subcategory": "普通宠物",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/宠物/DD-6-机器人.png",
+    "summary": "神秘的尖端机械战宠，觉醒特技「激光炮」释放横扫四周的高能激光束，超大范围清屏与高频输出。",
+    "tags": [
+      "普通",
+      "激光横扫",
+      "范围轰炸",
+      "激光炮"
+    ],
+    "attributes": {
+      "slot": "战术宠物",
+      "acquisition": "普通宠物宝箱开启 / 巡逻与章节挂机合成",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "激光",
+            "description": "发射3发灼热的激光射击敌人，造成400%攻击的伤害，激光可以穿透1个敌人，主人升级时提升50%伤害，冷却1秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/pet_weapon_3_0.png"
+          },
+          {
+            "name": "激光炮",
+            "description": "专属觉醒特技，随觉醒星级不断进阶强化",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetWakeSkill_3.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "解锁觉醒技能：激光炮",
+              "发射横扫前方小范围的激光束，冷却20秒"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“激光炮”升级",
+              "发射横扫前方中等范围的激光束，冷却12秒"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“激光炮”升级",
+              "发射横扫前方大范围的激光束，冷却12秒"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“激光炮”升级",
+              "发射横扫前方超大范围的激光束，冷却6秒"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“激光炮”升级",
+              "发射横扫四周的激光束，冷却6秒"
+            ]
+          }
+        ],
+        "supportSkills": [
+          {
+            "name": "强壮",
+            "description": "战斗中主人每升5级增加宠物20%生命上限，主人生命上限+5%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_1.png",
+            "type": "support"
+          },
+          {
+            "name": "强力",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_2.png",
+            "type": "support"
+          },
+          {
+            "name": "增幅",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能范围",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_3.png",
+            "type": "support"
+          },
+          {
+            "name": "耐久",
+            "description": "战斗中主人每升5级增加宠物子弹持续时间15%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_4.png",
+            "type": "support"
+          },
+          {
+            "name": "穿透",
+            "description": "战斗中主人每升5级增加宠物攻击穿透单位数量1",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_5.png",
+            "type": "support"
+          }
+        ],
+        "passives": [
+          {
+            "name": "战斗渴望",
+            "description": "减少宠物15%攻击和技能冷却",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_10.png",
+            "type": "passive"
+          },
+          {
+            "name": "不屈意志",
+            "description": "减少宠物20%复活时间",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_9.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级坚硬皮肤",
+            "description": "减少宠物40%承受伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_11.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级同仇敌忾",
+            "description": "增加宠物15%攻击继承",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_6.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级激励",
+            "description": "增加主人5%暴击率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_0.png",
+            "type": "passive"
+          }
+        ]
+      },
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 103
+  },
+  {
+    "slug": "pet-%E6%91%B8%E9%B1%BC",
+    "name": "摸鱼",
+    "category": "PET",
+    "subcategory": "普通宠物",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/宠物/鱼.png",
+    "summary": "不要被呆萌的样子所迷惑，觉醒特技「守护气泡」为主人生成防御气泡击退怪物并高额持续回血。",
+    "tags": [
+      "普通",
+      "回血护卫",
+      "击退保护",
+      "守护气泡"
+    ],
+    "attributes": {
+      "slot": "战术宠物",
+      "acquisition": "普通宠物宝箱开启 / 巡逻与章节挂机合成",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "泡泡弹",
+            "description": "向敌人吐出可以爆炸的泡泡，泡泡击中和爆炸都会造成200%攻击的伤害，主人升级时提升50%伤害，冷却1秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/pet_weapon_4_0.png"
+          },
+          {
+            "name": "守护气泡",
+            "description": "专属觉醒特技，随觉醒星级不断进阶强化",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetWakeSkill_4.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "解锁觉醒技能：守护气泡",
+              "为主人生成一个持续3秒的气泡，击退小型怪物，气泡范围内每秒回复3%HP，冷却30秒"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“守护气泡”升级",
+              "为主人生成一个持续3秒的气泡，击退小型怪物，气泡范围内每秒回复5%HP，冷却30秒"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“守护气泡”升级",
+              "为主人生成一个持续3秒的气泡，击退小型怪物，气泡范围内每秒回复5%HP，靠近气泡的怪物会持续受到伤害，冷却30秒"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“守护气泡”升级",
+              "为主人生成一个持续3秒的气泡，击退小型怪物，气泡范围内每秒回复5%HP，靠近气泡的怪物会持续受到伤害，冷却18秒"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“守护气泡”升级",
+              "为主人生成一个持续3秒的气泡，击退小型怪物，气泡范围内每秒回复10%HP，靠近气泡的怪物会受到更高伤害，冷却18秒"
+            ]
+          }
+        ],
+        "supportSkills": [
+          {
+            "name": "强壮",
+            "description": "战斗中主人每升5级增加宠物20%生命上限，主人生命上限+5%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_1.png",
+            "type": "support"
+          },
+          {
+            "name": "强力",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_2.png",
+            "type": "support"
+          },
+          {
+            "name": "增幅",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能范围",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_3.png",
+            "type": "support"
+          },
+          {
+            "name": "耐久",
+            "description": "战斗中主人每升5级增加宠物子弹持续时间15%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_4.png",
+            "type": "support"
+          },
+          {
+            "name": "穿透",
+            "description": "战斗中主人每升5级增加宠物攻击穿透单位数量1",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_5.png",
+            "type": "support"
+          }
+        ],
+        "passives": [
+          {
+            "name": "精进",
+            "description": "增加主人5%战斗经验获取",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_3.png",
+            "type": "passive"
+          },
+          {
+            "name": "护卫",
+            "description": "增加主人10%撞击免伤率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_4.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级屏障",
+            "description": "增加主人15%子弹免伤率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_5.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级巨大化",
+            "description": "体型变大，增加宠物20%攻击和技能范围",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_13.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级锋利爪牙",
+            "description": "增加宠物60%技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_8.png",
+            "type": "passive"
+          }
+        ]
+      },
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 104
+  },
+  {
+    "slug": "pet-%E5%A3%B3%E5%A3%B3%E9%BE%9F",
+    "name": "壳壳龟",
+    "category": "PET",
+    "subcategory": "普通宠物",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/宠物/壳壳龟.png",
+    "summary": "行走看似迟缓但绝对坚韧，觉醒特技「吸引漩涡」嘲讽聚怪，大幅自身减伤并替主人分担50%伤害。",
+    "tags": [
+      "普通",
+      "坚韧坦怪",
+      "嘲讽聚怪",
+      "替伤护盾"
+    ],
+    "attributes": {
+      "slot": "战术宠物",
+      "acquisition": "普通宠物宝箱开启 / 巡逻与章节挂机合成",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "龟派脉冲",
+            "description": "跳起后重重砸向地面，产生冲击波，造成300%攻击的伤害，主人升级时提升50%伤害，冷却1秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/pet_weapon_5_0.png"
+          },
+          {
+            "name": "吸引漩涡",
+            "description": "专属觉醒特技，随觉醒星级不断进阶强化",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetWakeSkill_5.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "解锁觉醒技能：吸引漩涡",
+              "吸引附近的怪物，期间乌龟减伤10%，冷却24秒"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“吸引漩涡”升级",
+              "吸引大范围的怪物，期间乌龟减伤20%，冷却24秒"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“吸引漩涡”升级",
+              "吸引大范围的怪物，期间乌龟减伤20%，冷却24秒，乌龟存活时分担主人50%的伤害"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“吸引漩涡”升级",
+              "吸引大范围的怪物，期间乌龟减伤20%，冷却16秒，乌龟存活时自身+10%减伤，分担主人50%的伤害"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“吸引漩涡”升级",
+              "吸引大范围的怪物，期间乌龟减伤20%，冷却16秒，乌龟存活时自身+20%减伤，分担主人50%的伤害"
+            ]
+          }
+        ],
+        "supportSkills": [
+          {
+            "name": "强壮",
+            "description": "战斗中主人每升5级增加宠物20%生命上限，主人生命上限+5%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_1.png",
+            "type": "support"
+          },
+          {
+            "name": "强力",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_2.png",
+            "type": "support"
+          },
+          {
+            "name": "增幅",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能范围",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_3.png",
+            "type": "support"
+          },
+          {
+            "name": "耐久",
+            "description": "战斗中主人每升5级增加宠物子弹持续时间15%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_4.png",
+            "type": "support"
+          },
+          {
+            "name": "穿透",
+            "description": "战斗中主人每升5级增加宠物攻击穿透单位数量1",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_5.png",
+            "type": "support"
+          }
+        ],
+        "passives": [
+          {
+            "name": "屏障",
+            "description": "增加主人10%子弹免伤率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_5.png",
+            "type": "passive"
+          },
+          {
+            "name": "护卫",
+            "description": "增加主人10%撞击免伤率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_4.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级不屈意志",
+            "description": "减少宠物30%复活时间",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_9.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级同心协力",
+            "description": "增加宠物15%血量继承",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_7.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级坚硬皮肤",
+            "description": "减少宠物60%承受伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_11.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级狂化",
+            "description": "增加宠物攻击和技能60%暴击率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_15.png",
+            "type": "passive"
+          }
+        ]
+      },
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 105
+  },
+  {
+    "slug": "pet-%E6%B3%A1%E6%B3%A1%E8%9F%B9",
+    "name": "泡泡蟹",
+    "category": "PET",
+    "subcategory": "普通宠物",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/宠物/螃蟹.png",
+    "summary": "面对敌人异常凶悍的强力水系战宠，觉醒特技「致命钳击」击杀敌人无限叠加强力伤害与技能冷却缩减。",
+    "tags": [
+      "普通",
+      "击杀叠伤",
+      "快速刷新",
+      "致命钳击"
+    ],
+    "attributes": {
+      "slot": "战术宠物",
+      "acquisition": "普通宠物宝箱开启 / 巡逻与章节挂机合成",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "浪涌",
+            "description": "向敌人推出强力的浪涌，造成500%攻击的伤害，穿透所有敌人，主人升级时提升50%伤害，冷却1.5秒",
+            "icon": "/wiki-assets/技能图标/宠物技能/pet_weapon_8_0.png"
+          },
+          {
+            "name": "致命钳击",
+            "description": "专属觉醒特技，随觉醒星级不断进阶强化",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetWakeSkill_8.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": [
+              "解锁觉醒技能：羽毛连射",
+              "羽毛4连射，羽毛命中同一目标技能冷却降低2%，冷却最多降低20%"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“羽毛连射”升级",
+              "羽毛4连射，羽毛命中同一目标技能冷却降低2%，冷却最多降低35%"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": [
+              "觉醒技能“羽毛连射”升级",
+              "羽毛4连射，羽毛命中同一目标技能冷却降低2%伤害提升2.5%，冷却最多降低35%，伤害最高提升40%"
+            ]
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“羽毛连射”升级",
+              "羽毛4连射，羽毛命中同一目标技能冷却降低4%伤害提升5%，冷却最多降低35%，伤害最高提升40%"
+            ]
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": [
+              "出战技能槽位品质提升"
+            ]
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": [
+              "觉醒技能“羽毛连射”升级",
+              "羽毛4连射，羽毛命中同一目标技能冷却降低6%伤害提升10%，冷却最多降低50%，伤害最高提升90%"
+            ]
+          }
+        ],
+        "supportSkills": [
+          {
+            "name": "强壮",
+            "description": "战斗中主人每升5级增加宠物20%生命上限，主人生命上限+5%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_1.png",
+            "type": "support"
+          },
+          {
+            "name": "强力",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_2.png",
+            "type": "support"
+          },
+          {
+            "name": "增幅",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能范围",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_3.png",
+            "type": "support"
+          },
+          {
+            "name": "耐久",
+            "description": "战斗中主人每升5级增加宠物子弹持续时间15%",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_4.png",
+            "type": "support"
+          },
+          {
+            "name": "穿透",
+            "description": "战斗中主人每升5级增加宠物攻击穿透单位数量1",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_5.png",
+            "type": "support"
+          }
+        ],
+        "passives": [
+          {
+            "name": "吸血",
+            "description": "增加宠物1%攻击吸血",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_14.png",
+            "type": "passive"
+          },
+          {
+            "name": "锋利爪牙",
+            "description": "增加宠物15%技能伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_8.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级狂化",
+            "description": "增加宠物攻击和技能20%暴击率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_15.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级同仇敌忾",
+            "description": "增加宠物15%攻击继承",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_6.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级战斗渴望",
+            "description": "减少宠物30%攻击和技能冷却",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_10.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级不屈意志",
+            "description": "减少宠物40%复活时间",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_9.png",
+            "type": "passive"
+          }
+        ]
+      },
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 106
+  },
+  {
+    "slug": "pet-%E5%B0%8F%E8%9C%97",
+    "name": "小蜗",
+    "category": "PET",
+    "subcategory": "普通宠物",
+    "rarity": "COMMON",
+    "icon": "/wiki-assets/宠物/蜗牛.png",
+    "summary": "海绵宝宝的忠实萌宠，行动缓慢但是助战与腐蚀减速能力超群，移动留下带有腐蚀性的粘液持续重创敌人。",
+    "tags": [
+      "普通",
+      "海绵宝宝联动",
+      "腐蚀粘液",
+      "持续重创"
+    ],
+    "attributes": {
+      "slot": "战术宠物",
+      "acquisition": "普通宠物宝箱开启 / 巡逻与章节挂机合成",
+      "petDetail": {
+        "innateSkills": [
+          {
+            "name": "粘液",
+            "description": "移动时留下带有腐蚀性的粘液，每0.5秒造成200%攻击的伤害，持续4秒，主人升级时提升50%伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/pet_weapon_9_0.png"
+          },
+          {
+            "name": "突袭",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能伤害；额外特性：减少出战宠物20%CD（不随主人等级成长）",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_6.png"
+          }
+        ],
+        "awakeningStars": [
+          {
+            "star": 1,
+            "tier": "yellow",
+            "lines": []
+          },
+          {
+            "star": 2,
+            "tier": "yellow",
+            "lines": []
+          },
+          {
+            "star": 3,
+            "tier": "yellow",
+            "lines": []
+          },
+          {
+            "star": 4,
+            "tier": "yellow",
+            "lines": []
+          },
+          {
+            "star": 5,
+            "tier": "yellow",
+            "lines": []
+          },
+          {
+            "star": 1,
+            "tier": "red",
+            "lines": []
+          },
+          {
+            "star": 2,
+            "tier": "red",
+            "lines": []
+          },
+          {
+            "star": 3,
+            "tier": "red",
+            "lines": []
+          },
+          {
+            "star": 4,
+            "tier": "red",
+            "lines": []
+          },
+          {
+            "star": 5,
+            "tier": "red",
+            "lines": []
+          }
+        ],
+        "supportSkills": [
+          {
+            "name": "突袭",
+            "description": "战斗中主人每升5级增加宠物10%攻击和技能伤害；额外特性：减少出战宠物20%CD（不随主人等级成长）",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSupportSkill_6.png",
+            "type": "support"
+          }
+        ],
+        "passives": [
+          {
+            "name": "鼓舞",
+            "description": "增加主人6%暴击伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_1.png",
+            "type": "passive"
+          },
+          {
+            "name": "护卫",
+            "description": "增加主人10%撞击免伤率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_4.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级激励",
+            "description": "增加主人4%暴击率",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_0.png",
+            "type": "passive"
+          },
+          {
+            "name": "高级坚硬皮肤",
+            "description": "减少宠物40%承受伤害",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_11.png",
+            "type": "passive"
+          },
+          {
+            "name": "超级同心协力",
+            "description": "增加宠物35%血量继承",
+            "icon": "/wiki-assets/技能图标/宠物技能/PetSkills_7.png",
+            "type": "passive"
+          }
+        ]
+      },
+      "milestones": []
+    },
+    "relatedArticleSlugs": [],
+    "sort": 1098
   }
 ];

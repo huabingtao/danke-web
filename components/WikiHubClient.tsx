@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { 
   Search, 
   Flame, 
@@ -27,6 +28,7 @@ import { VEHICLES_DATA, VehicleData } from '@/lib/data/vehicles';
 type TabType = 'heroes' | 'collections' | 'vehicles';
 
 export default function WikiHubClient() {
+  const searchParams = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabType>('heroes');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTag, setSelectedTag] = useState<string>('all');
@@ -41,6 +43,17 @@ export default function WikiHubClient() {
     { id: 'vuln', label: '💥 独立易伤', icon: Crosshair },
     { id: 'all_hero', label: '🛡️ 全体生效', icon: Shield },
   ];
+
+  useEffect(() => {
+    const tag = searchParams.get('tag');
+    if (tag && FILTER_PILLS.some((p) => p.id === tag)) {
+      setSelectedTag(tag);
+    }
+    const tab = searchParams.get('tab');
+    if (tab === 'heroes' || tab === 'collections' || tab === 'vehicles') {
+      setActiveTab(tab as TabType);
+    }
+  }, [searchParams]);
 
   // Filtered Heroes
   const filteredHeroes = useMemo(() => {
@@ -191,7 +204,7 @@ export default function WikiHubClient() {
             }`}
           >
             <Car className="w-3.5 h-3.5" />
-            <span>战术载具 ({VEHICLES_DATA.length})</span>
+            <span>载具 ({VEHICLES_DATA.length})</span>
           </button>
         </div>
       </div>

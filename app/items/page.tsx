@@ -1,10 +1,8 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import WikiEncyclopediaClient from '@/components/WikiEncyclopediaClient';
-import { fetchWikiEntries } from '@/lib/api';
-import {
-  LOCAL_WIKI_ENTRIES,
-  LOCAL_HANDBOOK_GUIDES,
-} from '@/lib/local-wiki-data';
+import { LOCAL_HANDBOOK_GUIDES } from '@/lib/local-wiki-data';
+import { getNormalizedWikiEntries } from '@/lib/wiki-server';
 
 export const metadata: Metadata = {
   title: '百科图鉴中心 | 弹壳特攻队 Wiki 知识库',
@@ -13,20 +11,14 @@ export const metadata: Metadata = {
 };
 
 export default async function ItemsPage() {
-  let entries = LOCAL_WIKI_ENTRIES;
-  try {
-    const remote = await fetchWikiEntries();
-    if (remote && remote.length > 0) {
-      entries = remote;
-    }
-  } catch {
-    entries = LOCAL_WIKI_ENTRIES;
-  }
+  const entries = await getNormalizedWikiEntries();
 
   return (
-    <WikiEncyclopediaClient
-      initialEntries={entries}
-      handbookGuides={LOCAL_HANDBOOK_GUIDES}
-    />
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0f1d] p-8 text-center text-slate-400">加载图鉴中...</div>}>
+      <WikiEncyclopediaClient
+        initialEntries={entries}
+        handbookGuides={LOCAL_HANDBOOK_GUIDES}
+      />
+    </Suspense>
   );
 }

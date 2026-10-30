@@ -2,10 +2,16 @@
 
 import { MessageCircle, HeartHandshake, ShieldAlert, Sparkles } from 'lucide-react';
 
-export default function FooterSection() {
+interface FooterSectionProps {
+  width?: 'default' | 'wide';
+}
+
+export default function FooterSection({ width = 'default' }: FooterSectionProps) {
+  const containerWidthClass = width === 'wide' ? 'max-w-[1600px]' : 'max-w-7xl';
+
   return (
     <footer id="footer-about" className="pt-10 pb-12 border-t border-slate-800/80 mt-16 text-slate-400">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className={`${containerWidthClass} mx-auto px-4 sm:px-6 lg:px-8 space-y-8`}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {/* 1. 微信公众号入口 */}
           <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-2.5">

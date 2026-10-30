@@ -7,6 +7,7 @@ export interface StrategyArticle {
   categoryLabel: string;
   summary: string;
   coverImage?: string;
+  coverVertical?: string;
   publishedAt: string;
   updatedAt?: string;
   gameVersion?: string;
@@ -26,6 +27,7 @@ export const FEATURED_STRATEGY: StrategyArticle = {
   categoryLabel: '版本爆料',
   summary: '月殇护手（SS手套）异星神炼全13级属性明细、四大触发机制实战分析与平民/高战分档投资建议。',
   coverImage: '/uploads/creator/爆料/ss手套开启神炼/cover.png',
+  coverVertical: '/uploads/creator/爆料/ss手套开启神炼/cover_vertical.png',
   publishedAt: '2026-09-11',
   updatedAt: '2026-09-11',
   gameVersion: 'v2.11+',
@@ -44,6 +46,7 @@ export const MUST_READ_STRATEGIES: StrategyArticle[] = [
     categoryLabel: '常见问题',
     summary: '解决萌新最纠结的核心问题：开局特工顺位、坐骑过渡路径、配件过载触发机制与红装神铸踩坑预警。',
     coverImage: '/uploads/creator/其他/高频问答第一弹/cover.png',
+    coverVertical: '/uploads/creator/其他/高频问答第一弹/cover_vertical.png',
     publishedAt: '2026-08-31',
     gameVersion: 'v2.10+',
     tags: ['答疑', '新手必读', '特工选择', '避坑指南'],
@@ -58,6 +61,7 @@ export const MUST_READ_STRATEGIES: StrategyArticle[] = [
     categoryLabel: '特工评测',
     summary: '特工机制与增伤倍率实测拆解，微氪与零氪玩家的星级解锁顺位及武器共鸣实战推荐。',
     coverImage: '/uploads/creator/特工/s特工伊狑分析/cover.png',
+    coverVertical: '/uploads/creator/特工/s特工伊狑分析/cover_vertical.png',
     publishedAt: '2026-09-10',
     gameVersion: 'v2.11+',
     tags: ['特工', '特工养成', '伤害机制', '星级质变'],
@@ -72,6 +76,7 @@ export const MUST_READ_STRATEGIES: StrategyArticle[] = [
     categoryLabel: '装备养成',
     summary: '系统讲解宠物升级、被动技能锁词条逻辑与异宠核心搭配，避免乱耗金币与觉醒石。',
     coverImage: '/uploads/creator/宠物/从入门到入土-宠物篇/cover.png',
+    coverVertical: '/uploads/creator/宠物/从入门到入土-宠物篇/cover_vertical.png',
     publishedAt: '2026-08-18',
     gameVersion: 'v2.10+',
     tags: ['宠物', '战术宠物', '洗练指南', '配队思路'],
@@ -86,6 +91,7 @@ export const MUST_READ_STRATEGIES: StrategyArticle[] = [
     categoryLabel: '常见问题',
     summary: '深入解答特工 741 含义、神炼材料投入优先度、扭曲腰带伤害放大门槛等中高阶疑难。',
     coverImage: '/uploads/creator/其他/高频问答第二弹/cover.png',
+    coverVertical: '/uploads/creator/其他/高频问答第二弹/cover_vertical.png',
     publishedAt: '2026-09-12',
     gameVersion: 'v2.11+',
     tags: ['答疑', '高阶答疑', '神炼节奏', '装备门槛'],

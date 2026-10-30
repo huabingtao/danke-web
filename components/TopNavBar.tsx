@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Flame, Menu, X, BookOpen, Layers, Calculator, Info, Sparkles } from 'lucide-react';
+import { Flame, Menu, X, BookOpen, Layers, Calculator, Info, Sparkles, Home } from 'lucide-react';
 
 interface TopNavBarProps {
   onNavigateTo?: (targetId: string) => void;
+  width?: 'default' | 'wide';
 }
 
-export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
+export default function TopNavBar({ onNavigateTo, width = 'default' }: TopNavBarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleNavClick = (targetId: string) => {
@@ -23,9 +24,11 @@ export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
     }
   };
 
+  const containerWidthClass = width === 'wide' ? 'max-w-[1600px]' : 'max-w-7xl';
+
   return (
     <header className="sticky top-0 z-50 w-full bg-[#0a0f1d]/85 backdrop-blur-xl border-b border-slate-800/80 transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className={`${containerWidthClass} mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between`}>
         {/* Left: Brand Logo & Title */}
         <Link href="/" className="flex items-center space-x-3 group">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-orange-600 via-amber-500 to-yellow-400 p-[2px] shadow-lg shadow-orange-500/20 group-hover:scale-105 transition-transform duration-300 shrink-0">
@@ -47,15 +50,23 @@ export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
         <nav className="hidden md:flex items-center space-x-2">
           <Link
             href="/"
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
+            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
           >
-            <BookOpen className="w-4 h-4 text-orange-400" />
-            <span>深度攻略</span>
+            <Home className="w-4 h-4 text-orange-400" />
+            <span>首页</span>
+          </Link>
+
+          <Link
+            href="/strategies"
+            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
+          >
+            <BookOpen className="w-4 h-4 text-amber-400" />
+            <span>攻略库</span>
           </Link>
 
           <Link
             href="/wiki"
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 border border-orange-500/20 transition-all"
+            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-sm font-bold text-orange-400 hover:text-orange-300 hover:bg-orange-500/10 border border-orange-500/20 transition-all"
           >
             <Sparkles className="w-4 h-4 text-orange-400 animate-pulse" />
             <span>战术图鉴</span>
@@ -63,7 +74,7 @@ export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
 
           <Link
             href="/items"
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
+            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
           >
             <Layers className="w-4 h-4 text-amber-400" />
             <span>物品图鉴</span>
@@ -71,7 +82,7 @@ export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
 
           <Link
             href="/calculator"
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
+            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all"
           >
             <Calculator className="w-4 h-4 text-cyan-400" />
             <span>养成消耗表</span>
@@ -79,7 +90,7 @@ export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
 
           <button
             onClick={() => handleNavClick('footer-about')}
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all cursor-pointer"
+            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-sm font-bold text-slate-200 hover:text-white hover:bg-slate-800/60 transition-all cursor-pointer"
           >
             <Info className="w-4 h-4 text-slate-400" />
             <span>关于</span>
@@ -106,8 +117,17 @@ export default function TopNavBar({ onNavigateTo }: TopNavBarProps) {
             onClick={() => setMobileMenuOpen(false)}
             className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-orange-500/20 hover:text-orange-300"
           >
-            <BookOpen className="w-4 h-4 text-orange-400" />
-            <span>深度攻略门户</span>
+            <Home className="w-4 h-4 text-orange-400" />
+            <span>功能首页</span>
+          </Link>
+
+          <Link
+            href="/strategies"
+            onClick={() => setMobileMenuOpen(false)}
+            className="w-full flex items-center space-x-2.5 px-4 py-2.5 rounded-xl font-bold text-sm bg-slate-900/80 text-slate-100 hover:bg-amber-500/20 hover:text-amber-300"
+          >
+            <BookOpen className="w-4 h-4 text-amber-400" />
+            <span>战术攻略库</span>
           </Link>
 
           <Link

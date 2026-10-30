@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import WikiHubClient from '@/components/WikiHubClient';
 
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function WikiPage() {
-  return <WikiHubClient />;
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0f1d] p-8 text-center text-slate-400">加载词条字典中...</div>}>
+      <WikiHubClient />
+    </Suspense>
+  );
 }
