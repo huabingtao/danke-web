@@ -15,6 +15,12 @@ export interface StrategyArticle {
   externalUrl?: string;
   isPinned?: boolean;
   isMustRead?: boolean;
+  series?: string;
+  subtopic?: string;
+  subtopicLabel?: string;
+  contentType?: string;
+  date?: string;
+  highlights?: string[];
 }
 
 // 手动指定的本期重点置顶攻略（非日历重磅爆料精算）

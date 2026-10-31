@@ -13,6 +13,7 @@ import { stripFrontmatter, renderMarkdownToHtml, safeDecodeUri } from '@/lib/mar
 import { resolveLocalArticle, getAllLocalArticleSlugs } from '@/lib/article-resolver';
 import { ALL_STRATEGIES, FEATURED_STRATEGY, MUST_READ_STRATEGIES } from '@/lib/local-strategies-data';
 import { LOCAL_WIKI_ENTRIES, LOCAL_HANDBOOK_GUIDES } from '@/lib/local-wiki-data';
+import { getCreatorStrategySlugs, resolveCreatorStrategy } from '@/lib/creator-content';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -23,6 +24,7 @@ export async function generateStaticParams() {
   const fallbackSlugs = Array.from(
     new Set([
       ...localSlugs,
+      ...getCreatorStrategySlugs(),
       ...ALL_STRATEGIES.map((s) => s.slug).filter(Boolean),
       ...LOCAL_HANDBOOK_GUIDES.map((g) => g.articleSlug).filter(Boolean),
       'resources-%e7%a5%9e%e7%82%bc%e9%a1%ba%e5%ba%8f%e6%8e%a8%e8%8d%90',
@@ -59,7 +61,8 @@ export default async function StrategyDetailPage({ params }: PageProps) {
   const decodedSlug = safeDecodeUri(slug);
 
   // 1. 优先尝试从 danke-core API 获取
-  let article = await fetchStrategyBySlug(decodedSlug);
+  let article: any = resolveCreatorStrategy(decodedSlug) || resolveCreatorStrategy(slug);
+  if (!article) article = await fetchStrategyBySlug(decodedSlug);
   if (!article && slug !== decodedSlug) {
     article = await fetchStrategyBySlug(slug);
   }

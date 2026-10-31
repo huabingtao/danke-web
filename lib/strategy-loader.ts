@@ -1,5 +1,6 @@
 import { ALL_STRATEGIES, StrategyArticle } from '@/lib/local-strategies-data';
 import { fetchStrategies, getApiBase } from '@/lib/api';
+import { loadCreatorStrategyCards } from '@/lib/creator-content';
 
 interface RawStrategyItem {
   id?: string;
@@ -37,13 +38,19 @@ export const deriveVertical = (cover?: string) => {
 };
 
 export async function loadStrategies(): Promise<StrategyArticle[]> {
+  const creatorArticles = loadCreatorStrategyCards();
+  const mergeCreatorArticles = (base: StrategyArticle[]) => {
+    const merged = new Map(base.map((article) => [article.slug, article]));
+    for (const article of creatorArticles) merged.set(article.slug, article);
+    return [...merged.values()];
+  };
   try {
     const data = await fetchStrategies();
     if (data && Array.isArray(data) && data.length > 0) {
       const rawList = data as RawStrategyItem[];
       const strategiesOnly = rawList.filter((item) => !isReminder(item) && item.category !== 'video');
       const apiBase = getApiBase();
-      return strategiesOnly.map((item) => {
+      const apiArticles = strategiesOnly.map((item) => {
         let coverImg = item.cover;
         if (coverImg && coverImg.startsWith('/uploads/') && apiBase && !apiBase.includes('localhost:3000')) {
           coverImg = `${apiBase}${coverImg}`;
@@ -85,10 +92,11 @@ export async function loadStrategies(): Promise<StrategyArticle[]> {
           isMustRead: item.slug?.includes('1000000149') || item.slug?.includes('1000000157'),
         };
       });
+      return mergeCreatorArticles(apiArticles);
     }
   } catch (err) {
     console.warn('加载全量攻略失败，使用本地兜底:', err);
   }
 
-  return ALL_STRATEGIES;
+  return mergeCreatorArticles(ALL_STRATEGIES);
 }

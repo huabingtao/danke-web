@@ -36,16 +36,28 @@ export default function LatestStrategiesSection({
 
   // 基础攻略集合（彻底筛除过滤掉每日提醒/日历与实机录像视频，保持攻略专区 100% 纯粹图文深度精算）
   const strategyOnlyArticles = articles.filter(
-    (item) =>
-      item.category !== 'reminder' &&
-      item.category !== 'video' &&
-      item.categoryLabel !== '每日日历' &&
-      item.categoryLabel !== '提醒' &&
-      item.tag !== '提醒' &&
-      !item.title.includes('日历') &&
-      !item.title.includes('每日事项') &&
-      !item.title.includes('每日提醒')
+    (item) => {
+      // Metadata-enabled Creator articles explicitly opt into the website channel.
+      if (item.contentType) return true;
+      return item.category !== 'reminder' &&
+        item.category !== 'video' &&
+        item.categoryLabel !== '每日日历' &&
+        item.categoryLabel !== '提醒' &&
+        item.tag !== '提醒' &&
+        !item.title.includes('日历') &&
+        !item.title.includes('每日事项') &&
+        !item.title.includes('每日提醒');
+    },
   );
+  const dynamicCategoryTabs = Array.from(
+    new Map(
+      strategyOnlyArticles
+        .filter((article) => article.contentType && !CATEGORY_TABS.some((tab) => tab.id === article.category))
+        .map((article) => [article.category, article.categoryLabel] as const),
+    ),
+    ([id, label]) => ({ id, label }),
+  );
+  const categoryTabs = [...CATEGORY_TABS, ...dynamicCategoryTabs];
 
   // 综合过滤：分类 + 关键词搜索
   const filteredArticles = strategyOnlyArticles.filter((item) => {
@@ -129,7 +141,7 @@ export default function LatestStrategiesSection({
 
         {/* 分类筛选 Tabs */}
         <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-0.5">
-          {CATEGORY_TABS.map((tab) => {
+          {categoryTabs.map((tab) => {
             const isActive = activeCategory === tab.id;
             return (
               <button

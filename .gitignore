@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated from danke-creator for static export
+/.creator-strategies-manifest.json
+/public/creator-strategies/
