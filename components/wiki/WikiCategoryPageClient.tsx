@@ -1,10 +1,8 @@
 "use client";
+import ReturnHome from '@/components/ReturnHome';
 
 import React, { useState, useMemo } from 'react';
-import Link from 'next/link';
-import { Search, ArrowLeft, Layers } from 'lucide-react';
-import TopNavBar from '@/components/TopNavBar';
-import FooterSection from '@/components/FooterSection';
+import { Search, Layers } from 'lucide-react';
 import { WikiEntryItem } from '@/lib/local-wiki-data';
 import { WIKI_CATEGORIES, WikiCategoryKey } from '@/lib/wiki-categories';
 import { filterWikiEntries } from '@/lib/wiki-helpers';
@@ -39,35 +37,18 @@ export default function WikiCategoryPageClient({
   }, [initialEntries, categoryKey, selectedEdition, quickFilter, searchQuery]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0a0f1d] text-slate-100 selection:bg-orange-500 selection:text-slate-950">
-      <TopNavBar />
+    <div className="flex flex-col bg-[#0a0f1d] text-slate-100 selection:bg-orange-500 selection:text-slate-950">
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8">
+
+      <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-6 sm:pt-8 sm:pb-10 space-y-8">
+        <ReturnHome />
         {/* 1. Category Header & Search */}
         <section className="relative overflow-hidden rounded-3xl border border-slate-800/90 bg-gradient-to-br from-slate-900/95 via-[#111a2e]/95 to-slate-950 p-6 sm:p-8 shadow-2xl space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="space-y-2">
-              <div className="flex items-center space-x-3">
-                <Link
-                  href="/"
-                  className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-400 hover:text-orange-400 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4" />
-                  <span>返回首页</span>
-                </Link>
-                <span className="text-slate-700">/</span>
-                <span className="text-xs font-bold text-orange-400">
-                  {catDef.label}图鉴
-                </span>
-              </div>
               <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
                 {catDef.label}图鉴
               </h1>
-              {catDef.description && (
-                <p className="text-xs sm:text-sm text-slate-300">
-                  {catDef.description}
-                </p>
-              )}
             </div>
           </div>
 
@@ -139,7 +120,7 @@ export default function WikiCategoryPageClient({
         onClose={() => setSelectedEntry(null)}
       />
 
-      <FooterSection />
+
     </div>
   );
 }

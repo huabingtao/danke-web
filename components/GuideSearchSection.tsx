@@ -22,9 +22,7 @@ export default function GuideSearchSection({
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
             弹壳特攻队攻略
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
-            从新手入坑到养成提升，找到你需要的答案。
-          </p>
+
         </div>
 
         {/* Search Input Box */}

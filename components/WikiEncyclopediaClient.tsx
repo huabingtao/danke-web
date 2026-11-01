@@ -1,4 +1,5 @@
 "use client";
+import ReturnHome from '@/components/ReturnHome';
 
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
@@ -19,8 +20,6 @@ import {
   ChevronRight,
   Layers,
 } from 'lucide-react';
-import TopNavBar from '@/components/TopNavBar';
-import FooterSection from '@/components/FooterSection';
 import {
   WikiEntryItem,
   HandbookGuideItem,
@@ -95,10 +94,11 @@ export default function WikiEncyclopediaClient({
   }, [initialEntries]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0a0f1d] text-slate-100 selection:bg-orange-500 selection:text-slate-950">
-      <TopNavBar />
+    <div className="flex flex-col bg-[#0a0f1d] text-slate-100 selection:bg-orange-500 selection:text-slate-950">
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-10">
+
+      <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-6 sm:pt-8 sm:pb-10 space-y-10">
+        <ReturnHome />
         {/* 1. Hero Header & Global Search */}
         <section className="relative overflow-hidden rounded-3xl border border-slate-800/90 bg-gradient-to-br from-slate-900/95 via-[#111a2e]/95 to-slate-950 p-6 sm:p-10 shadow-2xl">
           <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-orange-500/10 blur-3xl pointer-events-none" />
@@ -113,9 +113,7 @@ export default function WikiEncyclopediaClient({
               <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
                 《弹壳特攻队》百科图鉴与词条中心
               </h1>
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-                涵盖 <span className="text-orange-400 font-semibold">SP/S特工、SS神器与神炼、1~10期红/金收藏品、S宠物与助战技能、双生配件、载具及局内Debuff乘区</span>，支持按暴击率/暴伤/期数秒级检索并与深度攻略双向联动。
-              </p>
+
             </div>
 
             <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
@@ -308,7 +306,7 @@ export default function WikiEncyclopediaClient({
         onClose={() => setSelectedEntry(null)}
       />
 
-      <FooterSection />
+
     </div>
   );
 }

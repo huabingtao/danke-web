@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import ZoneHeader from './ZoneHeader';
+import ConstructionOverlay from './ConstructionOverlay';
 import { HOME_TOOLS, HomeToolItem } from '@/lib/home-config';
 
 interface ToolZoneProps {
@@ -17,12 +18,13 @@ export default function ToolZone({ tools = HOME_TOOLS }: ToolZoneProps) {
       />
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-        {tools.map((tool) => {
+        {tools.filter((tool) => !tool.hidden).map((tool) => {
           const Icon = tool.icon;
           const cardInner = (
             <div
               className={`group relative w-full aspect-square rounded-3xl bg-gradient-to-br ${tool.gradient} p-5 sm:p-6 flex flex-col items-center justify-center border border-slate-800 hover:border-orange-500/50 transition-all duration-300 shadow-lg hover:shadow-2xl hover:shadow-orange-500/10 cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500`}
             >
+              {tool.badge === '建设中' ? <ConstructionOverlay /> : tool.badge && <span className="absolute right-3 top-3 rounded-full bg-slate-950/70 px-2 py-1 text-xs text-amber-300">{tool.badge}</span>}
               {/* Center Enlarged Graphic & Title */}
               <div className="flex flex-col items-center justify-center space-y-4 sm:space-y-5 text-center">
                 <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-3xl bg-slate-900/90 border border-slate-700/60 flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:border-orange-500/40 transition-all duration-300">
@@ -51,7 +53,7 @@ export default function ToolZone({ tools = HOME_TOOLS }: ToolZoneProps) {
           }
 
           return (
-            <Link key={tool.id} href={tool.url} className="block focus:outline-none" aria-label={tool.name}>
+            <Link key={tool.id} href={tool.url} className="block focus:outline-none" aria-label={tool.name} aria-description={tool.badge === '建设中' ? '建设中' : undefined}>
               {cardInner}
             </Link>
           );

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="amber" x1="10" y1="5" x2="53" y2="60" gradientUnits="userSpaceOnUse"><stop stop-color="#FFD278"/><stop offset=".53" stop-color="#FF9F27"/><stop offset="1" stop-color="#F46A13"/></linearGradient>
+    <clipPath id="disc"><circle cx="32" cy="32" r="30"/></clipPath>
+  </defs>
+  <circle cx="32" cy="32" r="31" fill="#0B1220"/>
+  <circle cx="32" cy="32" r="29.5" fill="url(#amber)"/>
+  <g clip-path="url(#disc)" stroke="#763411" opacity=".14">
+    <circle cx="8" cy="61" r="35" stroke-width="2"/>
+    <circle cx="8" cy="61" r="43"/>
+    <path d="m-5 34 59-34M5 68 72 29" stroke-width="7"/>
+  </g>
+  <circle cx="32" cy="32" r="26" stroke="#FFF2CE" stroke-opacity=".45"/>
+  <!-- Original geometric strokes: 弓 radical and 单 radical. -->
+  <g stroke="#142033" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="round">
+    <path d="M13 19h11v9H15l-1 7h10v8q0 5-5 5h-4"/>
+    <path d="m32 17 3 4m13-4-3 4M30 26h20v14H30zM31 33h18M40 26v23M28 45h24"/>
+  </g>
+  <path d="m50 10 1.2 3.2 3.3 1.1-3.3 1.2-1.2 3.2-1.1-3.2-3.3-1.2 3.3-1.1Z" fill="#FFF4D7"/>
+</svg>

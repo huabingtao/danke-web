@@ -31,6 +31,7 @@ export default function MobileTabBar() {
             <Link
               key={item.href}
               href={item.href}
+              scroll={item.href === '/' ? false : undefined}
               className={`flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all ${
                 isActive
                   ? 'text-orange-400 font-bold bg-orange-500/10'

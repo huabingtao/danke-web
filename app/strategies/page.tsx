@@ -4,7 +4,7 @@ import StrategyLibraryClient from '@/components/StrategyLibraryClient';
 import { loadStrategies } from '@/lib/strategy-loader';
 
 export const metadata: Metadata = {
-  title: '战术攻略库 | 弹壳特攻队 Wiki 知识库',
+  title: '战术攻略库 | 弹壳攻略站',
   description: '《弹壳特攻队》全量战术攻略库：活动精算、特工评测、装备神炼、高频问答与版本爆料。',
 };
 

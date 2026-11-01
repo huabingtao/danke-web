@@ -3,7 +3,7 @@ import WikiCategoryPageClient from '@/components/wiki/WikiCategoryPageClient';
 import { getNormalizedWikiEntries } from '@/lib/wiki-server';
 
 export const metadata: Metadata = {
-  title: '配件图鉴 | 弹壳特攻队 Wiki 知识库',
+  title: '配件图鉴 | 弹壳攻略站',
   description: '《弹壳特攻队》配件图鉴。',
 };
 

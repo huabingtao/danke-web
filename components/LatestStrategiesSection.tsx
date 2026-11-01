@@ -22,6 +22,8 @@ const CATEGORY_TABS = [
   { id: 'faq', label: '避坑指南' },
 ];
 
+const LEGACY_CATEGORY_IDS = new Set(CATEGORY_TABS.map((category) => category.id));
+
 const PAGE_SIZE = 20;
 
 export default function LatestStrategiesSection({
@@ -46,6 +48,15 @@ export default function LatestStrategiesSection({
       !item.title.includes('每日事项') &&
       !item.title.includes('每日提醒')
   );
+
+  const categoryTabs = [
+    ...CATEGORY_TABS,
+    ...Array.from(new Map(
+      strategyOnlyArticles
+        .filter((article) => !LEGACY_CATEGORY_IDS.has(article.category))
+        .map((article) => [article.category, article.categoryLabel]),
+    ), ([id, label]) => ({ id, label })),
+  ];
 
   // 综合过滤：分类 + 关键词搜索
   const filteredArticles = strategyOnlyArticles.filter((item) => {
@@ -129,7 +140,7 @@ export default function LatestStrategiesSection({
 
         {/* 分类筛选 Tabs */}
         <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-0.5">
-          {CATEGORY_TABS.map((tab) => {
+          {categoryTabs.map((tab) => {
             const isActive = activeCategory === tab.id;
             return (
               <button

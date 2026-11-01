@@ -1,173 +1,41 @@
+import ReturnHome from '@/components/ReturnHome';
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import fs from 'fs';
-import path from 'path';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Calendar, Clock, Eye, ExternalLink, Sparkles, FileText, Globe, Play, Film, Video } from 'lucide-react';
-import TopNavBar from '@/components/TopNavBar';
-import FooterSection from '@/components/FooterSection';
+import { Calendar, Clock, Eye, ExternalLink, Sparkles, Globe, Play, Film, Video } from 'lucide-react';
 import TacticalArticleViewer from '@/components/TacticalArticleViewer';
-import { fetchStrategyBySlug } from '@/lib/api';
+import { fetchStrategyBySlug, fetchStrategies, getApiBase } from '@/lib/api';
 import { stripFrontmatter, renderMarkdownToHtml, safeDecodeUri } from '@/lib/markdown';
-import { resolveLocalArticle, getAllLocalArticleSlugs } from '@/lib/article-resolver';
-import { ALL_STRATEGIES, FEATURED_STRATEGY, MUST_READ_STRATEGIES } from '@/lib/local-strategies-data';
-import { LOCAL_WIKI_ENTRIES, LOCAL_HANDBOOK_GUIDES } from '@/lib/local-wiki-data';
+import { LOCAL_WIKI_ENTRIES } from '@/lib/local-wiki-data';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const localSlugs = getAllLocalArticleSlugs();
-  const fallbackSlugs = Array.from(
-    new Set([
-      ...localSlugs,
-      ...ALL_STRATEGIES.map((s) => s.slug).filter(Boolean),
-      ...LOCAL_HANDBOOK_GUIDES.map((g) => g.articleSlug).filter(Boolean),
-      'resources-%e7%a5%9e%e7%82%bc%e9%a1%ba%e5%ba%8f%e6%8e%a8%e8%8d%90',
-      'resources-ss%e8%a3%85%e5%a4%87%e5%90%88%e6%88%90%e9%a1%ba%e5%ba%8f',
-      'resources-6%e4%b8%aa%e5%bf%85%e5%81%9a%e7%9a%84%e7%ba%a2%e6%94%b6%e8%97%8f%e5%93%81%e6%8e%a8%e8%8d%90',
-      'resources-1-10%e6%9c%9f%e5%8a%a0%e6%9a%b4%e4%bc%a4%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f',
-      'resources-%e5%8a%a0%e6%9a%b4%e5%87%bb%e7%9a%84%e9%87%91%e6%94%b6%e8%97%8f%e7%af%87',
-      'resources-%e5%bc%82%e5%ae%a0%e6%a0%b8%e5%bf%83%e6%b6%88%e8%80%97%e8%8a%82%e7%82%b9%e6%8e%a8%e8%8d%90',
-      'resources-%e9%85%8d%e4%bb%b6%e8%bf%87%e8%bd%bd%e6%b6%88%e8%80%97',
-      'resources-%e8%bd%bd%e5%85%b7%e9%9b%b6%e4%bb%b6%e6%91%86%e6%94%be%e6%94%bb%e7%95%a5',
-      'faq-%e5%91%a8%e5%b8%b8%e5%92%8c%e6',
-    ]),
-  );
-
-  try {
-    const res = await fetch('http://localhost:3000/api/strategies?limit=1000');
-    if (!res.ok) return fallbackSlugs.map((slug) => ({ slug }));
-    const items = await res.json();
-    if (!Array.isArray(items) || items.length === 0) {
-      return fallbackSlugs.map((slug) => ({ slug }));
-    }
-    const merged = new Set([
-      ...items.map((item: { slug: string }) => item.slug),
-      ...fallbackSlugs,
-    ]);
-    return Array.from(merged).map((slug) => ({ slug }));
-  } catch {
-    return fallbackSlugs.map((slug) => ({ slug }));
+  const items = await fetchStrategies();
+  if (!items) {
+    throw new Error('Core API is unavailable while generating strategy routes');
   }
+  return items
+    .filter((item: { slug?: string; category?: string }) => item.slug && item.category !== 'reminder' && item.category !== 'video')
+    .map((item: { slug: string }) => ({ slug: item.slug }));
 }
 
 export default async function StrategyDetailPage({ params }: PageProps) {
   const { slug } = await params;
   const decodedSlug = safeDecodeUri(slug);
-
-  // 1. 优先尝试从 danke-core API 获取
   let article = await fetchStrategyBySlug(decodedSlug);
   if (!article && slug !== decodedSlug) {
     article = await fetchStrategyBySlug(slug);
   }
+  if (!article) notFound();
 
-  // 2. 若 API 未启动或返回空，使用本地文件解析器从 my-articles-md 实时读取并渲染
-  if (!article) {
-    article = resolveLocalArticle(slug) || resolveLocalArticle(decodedSlug);
-  }
-
-  // 3. 兜底匹配预置常量与手册
-  if (!article) {
-    const localMatch =
-      (FEATURED_STRATEGY.slug === slug || FEATURED_STRATEGY.slug === decodedSlug
-        ? FEATURED_STRATEGY
-        : null) ||
-      MUST_READ_STRATEGIES.find((s) => s.slug === slug || s.slug === decodedSlug) ||
-      ALL_STRATEGIES.find((s) => s.slug === slug || s.slug === decodedSlug);
-    const handbookMatch = LOCAL_HANDBOOK_GUIDES.find(
-      (g) => g.articleSlug === slug || g.articleSlug === decodedSlug,
-    );
-    if (localMatch) {
-      let contentHtml = `<p>${localMatch.summary}</p>`;
-      // 尝试在本地文件系统中查找对应的 Markdown 手稿并使用 marked 编译
-      try {
-        if (localMatch.coverImage && localMatch.coverImage.startsWith('/uploads/creator/')) {
-          const relDir = localMatch.coverImage
-            .replace('/uploads/creator/', '')
-            .replace(/\/(dist\/)?cover\.png$/, '');
-          const creatorDir = path.resolve(process.cwd(), '../danke-creator/my-articles-md', relDir);
-          if (fs.existsSync(creatorDir)) {
-            const files = fs.readdirSync(creatorDir);
-            const mdFile =
-              files.find(
-                (f) =>
-                  f.endsWith('.md') &&
-                  !f.includes('_stage') &&
-                  f !== '粗稿.md' &&
-                  !f.includes('征集') &&
-                  !f.startsWith('.'),
-              ) ||
-              files.find((f) => f.endsWith('.md') && !f.includes('_stage')) ||
-              files.find((f) => f.endsWith('.md'));
-            if (mdFile) {
-              const rawMd = fs.readFileSync(path.join(creatorDir, mdFile), 'utf-8');
-              contentHtml = renderMarkdownToHtml(rawMd, relDir);
-            }
-          }
-        }
-      } catch (e) {
-        // fallback to summary
-      }
-
-      article = {
-        slug: localMatch.slug,
-        title: localMatch.title,
-        tag: localMatch.tag,
-        category: localMatch.category,
-        categoryLabel: localMatch.tag || localMatch.categoryLabel,
-        summary: localMatch.summary,
-        date: localMatch.publishedAt,
-        highlights: localMatch.tags,
-        sourceType: 'LOCAL_MARKDOWN',
-        contentHtml,
-      };
-    } else if (handbookMatch) {
-      article = {
-        slug: handbookMatch.articleSlug,
-        title: handbookMatch.title,
-        tag: '装备',
-        category: handbookMatch.category.toLowerCase(),
-        categoryLabel: handbookMatch.chapter,
-        summary: handbookMatch.routeSummary,
-        date: '2026-10-25',
-        highlights: handbookMatch.keyTakeaways,
-        sourceType: 'LOCAL_MARKDOWN',
-        contentHtml: renderMarkdownToHtml(
-          `### ${handbookMatch.title}\n\n${handbookMatch.routeSummary}\n\n${handbookMatch.keyTakeaways
-            .map((k) => `- ${k}`)
-            .join('\n')}`,
-        ),
-      };
-    } else {
-      article = {
-        slug: decodedSlug,
-        title: `《弹壳特攻队》专题攻略`,
-        tag: '攻略',
-        category: 'resources',
-        categoryLabel: 'Wiki 专题攻略',
-        summary: '结合最新实战测试整理的核心机制、节点消耗与养成优先级指南。',
-        date: '2026-10-25',
-        highlights: ['核心机制', '养成优先级'],
-        sourceType: 'LOCAL_MARKDOWN',
-        contentHtml: '<p>请结合下方关联 Wiki 词条与养成消耗速查矩阵查阅详细数值节点。</p>',
-      };
-    }
-  } else {
-    // 若从 core 返回了 contentMarkdown，优先以 marked 重新编译为纯净无数据头的 HTML
-    if (article.contentMarkdown) {
-      const cleanPath = article.sourcePath
-        ? article.sourcePath.replace(/^.*my-articles-md\//, '')
-        : '';
-      const relDir = cleanPath.endsWith('.md')
-        ? path.dirname(cleanPath)
-        : cleanPath;
-      article.contentHtml = renderMarkdownToHtml(article.contentMarkdown, relDir);
-    } else if (article.contentHtml) {
-      article.contentHtml = stripFrontmatter(article.contentHtml);
-    }
+  if (article.contentMarkdown) {
+    article.contentHtml = renderMarkdownToHtml(article.contentMarkdown);
+  } else if (article.contentHtml) {
+    article.contentHtml = stripFrontmatter(article.contentHtml);
   }
 
   const rawTag =
@@ -177,7 +45,6 @@ export default async function StrategyDetailPage({ params }: PageProps) {
     '战术攻略';
   const articleTag = String(rawTag).replace(/\([a-zA-Z-]+\)/g, '').trim();
 
-  const isLocalMarkdown = article.sourceType === 'LOCAL_MARKDOWN';
   const isVideo = article.category === 'video' || article.contentType === 'VIDEO';
 
   const fullDate = article.slug && /^pub-(\d{4})(\d{2})(\d{2})/.test(article.slug)
@@ -185,19 +52,14 @@ export default async function StrategyDetailPage({ params }: PageProps) {
     : (article.date && article.date.length === 5 ? `2026-${article.date}` : (article.date || '2026-09-14'));
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0a0f1d] text-slate-100 selection:bg-orange-500 selection:text-slate-950">
-      <TopNavBar />
+    <div className="flex flex-col bg-[#0a0f1d] text-slate-100 selection:bg-orange-500 selection:text-slate-950">
 
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-6 sm:pt-8 sm:pb-10">
+        <ReturnHome currentPage={article.title} />
         {/* 顶部面包屑与返回导航 */}
         <div className="flex items-center justify-between gap-4 mb-6 text-sm">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-slate-400 hover:text-orange-400 transition-colors group"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span>返回攻略门户</span>
-          </Link>
+
 
           {/* 权威源标识徽章 */}
           <div className="flex items-center gap-2">
@@ -205,12 +67,6 @@ export default async function StrategyDetailPage({ params }: PageProps) {
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-sm">
                 <Film className="w-3.5 h-3.5" />
                 实机录像 · 战术演练
-              </span>
-            ) : isLocalMarkdown ? (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <FileText className="w-3.5 h-3.5" />
-                本地原稿 · 实时更新
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-800/80 text-slate-300 border border-slate-700">
@@ -237,13 +93,6 @@ export default async function StrategyDetailPage({ params }: PageProps) {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight mb-4">
             {article.title}
           </h1>
-
-          {/* 摘要说明 */}
-          {article.summary && (
-            <p className="text-slate-400 text-sm sm:text-base leading-relaxed mb-6 border-l-2 border-slate-700 pl-3">
-              {article.summary}
-            </p>
-          )}
 
           {/* 元数据与高光标签 */}
           <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-800/80 text-xs sm:text-sm text-slate-400">
@@ -303,7 +152,7 @@ export default async function StrategyDetailPage({ params }: PageProps) {
             <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-2xl group">
               {article.cover ? (
                 <Image
-                  src={article.cover.startsWith('/uploads/') ? `http://localhost:3000${article.cover}` : article.cover}
+                  src={article.cover.startsWith('/uploads/') ? `${getApiBase()}${article.cover}` : article.cover}
                   alt={article.title}
                   fill
                   sizes="100vw"
@@ -414,13 +263,7 @@ export default async function StrategyDetailPage({ params }: PageProps) {
 
         {/* 底部导航返回区 */}
         <footer className="mt-10 flex items-center justify-between gap-4 py-6 border-t border-slate-800 text-sm">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-slate-400 hover:text-orange-400 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>返回攻略首页</span>
-          </Link>
+
 
           {article.url && (
             <a
@@ -436,7 +279,7 @@ export default async function StrategyDetailPage({ params }: PageProps) {
         </footer>
       </main>
 
-      <FooterSection />
+
     </div>
   );
 }

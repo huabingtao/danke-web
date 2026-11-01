@@ -1,4 +1,5 @@
 "use client";
+import ReturnHome from '@/components/ReturnHome';
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
@@ -15,8 +16,6 @@ import {
   Award,
   Cpu,
 } from 'lucide-react';
-import TopNavBar from '@/components/TopNavBar';
-import FooterSection from '@/components/FooterSection';
 import { ProgressionMatrixItem } from '@/lib/local-wiki-data';
 
 interface ProgressionCalculatorClientProps {
@@ -118,10 +117,11 @@ export default function ProgressionCalculatorClient({
     activeTrack.steps[safeFromIdx].cumulative;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0a0f1d] text-slate-100 selection:bg-orange-500 selection:text-slate-950">
-      <TopNavBar />
+    <div className="flex flex-col bg-[#0a0f1d] text-slate-100 selection:bg-orange-500 selection:text-slate-950">
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-10">
+
+      <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-6 sm:pt-8 sm:pb-10 space-y-10">
+        <ReturnHome />
         {/* 1. Hero Header */}
         <section className="relative overflow-hidden rounded-3xl border border-slate-800/90 bg-gradient-to-br from-slate-900/95 via-[#111a2e]/95 to-slate-950 p-6 sm:p-10 shadow-2xl">
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -133,9 +133,7 @@ export default function ProgressionCalculatorClient({
               <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
                 五大核心养成矩阵 & 阶段差额速算器
               </h1>
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-                将散落在数十篇攻略中的 <span className="text-orange-400 font-semibold">SS合成与神炼顺位、543/741/840/844特工核心、11~162异宠核心槽位、1~10期暴击/红藏优先级、双生配件与载具洗练</span> 濃縮为标准对照表。
-              </p>
+
             </div>
 
             <div className="flex flex-wrap gap-3 shrink-0">
@@ -378,7 +376,7 @@ export default function ProgressionCalculatorClient({
         </section>
       </main>
 
-      <FooterSection />
+
     </div>
   );
 }

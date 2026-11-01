@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { BookOpen, Flame, Eye, Clock, Tag, ChevronRight, ChevronLeft, ShieldCheck, Zap } from 'lucide-react';
-import { fetchStrategies } from '@/lib/api';
+import { useState, useRef } from 'react';
+import { Eye, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
 
 interface StrategyItem {
   id: string;
@@ -89,18 +88,10 @@ const FALLBACK_STRATEGIES: StrategyItem[] = [
 ];
 
 export default function StrategyCards() {
-  const [strategies, setStrategies] = useState<StrategyItem[]>(FALLBACK_STRATEGIES);
+  const strategies = FALLBACK_STRATEGIES;
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [showToast, setShowToast] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    fetchStrategies().then((data) => {
-      if (data && data.length > 0) {
-        setStrategies(data);
-      }
-    });
-  }, []);
 
   const categories = [
     { id: 'all', label: '全部精选' },

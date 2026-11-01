@@ -1,4 +1,4 @@
-import { ALL_STRATEGIES, StrategyArticle } from '@/lib/local-strategies-data';
+import { StrategyArticle } from '@/lib/local-strategies-data';
 import { fetchStrategies, getApiBase } from '@/lib/api';
 
 interface RawStrategyItem {
@@ -14,7 +14,6 @@ interface RawStrategyItem {
   highlights?: string[];
   url?: string;
   badge?: string;
-  sourcePath?: string;
 }
 
 const isReminder = (item: RawStrategyItem) =>
@@ -25,8 +24,7 @@ const isReminder = (item: RawStrategyItem) =>
   item.title?.includes('日历') ||
   item.title?.includes('每日事项') ||
   item.title?.includes('每日提醒') ||
-  item.slug?.includes('reminder') ||
-  item.sourcePath?.includes('提醒/');
+  item.slug?.includes('reminder');
 
 export const deriveVertical = (cover?: string) => {
   if (!cover) return undefined;
@@ -45,7 +43,7 @@ export async function loadStrategies(): Promise<StrategyArticle[]> {
       const apiBase = getApiBase();
       return strategiesOnly.map((item) => {
         let coverImg = item.cover;
-        if (coverImg && coverImg.startsWith('/uploads/') && apiBase && !apiBase.includes('localhost:3000')) {
+        if (coverImg && coverImg.startsWith('/uploads/') && apiBase) {
           coverImg = `${apiBase}${coverImg}`;
         }
         let fullDate = '2026-09-14';
@@ -87,8 +85,8 @@ export async function loadStrategies(): Promise<StrategyArticle[]> {
       });
     }
   } catch (err) {
-    console.warn('加载全量攻略失败，使用本地兜底:', err);
+    console.warn('从 Core API 加载攻略失败:', err);
   }
 
-  return ALL_STRATEGIES;
+  return [];
 }

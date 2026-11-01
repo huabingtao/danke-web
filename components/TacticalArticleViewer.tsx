@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef } from 'react';
+import { sanitizeArticleHtml } from '@/lib/markdown';
 import { getApiBase } from '@/lib/api';
-import { stripFrontmatter } from '@/lib/markdown';
 
 interface TacticalArticleViewerProps {
   contentHtml?: string;
@@ -12,16 +12,13 @@ interface TacticalArticleViewerProps {
 
 export default function TacticalArticleViewer({
   contentHtml,
-  sourceType,
-  title,
 }: TacticalArticleViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const cleanHtml = stripFrontmatter(contentHtml);
+  const cleanHtml = sanitizeArticleHtml(contentHtml);
 
   useEffect(() => {
     if (!containerRef.current) return;
     const root = containerRef.current;
-    const apiBase = getApiBase();
 
     // 0. 防御性彻底消除顶端泄漏的 frontmatter 节点 (title:, summary:, tags:)
     const firstChildren = Array.from(root.children).slice(0, 5);
@@ -77,11 +74,11 @@ export default function TacticalArticleViewer({
     // 2. 纠正正文中所有指向 /uploads/ 的相对静态资源图片链接
     const images = root.querySelectorAll('img');
     images.forEach((img) => {
-      let src = img.getAttribute('src') || img.getAttribute('data-src') || '';
-      if (src.startsWith('/uploads/')) {
-        img.src = `${apiBase}${src}`;
-      } else if (src.startsWith('uploads/')) {
-        img.src = `${apiBase}/${src}`;
+      const src = img.getAttribute('src') || img.getAttribute('data-src') || '';
+      if (src.startsWith('uploads/')) {
+        img.src = `/${src}`;
+      } else if (src.startsWith('/uploads/')) {
+        img.src = `${getApiBase()}${src}`;
       } else if (img.getAttribute('data-src') && !img.src) {
         img.src = img.getAttribute('data-src')!;
       }
@@ -103,22 +100,8 @@ export default function TacticalArticleViewer({
 
       // 图片加载失败优雅降级，严格杜绝死循环向控制台刷请求
       img.onerror = () => {
-        // 立即注销 onerror 事件监听，彻底阻断任何二次递归死循环
+        // 立即注销 onerror 事件监听，避免失败图片重复触发
         img.onerror = null;
-
-        const currentSrc = img.src;
-        // 最多仅尝试一次跨端口优雅回退（仅当未重试过且来自非本页面端口时）
-        if (!img.dataset.retried && typeof window !== 'undefined') {
-          img.dataset.retried = 'true';
-          const localPort = window.location.port || '3002';
-          if (currentSrc.includes(':3000') || currentSrc.includes(':3001')) {
-            const fallbackSrc = currentSrc.replace(/:(3000|3001)/, `:${localPort}`);
-            if (fallbackSrc !== currentSrc) {
-              img.src = fallbackSrc;
-              return;
-            }
-          }
-        }
         // 最终兜底：优雅隐藏失败图片，绝不频繁重发请求
         img.style.display = 'none';
       };

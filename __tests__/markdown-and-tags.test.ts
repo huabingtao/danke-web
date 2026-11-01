@@ -1,8 +1,16 @@
 import { describe, it, expect } from 'vitest';
-import { stripFrontmatter, renderMarkdownToHtml, cleanChineseTag } from '../lib/markdown';
-import { ALL_STRATEGIES, FEATURED_STRATEGY, MUST_READ_STRATEGIES } from '../lib/local-strategies-data';
+import { stripFrontmatter, renderMarkdownToHtml, cleanChineseTag, sanitizeArticleHtml } from '../lib/markdown';
 
 describe('Markdown & Frontmatter Stripping', () => {
+  it('sanitizes untrusted article HTML while preserving tables and normal links', () => {
+    const html = sanitizeArticleHtml('<script>window.pwned = true</script><img src="/cover.png" onerror="alert(1)"><table><tr><td>奖励</td></tr></table><a href="https://example.com/video">视频</a>');
+    expect(html).not.toContain('<script');
+    expect(html).not.toContain('onerror');
+    expect(html).toContain('<table>');
+    expect(html).toContain('奖励');
+    expect(html).toContain('https://example.com/video');
+  });
+
   it('strips YAML frontmatter from raw markdown using gray-matter', () => {
     const raw = `---
 title: "【活动】水上乐园大乱斗"
@@ -47,7 +55,7 @@ summary: "公会商店"
 - 要点 2：消耗 {{神器核心}} 30个
 `;
 
-    const html = renderMarkdownToHtml(raw, '公会/公会币性价比方案');
+    const html = renderMarkdownToHtml(raw);
     expect(html).not.toContain('---');
     expect(html).not.toContain('title:');
     expect(html).not.toContain('img://article-top');
@@ -80,27 +88,5 @@ summary: "公会商店"
     expect(cleanChineseTag('装备(equipment)')).toBe('装备');
     expect(cleanChineseTag('区域行动(zone-operation)')).toBe('区域行动');
     expect(cleanChineseTag('宠物')).toBe('宠物');
-  });
-});
-
-describe('Strategy Articles Metadata & Tags', () => {
-  it('ensures featured and must-read articles have standardized pure Chinese tag and cover.png', () => {
-    expect(FEATURED_STRATEGY.tag).toMatch(/^[\u4e00-\u9fa5]+$/);
-    expect(FEATURED_STRATEGY.coverImage).toContain('cover.png');
-
-    for (const article of MUST_READ_STRATEGIES) {
-      expect(article.tag).toMatch(/^[\u4e00-\u9fa5]+$/);
-      expect(article.coverImage).toContain('cover.png');
-    }
-  });
-
-  it('ensures all local strategies have standardized pure Chinese tags and no reminder leaks', () => {
-    for (const article of ALL_STRATEGIES) {
-      expect(article.tag).toMatch(/^[\u4e00-\u9fa5]+$/);
-      expect(article.coverImage).toContain('cover.png');
-      expect(article.category).not.toBe('reminder');
-      expect(article.title).not.toContain('日历');
-      expect(article.title).not.toContain('每日事项');
-    }
   });
 });

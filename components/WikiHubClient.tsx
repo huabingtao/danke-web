@@ -1,23 +1,22 @@
 "use client";
+import ReturnHome from '@/components/ReturnHome';
 
 import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { 
-  Search, 
-  Flame, 
-  Star, 
-  Shield, 
-  Zap, 
-  Trophy, 
-  Car, 
-  User, 
-  ChevronDown, 
-  ChevronUp, 
+import {
+  Search,
+  Flame,
+  Star,
+  Shield,
+  Zap,
+  Trophy,
+  Car,
+  User,
+  ChevronDown,
+  ChevronUp,
   Sparkles,
   Layers,
-  ArrowLeft,
   Crosshair,
   BadgeCheck
 } from 'lucide-react';
@@ -59,9 +58,9 @@ export default function WikiHubClient() {
   const filteredHeroes = useMemo(() => {
     return HEROES_DATA.filter(hero => {
       const q = searchQuery.toLowerCase().trim();
-      const matchSearch = !q || 
-        hero.name.toLowerCase().includes(q) || 
-        hero.title.toLowerCase().includes(q) || 
+      const matchSearch = !q ||
+        hero.name.toLowerCase().includes(q) ||
+        hero.title.toLowerCase().includes(q) ||
         hero.description.toLowerCase().includes(q) ||
         hero.exclusiveSkill.name.toLowerCase().includes(q) ||
         hero.synergyInfo?.recommendRank.toLowerCase().includes(q);
@@ -88,9 +87,9 @@ export default function WikiHubClient() {
   const filteredCollections = useMemo(() => {
     return COLLECTIONS_DATA.filter(col => {
       const q = searchQuery.toLowerCase().trim();
-      const matchSearch = !q || 
-        col.name.toLowerCase().includes(q) || 
-        col.associatedEquip?.toLowerCase().includes(q) || 
+      const matchSearch = !q ||
+        col.name.toLowerCase().includes(q) ||
+        col.associatedEquip?.toLowerCase().includes(q) ||
         col.reviewTip.toLowerCase().includes(q) ||
         col.baseStats.toLowerCase().includes(q);
 
@@ -117,26 +116,21 @@ export default function WikiHubClient() {
   const filteredVehicles = useMemo(() => {
     return VEHICLES_DATA.filter(veh => {
       const q = searchQuery.toLowerCase().trim();
-      return !q || 
-        veh.name.toLowerCase().includes(q) || 
-        veh.description.toLowerCase().includes(q) || 
+      return !q ||
+        veh.name.toLowerCase().includes(q) ||
+        veh.description.toLowerCase().includes(q) ||
         veh.layoutTip.toLowerCase().includes(q);
     });
   }, [searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#0a0f1d] text-slate-100 pb-24">
+    <div className="bg-[#0a0f1d] text-slate-100 pb-24">
+      <div className="site-container pt-6 sm:pt-8"><ReturnHome /></div>
       {/* Top Header & Sticky Navigation */}
-      <div className="sticky top-0 z-40 bg-[#0a0f1d]/90 backdrop-blur-xl border-b border-slate-800/80 px-4 py-3 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="sticky top-16 z-30 bg-[#0a0f1d]/90 backdrop-blur-xl border-b border-slate-800/80 px-4 py-3 sm:px-6 lg:px-8">
+        <div className="max-w-[1600px] mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center justify-between">
-            <Link 
-              href="/" 
-              className="inline-flex items-center space-x-1.5 text-xs text-slate-400 hover:text-white transition-colors mr-3"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>返回首页</span>
-            </Link>
+
             <div className="flex items-center space-x-2">
               <span className="w-2.5 h-2.5 rounded-full bg-orange-500 animate-pulse" />
               <h1 className="text-base sm:text-lg font-black tracking-wide bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-200 bg-clip-text text-transparent">
@@ -159,7 +153,7 @@ export default function WikiHubClient() {
               className="w-full bg-slate-900/90 border border-slate-700/70 rounded-xl pl-9 pr-4 py-1.5 text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-orange-500/80 focus:ring-1 focus:ring-orange-500/50 transition-all"
             />
             {searchQuery && (
-              <button 
+              <button
                 onClick={() => setSearchQuery('')}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-slate-500 hover:text-slate-300"
               >
@@ -170,7 +164,7 @@ export default function WikiHubClient() {
         </div>
 
         {/* Tab Selector (Mobile Touch Friendly) */}
-        <div className="max-w-6xl mx-auto mt-3 flex items-center space-x-2 overflow-x-auto no-scrollbar pb-1">
+        <div className="max-w-[1600px] mx-auto mt-3 flex items-center space-x-2 overflow-x-auto no-scrollbar pb-1">
           <button
             onClick={() => setActiveTab('heroes')}
             className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
@@ -210,7 +204,7 @@ export default function WikiHubClient() {
       </div>
 
       {/* Main Content Container */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 space-y-4">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-4 space-y-4">
         {/* Quick Attribute Filter Bar */}
         <div className="flex items-center justify-between flex-wrap gap-2 pt-1 pb-2 border-b border-slate-800/60">
           <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-0.5">
@@ -270,7 +264,7 @@ export default function WikiHubClient() {
                   <div
                     key={hero.id}
                     className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-                      isSP 
+                      isSP
                         ? 'bg-gradient-to-b from-red-950/20 via-slate-900/80 to-slate-950/90 border-red-500/30 hover:border-red-500/60 shadow-lg shadow-red-950/20'
                         : isS
                         ? 'bg-gradient-to-b from-amber-950/15 via-slate-900/80 to-slate-950/90 border-amber-500/30 hover:border-amber-500/60'
@@ -381,8 +375,8 @@ export default function WikiHubClient() {
                             <div
                               key={idx}
                               className={`p-2 rounded-lg flex items-start space-x-2 text-[11px] leading-snug ${
-                                starItem.isKey 
-                                  ? 'bg-amber-500/10 border border-amber-500/30 text-amber-200' 
+                                starItem.isKey
+                                  ? 'bg-amber-500/10 border border-amber-500/30 text-amber-200'
                                   : starItem.type === 'all'
                                   ? 'bg-blue-950/20 border border-blue-500/20 text-blue-200'
                                   : 'bg-slate-900/50 text-slate-300'

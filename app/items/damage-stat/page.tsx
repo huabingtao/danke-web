@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import WikiHubClient from '@/components/WikiHubClient';
 
 export const metadata: Metadata = {
-  title: '伤害词条图鉴 | 弹壳特攻队 Wiki 知识库',
+  title: '伤害词条图鉴 | 弹壳攻略站',
   description: '《弹壳特攻队》暴击率、暴击伤害、独立易伤与全体生效属性速查。',
 };
 

@@ -2,8 +2,7 @@
 
 import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
-import { Shield, Zap, Sparkles, ChevronRight, ChevronLeft, Flame, Swords, Award } from 'lucide-react';
-import { fetchAgents } from '@/lib/api';
+import { ChevronRight, ChevronLeft, Swords } from 'lucide-react';
 
 interface Agent {
   id: string;
@@ -157,19 +156,11 @@ const FALLBACK_AGENTS: Agent[] = [
 ];
 
 export default function AgentCards() {
-  const [agents, setAgents] = useState<Agent[]>(FALLBACK_AGENTS);
+  const agents = FALLBACK_AGENTS;
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [showToast, setShowToast] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  useEffect(() => {
-    fetchAgents().then((data) => {
-      if (data && data.length > 0) {
-        setAgents(data);
-      }
-    });
-  }, []);
-  
   // 连续当前位置 (以卡片索引为单位的浮点数，如 0.0 ~ 5.999...)
   const [currentProgress, setCurrentProgress] = useState(0);
   const currentProgressRef = useRef(0);

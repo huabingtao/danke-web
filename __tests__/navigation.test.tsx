@@ -24,15 +24,15 @@ describe('Navigation components', () => {
     });
   });
 
-  test('TopNavBar renders 首页, 攻略库, 战术图鉴, 物品图鉴, 养成消耗表', () => {
+  test('TopNavBar groups navigation by home sections', () => {
     render(<TopNavBar width="wide" />);
 
-    expect(screen.getByText('弹壳特攻队 Wiki & 攻略站')).toBeInTheDocument();
+    expect(screen.getByText('弹壳攻略站')).toBeInTheDocument();
     expect(screen.getAllByText('首页').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('攻略库').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('战术图鉴').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('物品图鉴').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('养成消耗表').length).toBeGreaterThan(0);
+    expect(screen.getByRole('link', { name: '攻略' })).toHaveAttribute('href', '/strategies');
+    expect(screen.getByRole('link', { name: '游戏资料' })).toHaveAttribute('href', '/#zone-wiki');
+    expect(screen.getByRole('link', { name: '弹壳工具' })).toHaveAttribute('href', '/#zone-tools');
+    expect(screen.getByRole('link', { name: '关于' })).toHaveAttribute('href', '/about');
   });
 
   test('MobileTabBar renders 4 core mobile tabs', () => {

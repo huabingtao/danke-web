@@ -159,12 +159,8 @@ function highlightAndFormatCode(text: string, language: string, showLineNumber =
 /**
  * 将 Markdown 格式的攻略正文深度净化并使用融合 cross-publisher (doocs/md) 技术的渲染引擎转换为精美 HTML
  * @param markdown 原始或清洗过的 markdown 内容
- * @param articleDirRel 相对于 my-articles-md 的文章子目录（如 "其他/周常和日常分享"）
  */
-export function renderMarkdownToHtml(
-  markdown: string | null | undefined,
-  articleDirRel?: string,
-): string {
+export function renderMarkdownToHtml(markdown: string | null | undefined): string {
   if (!markdown) return '';
 
   // 1. 剥离 Frontmatter 数据头
@@ -175,32 +171,10 @@ export function renderMarkdownToHtml(
   md = md.replace(/(!\[.*?\]\([^)]+\))\s*\{[^}]+\}/gi, '$1');
   md = md.replace(/\{type=[^}]+\}/gi, '');
 
-  // 3. 相对图片路径重写（支持文章本地相对图片通过 /uploads/creator 访问）
-  if (articleDirRel) {
-    const encodedDir = articleDirRel
-      .split('/')
-      .map((segment) => encodeURIComponent(segment))
-      .join('/');
-
-    md = md.replace(
-      /!\[(.*?)\]\((?:\.\/)?([^):]+?\.(?:png|jpe?g|webp|gif|svg))\)/gi,
-      (match, alt, relativePath) => {
-        if (relativePath.startsWith('http') || relativePath.startsWith('/')) {
-          return match;
-        }
-        const encodedPath = relativePath
-          .split('/')
-          .map((part: string) => encodeURIComponent(part))
-          .join('/');
-        return `![${alt}](/uploads/creator/${encodedDir}/${encodedPath})`;
-      },
-    );
-  }
-
-  // 4. 清理宏语法（例如 {{短名称}} 转换为纯净文本）
+  // 3. 清理宏语法（例如 {{短名称}} 转换为纯净文本）
   md = md.replace(/\{\{([^}]+)\}\}/g, '$1');
 
-  // 5. 构建借鉴 cross-publisher 微信排版引擎的自定义 Marked Renderer
+  // 4. 构建借鉴 cross-publisher 微信排版引擎的自定义 Marked Renderer
   const footnotes: [number, string, string][] = [];
   let footnoteIndex = 0;
   const listOrderedStack: boolean[] = [];
@@ -374,4 +348,13 @@ export function renderMarkdownToHtml(
 
   // 6. 使用 DOMPurify 进行企业级安全过滤
   return DOMPurify.sanitize(html, { ADD_TAGS: ['mp-common-profile', 'section', 'figure', 'figcaption'] });
+}
+
+export function sanitizeArticleHtml(html?: string | null): string {
+  if (!html) return '';
+  return DOMPurify.sanitize(stripFrontmatter(html), {
+    ADD_TAGS: ['mp-common-profile', 'section', 'figure', 'figcaption'],
+    FORBID_TAGS: ['script', 'style', 'object', 'embed'],
+    FORBID_ATTR: ['srcdoc'],
+  });
 }

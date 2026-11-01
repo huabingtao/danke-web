@@ -1,21 +1,12 @@
 import HomePageClient from '@/components/HomePageClient';
-import { fetchWikiEntries } from '@/lib/api';
-import { LOCAL_WIKI_ENTRIES, WikiEntryItem } from '@/lib/local-wiki-data';
+import { getNormalizedWikiEntries } from '@/lib/wiki-server';
 import { WIKI_CATEGORIES } from '@/lib/wiki-categories';
 import { CategorySummaryItem } from '@/components/home/WikiCategoryZone';
 
 export const dynamic = 'force-static';
 
 export default async function Home() {
-  let wikiEntries: WikiEntryItem[] = LOCAL_WIKI_ENTRIES;
-  try {
-    const remote = await fetchWikiEntries();
-    if (remote && Array.isArray(remote) && remote.length > 0) {
-      wikiEntries = remote;
-    }
-  } catch {
-    wikiEntries = LOCAL_WIKI_ENTRIES;
-  }
+  const wikiEntries = await getNormalizedWikiEntries();
 
   const categoriesData: CategorySummaryItem[] = WIKI_CATEGORIES.map((catDef) => {
     if (catDef.key === 'DAMAGE_STAT') {
