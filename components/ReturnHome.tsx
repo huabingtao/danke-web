@@ -7,6 +7,7 @@ const PAGE_NAMES: Record<string, string> = {
   '/items': '物品图鉴', '/wiki': '战术图鉴', '/calculator': '养成消耗表',
   '/strategies': '攻略库', '/events': '活动数据', '/yields': '资源获取',
   '/about': '关于本站与免责说明',
+  '/gem-values': '道具价值',
   '/damage-calculator': '弹壳伤害计算器',
 };
 export default function ReturnHome({ currentPage }: { currentPage?: string }) {

@@ -1,4 +1,4 @@
-import { CalendarDays, PackageSearch, Calculator, Car, ShoppingCart, Waves, LucideIcon } from 'lucide-react';
+import { CalendarDays, PackageSearch, Calculator, Car, ShoppingCart, Waves, Diamond, LucideIcon } from 'lucide-react';
 
 export interface HomeToolItem {
   id: string;
@@ -53,5 +53,6 @@ export const HOME_TOOLS: HomeToolItem[] = [
   },
   { id: 'progression', name: '养成模拟', hidden: true, url: '/calculator', icon: Calculator, ratio: 1, gradient: 'from-cyan-500/25 via-slate-900/40 to-slate-950' },
   { id: 'events', name: '活动数据', badge: '建设中', url: '/events', icon: CalendarDays, ratio: 1, gradient: 'from-purple-500/25 via-indigo-950/40 to-slate-950' },
-  { id: 'yields', name: '资源获取', badge: '建设中', url: '/yields', icon: PackageSearch, ratio: 1, gradient: 'from-amber-500/25 via-orange-950/40 to-slate-950' },
+  { id: 'yields', name: '资源获取', url: '/yields', icon: PackageSearch, ratio: 1, gradient: 'from-amber-500/25 via-orange-950/40 to-slate-950' },
+  { id: 'gem-values', name: '资源价值', url: '/gem-values', icon: Diamond, ratio: 1, gradient: 'from-emerald-500/20 via-cyan-950/40 to-slate-950' },
 ];

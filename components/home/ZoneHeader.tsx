@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 interface ZoneHeaderProps {
@@ -9,6 +10,7 @@ interface ZoneHeaderProps {
   viewAllText?: string;
   viewAllHref?: string;
   className?: string;
+  actions?: ReactNode;
 }
 
 export default function ZoneHeader({
@@ -17,6 +19,7 @@ export default function ZoneHeader({
   viewAllText = '查看全部',
   viewAllHref,
   className = '',
+  actions,
 }: ZoneHeaderProps) {
   return (
     <div id={id} className={`flex items-center justify-between pb-2 mb-3.5 sm:mb-4 border-b border-slate-800/60 scroll-mt-20 ${className}`}>
@@ -27,7 +30,7 @@ export default function ZoneHeader({
         </h2>
       </div>
 
-      {viewAllHref && (
+      {actions ?? (viewAllHref && (
         <Link
           href={viewAllHref}
           className="group inline-flex items-center space-x-1 text-xs font-bold text-slate-400 hover:text-orange-400 transition-colors"
@@ -35,7 +38,7 @@ export default function ZoneHeader({
           <span>{viewAllText}</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
         </Link>
-      )}
+      ))}
     </div>
   );
 }

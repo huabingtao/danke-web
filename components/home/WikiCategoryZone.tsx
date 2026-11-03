@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-import Link from 'next/link';
+import HomeCardLink from './HomeCardLink';
 import { useHomeExpanded } from '@/lib/home-view-state';
 import { BookOpen, ChevronDown } from 'lucide-react';
 import ZoneHeader from './ZoneHeader';
@@ -38,11 +38,11 @@ export default function WikiCategoryZone({ categoriesData }: WikiCategoryZonePro
           const Icon = category.icon;
           const enlargedPreview = sampleIcons.length > 0;
           return (
-            <Link key={category.key} href={category.href}
-              aria-label={category.key === 'STRATEGIES' ? '攻略' : `${category.label}图鉴`}
-              aria-description={category.key === 'STRATEGIES' ? '建设中' : undefined}
+            <HomeCardLink key={category.key} href={category.href}
+              label={category.key === 'STRATEGIES' ? '攻略' : `${category.label}图鉴`}
+              disabledReason={category.key === 'STRATEGIES' ? '建设中，暂不可用' : undefined}
               className="group block rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
-              <div className={`relative flex aspect-square w-full flex-col items-center justify-center overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br ${category.gradient} p-4 shadow-lg transition-all duration-300 hover:border-orange-500/50 hover:shadow-orange-500/10 sm:p-5`}>
+              <div className={`relative flex aspect-square w-full flex-col items-center justify-center overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br ${category.gradient} p-4 shadow-lg transition-all duration-300 sm:p-5 ${category.key !== 'STRATEGIES' ? 'hover:border-orange-500/50 hover:shadow-orange-500/10' : ''}`}>
                 {category.key === 'STRATEGIES' && <ConstructionOverlay />}
                 <div className={`flex w-full flex-col items-center justify-center gap-4 text-center ${enlargedPreview ? 'sm:h-full sm:min-h-0 sm:gap-4' : 'sm:gap-5'}`}>
                   {/* Compact screens use one large, legible category image. */}
@@ -65,10 +65,10 @@ export default function WikiCategoryZone({ categoriesData }: WikiCategoryZonePro
                       <Icon className={`h-12 w-12 ${category.color}`} />
                     </div>
                   )}
-                  <h3 className="shrink-0 line-clamp-1 px-1 text-base font-black text-white transition-colors group-hover:text-orange-400 sm:text-lg">{category.label}</h3>
+                  <h3 className={`shrink-0 line-clamp-1 px-1 text-base font-black text-white transition-colors sm:text-lg ${category.key !== 'STRATEGIES' ? 'group-hover:text-orange-400' : ''}`}>{category.label}</h3>
                 </div>
               </div>
-            </Link>
+            </HomeCardLink>
           );
         })}
       </div>

@@ -27,11 +27,12 @@ describe('HomePageClient component', () => {
   test('renders home tools and expandable game resources', async () => {
     render(<HomePageClient categoriesData={mockCategoriesData} />);
 
-    await waitFor(() => expect(screen.getByRole('link', { name: '攻略' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('group', { name: '攻略' })).toBeInTheDocument());
     // 1. Verify 弹壳工具 and 图鉴分类 zone headings
     expect(screen.getByText('弹壳工具')).toBeInTheDocument();
     expect(screen.getByText('游戏资料')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '攻略' })).toHaveAttribute('href', '/strategies');
+    expect(screen.queryByRole('link', { name: '攻略' })).not.toBeInTheDocument();
+    expect(screen.getByRole('group', { name: '攻略' })).toHaveAttribute('aria-disabled', 'true');
 
     // 2. Verify 深度攻略 is removed from home page
     expect(screen.queryByRole('heading', { name: '深度攻略' })).not.toBeInTheDocument();
@@ -63,8 +64,13 @@ describe('HomePageClient component', () => {
     expect(cxmjLink.getAttribute('href')).toBe('https://dankecxmj.guaguahub.cn/');
     expect(screen.getByRole('link', { name: '并列发车' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: '高价卖菜' })).toBeInTheDocument();
-    const calcLink = screen.getByRole('link', { name: '伤害计算器' });
-    expect(calcLink.getAttribute('href')).toBe('/damage-calculator');
+    expect(screen.queryByRole('link', { name: '伤害计算器' })).not.toBeInTheDocument();
+    expect(screen.getByRole('group', { name: '伤害计算器' })).toHaveAttribute('aria-disabled', 'true');
     expect(screen.queryByRole('link', { name: '养成模拟' })).not.toBeInTheDocument();
+    const valueLink = screen.getByRole('link', { name: '资源价值' });
+    expect(screen.getByRole('link', { name: '资源获取' })).not.toHaveAttribute('aria-description', '建设中');
+    expect(valueLink).toHaveAttribute('href', '/gem-values');
+    expect(valueLink).not.toHaveAttribute('aria-description', '建设中');
+    expect(screen.getByRole('link', { name: '资源获取' }).closest('[data-home-tool-id]')?.nextElementSibling).toBe(valueLink.closest('[data-home-tool-id]'));
   });
 });
