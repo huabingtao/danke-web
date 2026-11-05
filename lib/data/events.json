@@ -1,0 +1,310 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-11-03T15:03:10.497133",
+  "dataSource": "xiaomi_danke_5.3.1.apk / extracted tables",
+  "events": [
+    {
+      "id": "20260803",
+      "title": "古堡寻宝翻牌 (Castle Card)",
+      "subtitle": "万圣古堡专属翻牌集字兑换",
+      "type": "card_flip",
+      "typeName": "翻牌寻宝",
+      "badge": "已收官",
+      "badgeColor": "bg-slate-700/50 text-slate-400 border-slate-600",
+      "startTime": "2026-10-29 00:00:00",
+      "endTime": "2026-11-02 23:59:59",
+      "startTimestamp": 1793203200,
+      "endTimestamp": 1793635199,
+      "uiBanner": "CastleCard",
+      "tokens": [
+        {
+          "name": "翻牌钥匙",
+          "desc": "翻开古堡九宫格卡牌的专属钥匙",
+          "icon": "itemcommon"
+        },
+        {
+          "name": "南瓜金币",
+          "desc": "兑换特工觉醒石与S级装备的代币",
+          "icon": "itemcommon"
+        }
+      ],
+      "rewards": [
+        "S级自选核心",
+        "觉醒石",
+        "特工自选碎片"
+      ],
+      "tactics": "优先在每层翻出大奖钥匙即前往下一层，切勿在已出大奖的层浪费多余翻牌次数。"
+    },
+    {
+      "id": "20260806",
+      "title": "甜品大作战 · 糖果弹球宝藏",
+      "subtitle": "柏青哥物理弹球第 5 期 · 甜甜圈碰撞大奖",
+      "type": "pinball",
+      "typeName": "柏青哥弹球",
+      "badge": "即将上线",
+      "badgeColor": "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+      "startTime": "2026-11-04 00:00:00",
+      "endTime": "2026-11-08 23:59:59",
+      "startTimestamp": 1793721600,
+      "endTimestamp": 1794153599,
+      "uiBanner": "08Pinball",
+      "tokens": [
+        {
+          "id": "2320",
+          "name": "甜品券",
+          "desc": "甜品弹球宝藏活动抽奖道具",
+          "icon": "ticket",
+          "quality": 4
+        },
+        {
+          "id": "2321",
+          "name": "糖果弹球",
+          "desc": "糖果弹球",
+          "icon": "ball_ticket_1",
+          "quality": 4
+        },
+        {
+          "id": "2322",
+          "name": "甜甜圈弹球",
+          "desc": "甜甜圈弹球",
+          "icon": "ball_ticket_2",
+          "quality": 7
+        }
+      ],
+      "rewards": [
+        "自选神铸核心箱",
+        "史诗配件选集箱",
+        "特工伊狑碎片*30",
+        "随机传奇收藏品箱"
+      ],
+      "tactics": "尽量累积至少 10 发甜甜圈弹球连射，高密度碰撞弹力蘑菇能极大概率开启底部 Fever 聚宝盆，获取翻倍甜品券。"
+    },
+    {
+      "id": "20260809",
+      "title": "鲜花聚会 · 美食鉴赏大作战",
+      "subtitle": "厨房煲汤与食材鉴赏 · 珍宝评级换好礼",
+      "type": "appraise",
+      "typeName": "美食鉴赏",
+      "badge": "重点前瞻",
+      "badgeColor": "bg-purple-500/20 text-purple-400 border-purple-500/30",
+      "startTime": "2026-11-10 00:00:00",
+      "endTime": "2026-11-14 23:59:59",
+      "startTimestamp": 1794240000,
+      "endTimestamp": 1794671999,
+      "uiBanner": "08Gourmet",
+      "tokens": [
+        {
+          "id": "2330",
+          "name": "聚会好感度",
+          "desc": "鲜花手工坊活动积分道具，可用于兑换奖励",
+          "icon": "icon_token",
+          "quality": 4
+        },
+        {
+          "id": "2331",
+          "name": "鲜花礼券",
+          "desc": "鲜花手工坊活动道具",
+          "icon": "ticket",
+          "quality": 4
+        }
+      ],
+      "rewards": [
+        "异宠核心",
+        "S级特工自选宝箱",
+        "传奇收藏品【镜盾】碎片",
+        "神铸核心*3"
+      ],
+      "tactics": "遵循食谱配方精准下料，严格避免单品食材过载导致杂质煲汤，三星金色珍馐可获取海量聚会好感度。"
+    },
+    {
+      "id": "20260815",
+      "title": "双十一钻石狂欢嘉年华",
+      "subtitle": "年度重磅消费返利 · 全服进度累抽赠礼",
+      "type": "carnival",
+      "typeName": "狂欢嘉年华",
+      "badge": "特大庆典",
+      "badgeColor": "bg-amber-500/20 text-amber-400 border-amber-500/30",
+      "startTime": "2026-11-10 00:00:00",
+      "endTime": "2026-11-21 23:59:59",
+      "startTimestamp": 1794240000,
+      "endTimestamp": 1795276799,
+      "uiBanner": "DiamondCarnival11",
+      "tokens": [
+        {
+          "name": "钻石返还券",
+          "desc": "活动期间每消耗一定钻石可领取的等额回馈抵扣券",
+          "icon": "itemcommon"
+        },
+        {
+          "name": "狂欢徽章",
+          "desc": "全服共同累积进度，达到阶段时解锁全员神铸核心箱",
+          "icon": "itemcommon"
+        }
+      ],
+      "rewards": [
+        "双十一限定头像框",
+        "神铸核心*5",
+        "自选永恒/破坏之石*50",
+        "特工万能觉醒石*10"
+      ],
+      "tactics": "提前储备至少 20,000~30,000 钻石，配合 11.10 开启的异宠晶石抽奖，两项任务同时进行实现钻石双重收益最大化！"
+    },
+    {
+      "id": "20260812",
+      "title": "魔法阶梯爬塔探险 (Path Treasure)",
+      "subtitle": "高塔路径寻宝 · 投掷骰子穿越机关",
+      "type": "path_treasure",
+      "typeName": "路径寻宝",
+      "badge": "下旬接力",
+      "badgeColor": "bg-blue-500/20 text-blue-400 border-blue-500/30",
+      "startTime": "2026-11-16 00:00:00",
+      "endTime": "2026-11-20 23:59:59",
+      "startTimestamp": 1794758400,
+      "endTimestamp": 1795190399,
+      "uiBanner": "08PathTreasureHunt",
+      "tokens": [
+        {
+          "id": "2332",
+          "name": "骰子",
+          "desc": "魔法阶梯活动道具",
+          "icon": "newticket",
+          "quality": 4
+        },
+        {
+          "id": "2333",
+          "name": "魔法硬币",
+          "desc": "魔法阶梯活动积分道具，可用于兑换奖励",
+          "icon": "point_icon",
+          "quality": 4
+        }
+      ],
+      "rewards": [
+        "神铸核心自选箱",
+        "极品宠物蛋",
+        "特工升级补给箱",
+        "随机史诗配件"
+      ],
+      "tactics": "遥控骰子留给踩踏双倍金币格与传送跳跃门，普通骰子快速通过陷阱区与减益减速区。"
+    }
+  ],
+  "systemUnlocks": {
+    "unlockDate": "2026-11-10 00:00:00",
+    "timestamp": 1794240000,
+    "title": "全新系统【异世宠物】与红阶收藏品解禁",
+    "description": "游戏核心架构在 2026 年 11 月 10 日迎来里程碑级大更，开放全新异世助战系统，助战宠物全队增伤机制全面蜕变。",
+    "features": [
+      {
+        "id": "otherworld_pet",
+        "name": "异世宠物体系 (Otherworld Pet)",
+        "unlockCondition": "将 4 种普通宠物觉醒至 5 星（FunctionCfg: PetType=4, WakeLevel=5）",
+        "coreItems": [
+          {
+            "name": "异宠核心",
+            "desc": "可用于异世宠物突破与觉醒的珍贵核心 (ID: 16131 / 16133)"
+          },
+          {
+            "name": "异宠晶石",
+            "desc": "专属祈愿抽奖道具，抽取异世宠物专属碎片 (ID: 16132 / 16134)"
+          }
+        ],
+        "mechanics": "拥有全新的独立被动天赋槽位，全特工攻击同步率提升达 30%~50%，觉醒红星激活异次元合击战技。"
+      },
+      {
+        "id": "new_collections",
+        "name": "3 款全新红色传奇收藏品同步入库",
+        "unlockCondition": "2026-11-10 00:00:00 正式解锁进入收藏池",
+        "items": [
+          {
+            "id": "7293",
+            "name": "镜盾",
+            "quality": "红色传奇",
+            "desc": "能镜像反射一切攻击的盾牌。",
+            "buff": "特工执照：特工攻击+{0}，特工生命+{1}；全技能反弹增伤。"
+          },
+          {
+            "id": "7501",
+            "name": "失重奇点",
+            "quality": "红色传奇",
+            "desc": "自首次启动后便未停止旋转的实验陀螺。研究员试图称出它的重量，最后失去了一台秤。",
+            "buff": "极速激励：提升暴击伤害与局内移动速度，激活范围引力牵引。"
+          },
+          {
+            "id": "7502",
+            "name": "终极无限源",
+            "quality": "红色传奇",
+            "desc": "两枚相反的能量核心轮流充放电，让电量永远停在99%。最后的1%，科学家至今不敢充满。",
+            "buff": "高级激励：全技能暴击率+12%，神圣伤害穿透。"
+          }
+        ]
+      }
+    ]
+  },
+  "recurringSeasons": [
+    {
+      "id": "regional_action",
+      "name": "区域行动 (Zone Action)",
+      "cycle": "28 天 / 赛季",
+      "current": "第 3 赛季 (S3)",
+      "currentEnd": "2026-11-18 23:59:59",
+      "nextStart": "2026-11-19 00:00:00 (S4 开始)",
+      "nextEnd": "2026-12-16 23:59:59",
+      "futureCoverage": "官方底表 pre-configured 预设至 2028-06-28",
+      "summary": "每期 20 关高难 Zone 词缀挑战，提供神铸核心、自选收藏品箱与传奇配件。"
+    },
+    {
+      "id": "battle_pass",
+      "name": "特工战令 (BattlePass)",
+      "cycle": "28 天 / 赛季",
+      "current": "第 51 赛季 (S51)",
+      "currentEnd": "2026-11-18 23:59:59",
+      "nextStart": "2026-11-19 00:00:00 (S52 开始)",
+      "nextEnd": "2026-12-16 23:59:59",
+      "futureCoverage": "循环轮换至 2027 年末",
+      "summary": "高级版解锁当季限定时装、专属特工碎片（30级/50级）与神铸核心。"
+    },
+    {
+      "id": "echo_battle",
+      "name": "末日回响 (Echo Battle)",
+      "cycle": "28 天 / 赛季 (内含 10 轮 Boss)",
+      "current": "第 51 赛季 (S51)",
+      "currentEnd": "2026-11-18 23:59:59",
+      "nextStart": "2026-11-19 00:00:00 (S52 开始)",
+      "nextEnd": "2026-12-16 23:59:59",
+      "futureCoverage": "循环轮换",
+      "summary": "单人天梯伤害榜，根据最终段位发放大量远征币与限定头像框。"
+    },
+    {
+      "id": "guild_versus",
+      "name": "公会对战 (GvG Versus)",
+      "cycle": "7 天 / 赛季 (周轮换)",
+      "current": "每周一 00:00 报名布阵，周五~周日激战",
+      "futureCoverage": "官方底表预设至 2027-03-02",
+      "summary": "公会全员积分争夺，胜方公会奖励海量公会币与红色特工自选宝箱。"
+    },
+    {
+      "id": "guild_mystery",
+      "name": "公会潮汐秘境 (Guild Mystery)",
+      "cycle": "3 天 / 期 (超高频轮转)",
+      "current": "常驻超高频探险",
+      "futureCoverage": "官方底表预设至 2027-09-17",
+      "summary": "公会协作击杀潮汐秘境 Boss，兑换公会商店核心进阶图纸。"
+    },
+    {
+      "id": "boss_rush",
+      "name": "极速狂飙 (Boss Rush)",
+      "cycle": "7 天 / 赛季 (周轮换)",
+      "current": "每周日晚 24:00 结算",
+      "futureCoverage": "官方底表预设至 2027-11-14",
+      "summary": "3 分钟极限 Boss 连战挑战，考验单体输出与无敌闪避走位。"
+    },
+    {
+      "id": "daily_challenge_shop",
+      "name": "每日挑战远征商店轮换",
+      "cycle": "约 180 天 (半年大周期)",
+      "current": "第 7 周期（持续至 2027-02-23）",
+      "nextStart": "第 8 周期（2027-02-23 ~ 2027-08-23）",
+      "futureCoverage": "官方预设至 2027 年秋",
+      "summary": "每日挑战积分商品池更新，包含特工觉醒石、特工碎片与高级配件。"
+    }
+  ]
+}
