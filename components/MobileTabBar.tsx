@@ -9,7 +9,7 @@ export default function MobileTabBar() {
 
   const NAV_ITEMS = [
     { label: '首页', href: '/', icon: Home },
-    { label: '攻略库', href: '/strategies', icon: BookOpen },
+    { label: '攻略库', href: '/guides', icon: BookOpen },
     { label: '图鉴', href: '/items', icon: Sparkles },
     { label: '工具', href: '/calculator', icon: Calculator },
   ];

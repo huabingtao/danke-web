@@ -5,7 +5,6 @@ import HomeCardLink from './HomeCardLink';
 import { useHomeExpanded } from '@/lib/home-view-state';
 import { BookOpen, ChevronDown } from 'lucide-react';
 import ZoneHeader from './ZoneHeader';
-import ConstructionOverlay from './ConstructionOverlay';
 import { WIKI_CATEGORIES, WikiCategoryKey } from '@/lib/wiki-categories';
 
 export interface CategorySummaryItem {
@@ -21,7 +20,7 @@ interface WikiCategoryZoneProps {
 export default function WikiCategoryZone({ categoriesData }: WikiCategoryZoneProps) {
   const { expanded, toggle: toggleExpanded } = useHomeExpanded();
   const categories = [
-    { key: 'STRATEGIES', label: '攻略', href: '/strategies', icon: BookOpen, color: 'text-orange-400', gradient: 'from-orange-500/25 via-amber-950/40 to-slate-950' },
+    { key: 'STRATEGIES', label: '攻略', href: '/guides', icon: BookOpen, color: 'text-orange-400', gradient: 'from-orange-500/25 via-amber-950/40 to-slate-950' },
     ...WIKI_CATEGORIES.filter((category) => category.key !== 'DAMAGE_STAT').map((category) => ({
       key: category.key, label: category.label, href: category.linkHref || `/items?cat=${category.key}`,
       icon: category.icon, color: category.color, gradient: category.gradient,
@@ -40,10 +39,8 @@ export default function WikiCategoryZone({ categoriesData }: WikiCategoryZonePro
           return (
             <HomeCardLink key={category.key} href={category.href}
               label={category.key === 'STRATEGIES' ? '攻略' : `${category.label}图鉴`}
-              disabledReason={category.key === 'STRATEGIES' ? '建设中，暂不可用' : undefined}
               className="group block rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500">
-              <div className={`relative flex aspect-square w-full flex-col items-center justify-center overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br ${category.gradient} p-4 shadow-lg transition-all duration-300 sm:p-5 ${category.key !== 'STRATEGIES' ? 'hover:border-orange-500/50 hover:shadow-orange-500/10' : ''}`}>
-                {category.key === 'STRATEGIES' && <ConstructionOverlay />}
+              <div className={`relative flex aspect-square w-full flex-col items-center justify-center overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-br ${category.gradient} p-4 shadow-lg transition-all duration-300 sm:p-5 hover:border-orange-500/50 hover:shadow-orange-500/10`}>
                 <div className={`flex w-full flex-col items-center justify-center gap-4 text-center ${enlargedPreview ? 'sm:h-full sm:min-h-0 sm:gap-4' : 'sm:gap-5'}`}>
                   {/* Compact screens use one large, legible category image. */}
                   <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-3xl border border-slate-700/60 bg-slate-900/90 shadow-xl sm:hidden">
@@ -65,7 +62,7 @@ export default function WikiCategoryZone({ categoriesData }: WikiCategoryZonePro
                       <Icon className={`h-12 w-12 ${category.color}`} />
                     </div>
                   )}
-                  <h3 className={`shrink-0 line-clamp-1 px-1 text-base font-black text-white transition-colors sm:text-lg ${category.key !== 'STRATEGIES' ? 'group-hover:text-orange-400' : ''}`}>{category.label}</h3>
+                  <h3 className={`shrink-0 line-clamp-1 px-1 text-base font-black text-white transition-colors sm:text-lg group-hover:text-orange-400`}>{category.label}</h3>
                 </div>
               </div>
             </HomeCardLink>

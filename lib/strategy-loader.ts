@@ -1,5 +1,6 @@
 import { StrategyArticle } from '@/lib/local-strategies-data';
 import { fetchStrategies, getApiBase } from '@/lib/api';
+import { readLegacySnapshot } from '@/lib/legacy-content';
 
 interface RawStrategyItem {
   id?: string;
@@ -36,7 +37,7 @@ export const deriveVertical = (cover?: string) => {
 
 export async function loadStrategies(): Promise<StrategyArticle[]> {
   try {
-    const data = await fetchStrategies();
+    const data = readLegacySnapshot() ?? await fetchStrategies();
     if (data && Array.isArray(data) && data.length > 0) {
       const rawList = data as RawStrategyItem[];
       const strategiesOnly = rawList.filter((item) => !isReminder(item) && item.category !== 'video');

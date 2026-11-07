@@ -523,3 +523,20 @@
 @media (min-width: 1024px) { .site-container { padding-inline: 2rem; } }
 
 #zone-wiki, #zone-tools, #footer-about { scroll-margin-top: 5.5rem; }
+
+/* Creator supplies sanitized content; website owns its responsive typography. */
+.creator-prose { line-height: 1.9; overflow-wrap: anywhere; min-width: 0; }
+.creator-prose h2 { font-size: 1.5rem; font-weight: 700; margin: 2rem 0 1rem; color: #f1f5f9; }
+.creator-prose h3 { font-size: 1.2rem; font-weight: 650; margin: 1.5rem 0 .75rem; }
+.creator-prose p { margin: 1rem 0; }
+.creator-prose img { max-width: 100%; height: auto; border-radius: 6px; }
+.creator-prose .game-icon { width: 1.65em; height: 1.65em; object-fit: contain; vertical-align: middle; }
+.creator-prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+.creator-prose th, .creator-prose td { padding: .7em; border: 1px solid #35465e; }
+.creator-prose th { background: #1b2d48; }
+.creator-prose blockquote { margin: 1rem 0; border-left: 3px solid #f59e0b; padding-left: 1rem; }
+.creator-prose ul, .creator-prose ol { padding-left: 1.5rem; }
+.creator-prose ul { list-style: disc; }
+.creator-prose ol { list-style: decimal; }
+.creator-prose pre { overflow-x: auto; max-width: 100%; }
+.creator-prose .web-image-caption { color: #94a3b8; font-size: .85em; }

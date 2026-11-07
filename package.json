@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 0.0.0.0 -p 3002",
+    "dev": "node scripts/local-next.cjs dev",
     "build": "next build --webpack",
-    "start": "next start",
+    "start": "python3 scripts/serve-export.py --port 6102 --directory out",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "build:content": "node scripts/prepare-creator-content.mjs && next build --webpack"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

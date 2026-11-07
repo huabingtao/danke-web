@@ -24,6 +24,7 @@
 .DS_Store
 *.pem
 /public/uploads
+/public/creator-content
 
 # debug
 npm-debug.log*
@@ -40,3 +41,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/public/content/assets/
+
+/public/content-release.json
+/.creator-content-backups/

@@ -29,7 +29,7 @@ describe('Navigation components', () => {
 
     expect(screen.getByText('弹壳攻略站')).toBeInTheDocument();
     expect(screen.getAllByText('首页').length).toBeGreaterThan(0);
-    expect(screen.getByRole('link', { name: '攻略' })).toHaveAttribute('href', '/strategies');
+    expect(screen.getByRole('link', { name: '攻略' })).toHaveAttribute('href', '/guides');
     expect(screen.getByRole('link', { name: '游戏资料' })).toHaveAttribute('href', '/#zone-wiki');
     expect(screen.getByRole('link', { name: '弹壳工具' })).toHaveAttribute('href', '/#zone-tools');
     expect(screen.getByRole('link', { name: '关于' })).toHaveAttribute('href', '/about');

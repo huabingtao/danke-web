@@ -8,7 +8,7 @@ const items = [
   { label: '首页', href: '/' },
   { label: '游戏资料', href: '/#zone-wiki' },
   { label: '弹壳工具', href: '/#zone-tools' },
-  { label: '攻略', href: '/strategies' },
+  { label: '攻略', href: '/guides' },
   { label: '关于', href: '/about' },
 ];
 export default function TopNavBar(_props: { width?: 'default' | 'wide' }) {
@@ -30,7 +30,7 @@ export default function TopNavBar(_props: { width?: 'default' | 'wide' }) {
   }, [pathname]);
   const active = (href: string) => {
     if (href === '/about') return pathname === '/about';
-    if (href === '/strategies') return pathname.startsWith('/strategies');
+    if (href === '/guides') return pathname.startsWith('/guides');
     if (pathname !== '/') return false;
     return href === '/' ? !section : href === `/#${section}`;
   };

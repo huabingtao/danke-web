@@ -27,12 +27,12 @@ describe('HomePageClient component', () => {
   test('renders home tools and expandable game resources', async () => {
     render(<HomePageClient categoriesData={mockCategoriesData} />);
 
-    await waitFor(() => expect(screen.getByRole('group', { name: '攻略' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('link', { name: '攻略' })).toBeInTheDocument());
     // 1. Verify 弹壳工具 and 图鉴分类 zone headings
     expect(screen.getByText('弹壳工具')).toBeInTheDocument();
     expect(screen.getByText('游戏资料')).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: '攻略' })).not.toBeInTheDocument();
-    expect(screen.getByRole('group', { name: '攻略' })).toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByRole('link', { name: '攻略' })).toHaveAttribute('href', '/guides');
+    expect(screen.getByRole('link', { name: '攻略' })).not.toHaveAttribute('aria-disabled');
 
     // 2. Verify 深度攻略 is removed from home page
     expect(screen.queryByRole('heading', { name: '深度攻略' })).not.toBeInTheDocument();

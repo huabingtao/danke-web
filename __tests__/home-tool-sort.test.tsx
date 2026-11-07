@@ -51,9 +51,10 @@ for (const pointerType of ['mouse', 'touch']) {
   });
 }
 
-test('under-construction cards have no navigable element, including strategy cards; active links remain intact', () => {
+test('under-construction cards have no navigable element, while the strategy entry is enabled', () => {
   render(<><ToolZone /><WikiCategoryZone categoriesData={[]} /></>);
-  for (const name of ['伤害计算器', '活动数据', '攻略']) {
+  expect(screen.getByRole('link', { name: '攻略' })).toHaveAttribute('href', '/guides');
+  for (const name of ['伤害计算器', '活动数据']) {
     const disabled = screen.getByRole('group', { name });
     expect(disabled).toHaveAttribute('aria-disabled', 'true');
     expect(disabled).toHaveAccessibleDescription('建设中，暂不可用');
